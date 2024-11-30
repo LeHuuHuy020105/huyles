@@ -105,3 +105,50 @@
 .collection-1-content-item-text {
   padding: 40px;
 }
+.collection-1-content-item {
+  margin-bottom: 30px;
+}
+@media (min-width: 600px) and (max-width: 1099px) {
+  .levents {
+    display: block;
+  }
+  .levents-video {
+    width: 100%;
+  }
+  .levents-info {
+    width: 100%;
+  }
+  .collection-content {
+    overflow-x: unset;
+    display: block;
+  }
+  .collection-content-item {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+  .collection {
+    padding: 10px;
+  }
+  .scroll-left,
+  .scroll-right {
+    display: none;
+  }
+  .collection-1-content {
+    padding: 0;
+  }
+  .collection-1-header-info {
+    display: block;
+  }
+  .collection-1-header-info-left,
+  .collection-1-header-info-right {
+    width: 100%;
+  }
+  .collection-1-content-item {
+    display: block;
+  }
+  .collection-1-content-item-text,
+  .collection-1-content-item-img {
+    width: 100%;
+  }
+}
