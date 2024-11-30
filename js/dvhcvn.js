@@ -57736,10 +57736,15 @@ address = {
 };
 function populateCities() {
   const citySelect = document.getElementById("city");
-  citySelect.innerHTML = `<option value="">Chọn Thành phố</option>`;
-  address.data.forEach((city) => {
-    citySelect.innerHTML += `<option value="${city.name}">${city.name}</option>`;
-  });
+  if (citySelect) {
+    // Kiểm tra xem phần tử citySelect có tồn tại không
+    citySelect.innerHTML = "<option value=''>Chọn Thành phố</option>";
+
+    // Giả sử `address.data` chứa danh sách các thành phố
+    address.data.forEach((city) => {
+      citySelect.innerHTML += `<option value="${city.name}">${city.name}</option>`;
+    });
+  }
 }
 
 function populateDistricts() {

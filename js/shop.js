@@ -773,6 +773,7 @@ let objcolorcurrent = {
   img: "",
   soluong: "",
   size: "",
+  diachi: "",
   status: "1",
 };
 //chi tiet sp
@@ -1193,7 +1194,7 @@ function giaodienthanhtoan() {
         </div>
         <div class="contentTab">
           <span>Địa chỉ : </span>
-          <input type="text" class="input" id="address" value="${usercurrent.diachi}" readonly />
+         <div class="contentTab-address">${usercurrent.diachi}</div>
         </div>
         <div id="buttonEdit" onclick="chinhsua();">Chỉnh sửa</div>
       </div>
@@ -1562,17 +1563,23 @@ function thanhtoan() {
       creditcardform();
     } else {
       if (userIndex !== null) {
+        let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
         let arrayshopbag =
           JSON.parse(localStorage.getItem("arrayshopbag")) || [];
         for (let i = 0; i < arrayshopbag.length; i++) {
+          arrayshopbag[i].diachi = usercurrent.diachi;
           shopbagispay[userIndex].shopbagispayuser.push(arrayshopbag[i]);
         }
       } else {
+        let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
         let shopbagitem = {
           IDuser: usercurrent.userID,
           shopbagispayuser:
             JSON.parse(localStorage.getItem("arrayshopbag")) || [],
         };
+        for (let i = 0; i < shopbagitem.shopbagispayuser.length; i++) {
+          shopbagitem.shopbagispayuser[i].diachi = usercurrent.diachi;
+        }
         shopbagispay.push(shopbagitem);
       }
 
@@ -1614,7 +1621,7 @@ function chinhsua() {
   const inputEdit = document.querySelectorAll(".input"); // Get all input fields
   let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
   const phone = document.querySelector("#phone");
-  const address = document.querySelector("#address");
+  const address = document.querySelector(".contentTab-address");
 
   if (editButton != null) {
     editButton.addEventListener("click", () => {
@@ -1624,11 +1631,37 @@ function chinhsua() {
           e.setAttribute("readonly", true);
           e.classList.remove("active"); // Remove active class when saving
         });
-        editButton.textContent = "Chỉnh sửa";
-        // Save updated user information
-        usercurrent.phone = phone.value;
-        usercurrent.diachi = address.value;
-        localStorage.setItem("currentUser", JSON.stringify(usercurrent));
+        let sonha = document.querySelector("#numberaddress");
+        let thanhpho = document.querySelector("#city");
+        let quan = document.querySelector("#district");
+        let huyen = document.querySelector("#ward");
+        if (sonha && thanhpho && quan && huyen) {
+          sonha = sonha.value.trim();
+          thanhpho = thanhpho.value.trim();
+          quan = quan.value.trim();
+          huyen = huyen.value.trim();
+
+          if (sonha && thanhpho && quan && huyen) {
+            let s = `${sonha}, ${huyen}, ${quan}, ${thanhpho}`;
+
+            // Cập nhật thông tin người dùng
+            usercurrent.phone = phone.value;
+            usercurrent.diachi = s;
+
+            // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
+            setTimeout(() => {
+              localStorage.setItem("currentUser", JSON.stringify(usercurrent));
+
+              // Cập nhật lại giao diện
+
+              address.innerHTML = s;
+              // Đổi nút thành "Chỉnh sửa"
+              buttonEdit.textContent = "Chỉnh sửa";
+            }, 500); // Thêm thời gian trì hoãn (500ms)
+          } else {
+            console.log("Các trường địa chỉ chưa đầy đủ!");
+          }
+        }
         updateUserDetails(usercurrent); // Update the user details in storageUsers
       } else {
         // Edit mode
@@ -1636,6 +1669,24 @@ function chinhsua() {
           e.removeAttribute("readonly");
           e.classList.add("active"); // Add active class when editing
         });
+        // Thay thế phần address_user với các input/select mới
+        address.innerHTML = `
+          <input type="text" id="numberaddress" placeholder="Nhập số nhà & tên đường" />
+          <label for="city">Thành phố:</label>
+          <select id="city" onchange="populateDistricts()">
+            <option value="">Chọn Thành phố</option>
+          </select>
+          <label for="district">Quận/Huyện:</label>
+          <select id="district" onchange="populateWards()">
+            <option value="">Chọn Quận/Huyện</option>
+          </select>
+          <label for="ward">Phường/Xã:</label>
+          <select id="ward">
+            <option value="">Chọn Phường/Xã</option>
+          </select>`;
+
+        // Đảm bảo dữ liệu được hiển thị trong các select
+        populateCities();
         editButton.textContent = "Lưu lại";
       }
       // Toggle edit state

@@ -13,109 +13,69 @@ logout.forEach(function (e) {
 });
 login.forEach(function (e) {
   let user = JSON.parse(localStorage.getItem("currentUser"));
+  // console.log(user);
   e.addEventListener("click", () => {
-    if (user != null) {
-      window.scrollTo(0, 0);
-      midcontent.innerHTML = `<div class="leftpage">
-        <h1 class="tittleheader">Hồ sơ cá nhân</h1>
-        <div class="buttonGroup">
-          <div class="buttonTab profilebtn active" id="btnProfile" onclick="profile();">Thông tin cá nhân</div>
-          <div class="buttonTab statusbtn" id="btnStatusDelivery" onclick="hienthitheofilter(this);">
-            Tình trạng đơn hàng
-          </div>
-        </div>
-      </div>
-      <div class="rightpage">
-        <div class="user">
-      <h1>THÔNG TIN CÁ NHÂN</h1>
-      <div id="profile">
-        <div class="profile-body">
-          <div class="contentTab">
-            <span>Email</span>
-            <input
-            type="text"
-            class="input"
-            id="email"
-            value="${user.email}"
-            readonly
-          />
-          </div>
-          <div class="contentTab">
-            <span>Name</span>
-            <input
-            type="text"
-            class="input"
-            id="name"
-            value="${user.name}"
-            readonly
-          />
-          </div>
-          <div class="contentTab">
-            <span>Phone</span>
-            <input
-            type="text"
-            class="input"
-            id="phone"
-            value="${user.phone}"
-            readonly
-          />
-          </div>
-          <div class="contentTab">
-            <span>Address</span>
-            <div class="address_user">${user.diachi}</div>
-          </div>
-      </div>
-      <div id="buttonEdit" onclick="chinhsuainfo()">Chỉnh sửa</div>
-    </div>`;
-    }
+    profile();
   });
 });
 function profile() {
   let user = JSON.parse(localStorage.getItem("currentUser"));
-  let rightcontent = document.querySelector(".rightpage");
-  document.querySelector(".profilebtn").classList.add("active");
-  document.querySelector(".statusbtn").classList.remove("active");
-  rightcontent.innerHTML = `<div class="user">
-      <h1>THÔNG TIN CÁ NHÂN</h1>
-      <div id="profile">
-        <div class="profile-body">
-          <div class="contentTab">
-            <span>Email</span>
-            <input
-            type="text"
-            class="input"
-            id="email"
-            value="${user.email}"
-            readonly
-          />
-          </div>
-          <div class="contentTab">
-            <span>Name</span>
-            <input
-            type="text"
-            class="input"
-            id="name"
-            value="${user.name}"
-            readonly
-          />
-          </div>
-          <div class="contentTab">
-            <span>Phone</span>
-            <input
-            type="text"
-            class="input"
-            id="phone"
-            value="${user.phone}"
-            readonly
-          />
-          </div>
-          <div class="contentTab">
-            <span>Address</span>
-            <div class="address_user">${user.diachi}</div>
-          </div>
+  if (user != null) {
+    window.scrollTo(0, 0);
+    midcontent.innerHTML = `<div class="leftpage">
+      <h1 class="tittleheader">Hồ sơ cá nhân</h1>
+      <div class="buttonGroup">
+        <div class="buttonTab profilebtn active" id="btnProfile" onclick="profile();">Thông tin cá nhân</div>
+        <div class="buttonTab statusbtn" id="btnStatusDelivery" onclick="hienthitheofilter(this);">
+          Tình trạng đơn hàng
         </div>
       </div>
-      <div id="buttonEdit" onclick="chinhsuainfo()">Chỉnh sửa</div>`;
+    </div>
+    <div class="rightpage">
+      <div class="user">
+    <h1>THÔNG TIN CÁ NHÂN</h1>
+    <div id="profile">
+      <div class="profile-body">
+        <div class="contentTab">
+          <span>Email</span>
+          <input
+          type="text"
+          class="input"
+          id="email"
+          value="${user.email}"
+          readonly
+        />
+        </div>
+        <div class="contentTab">
+          <span>Name</span>
+          <input
+          type="text"
+          class="input"
+          id="name"
+          value="${user.name}"
+          readonly
+        />
+        </div>
+        <div class="contentTab">
+          <span>Phone</span>
+          <input
+          type="text"
+          class="input"
+          id="phone"
+          value="${user.phone}"
+          readonly
+        />
+        </div>
+        <div class="contentTab">
+          <span>Address</span>
+          <div class="address_user">${user.diachi}</div>
+        </div>
+    </div>
+    <div id="buttonEdit" onclick="chinhsuainfo()">Chỉnh sửa</div>
+  </div>`;
+    document.querySelector(".profilebtn").classList.add("active");
+    document.querySelector(".statusbtn").classList.remove("active");
+  }
 }
 function donhangcuauser() {
   let donhang = [];
@@ -225,8 +185,8 @@ function chinhsuainfo() {
   const input = document.querySelectorAll("input");
   const name = document.querySelector("#name");
   const phone = document.querySelector("#phone");
-  const address = document.querySelector("#address");
   const address_user = document.querySelector(".address_user");
+
   if (buttonEdit != null) {
     buttonEdit.addEventListener("click", () => {
       if (isEdit) {
@@ -234,48 +194,76 @@ function chinhsuainfo() {
           e.setAttribute("readonly", true);
           e.classList.remove("active");
         });
-        let sonha = document.querySelector("#numberaddress").value;
-        console.log(sonha);
-        let thanhpho = document.querySelector("#city").value;
-        let quan = document.querySelector("#district").value;
-        let huyen = document.querySelector("#ward").value;
-        let s = `${sonha} , ${huyen} , ${quan} , ${thanhpho}`;
-        address_user.innerHTML = s;
-        // Save updated user information
-        usercurrent.name = name.value;
-        usercurrent.phone = phone.value;
-        usercurrent.diachi = s;
-        localStorage.setItem("currentUser", JSON.stringify(usercurrent));
-        updateUserDetails(usercurrent); // Update the user details in storageUsers
-        buttonEdit.textContent = "Chỉnh sửa";
+
+        let sonha = document.querySelector("#numberaddress");
+        let thanhpho = document.querySelector("#city");
+        let quan = document.querySelector("#district");
+        let huyen = document.querySelector("#ward");
+
+        if (sonha && thanhpho && quan && huyen) {
+          sonha = sonha.value.trim();
+          thanhpho = thanhpho.value.trim();
+          quan = quan.value.trim();
+          huyen = huyen.value.trim();
+
+          if (sonha && thanhpho && quan && huyen) {
+            let s = `${sonha}, ${huyen}, ${quan}, ${thanhpho}`;
+
+            // Cập nhật thông tin người dùng
+            usercurrent.name = name.value;
+            usercurrent.phone = phone.value;
+            usercurrent.diachi = s;
+
+            // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
+            setTimeout(() => {
+              localStorage.setItem("currentUser", JSON.stringify(usercurrent));
+
+              // Cập nhật lại giao diện
+              profile();
+
+              // Đổi nút thành "Chỉnh sửa"
+              buttonEdit.textContent = "Chỉnh sửa";
+            }, 500); // Thêm thời gian trì hoãn (500ms)
+          } else {
+            console.log("Các trường địa chỉ chưa đầy đủ!");
+          }
+        }
       } else {
+        // Nếu là chế độ chỉnh sửa, mở các trường input
         input.forEach(function (e) {
           e.removeAttribute("readonly");
           e.classList.add("active");
         });
-        address_user.innerHTML = `<input type="text" id="numberaddress" placeholder="Nhập số nhà & tên đường" />
-    <label for="city">Thành phố:</label>
-    <select id="city" onchange="populateDistricts()">
-      <option value="">Chọn Thành phố</option>
-    </select>
 
-    <label for="district">Quận/Huyện:</label>
-    <select id="district" onchange="populateWards()">
-      <option value="">Chọn Quận/Huyện</option>
-    </select>
+        // Thay thế phần address_user với các input/select mới
+        address_user.innerHTML = `
+          <input type="text" id="numberaddress" placeholder="Nhập số nhà & tên đường" />
+          <label for="city">Thành phố:</label>
+          <select id="city" onchange="populateDistricts()">
+            <option value="">Chọn Thành phố</option>
+          </select>
+          <label for="district">Quận/Huyện:</label>
+          <select id="district" onchange="populateWards()">
+            <option value="">Chọn Quận/Huyện</option>
+          </select>
+          <label for="ward">Phường/Xã:</label>
+          <select id="ward">
+            <option value="">Chọn Phường/Xã</option>
+          </select>`;
 
-    <label for="ward">Phường/Xã:</label>
-    <select id="ward">
-      <option value="">Chọn Phường/Xã</option>
-    </select>`;
+        // Đảm bảo dữ liệu được hiển thị trong các select
         populateCities();
+
+        // Đổi nút thành "Lưu lại"
         buttonEdit.textContent = "Lưu lại";
       }
+
+      // Toggle trạng thái chỉnh sửa
+      isEdit = !isEdit;
     });
-    // Toggle edit state
-    isEdit = !isEdit;
   }
 }
+
 function mangtheofilter(statusid, arr) {
   let mang = [];
   if (statusid == "btnStatusDelivery" || statusid == "all") {

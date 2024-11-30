@@ -400,7 +400,7 @@ function loadpage() {
 
   setTimeout(function () {
     loader.classList.remove("active");
-  }, 1000); // Duration should match the time for loader animation
+  }, 600); // Duration should match the time for loader animation
 }
 
 // console.log(a);
@@ -1130,7 +1130,7 @@ function giaodienthanhtoan() {
         </div>
         <div class="contentTab">
           <span>Địa chỉ : </span>
-          <input type="text" class="input" id="address" value="${usercurrent.diachi}" readonly />
+          <div class="contentTab-address">${usercurrent.diachi}</div>
         </div>
         <div id="buttonEdit" onclick="chinhsua();">Chỉnh sửa</div>
       </div>
@@ -1189,6 +1189,87 @@ function giaodienthanhtoan() {
   }
 }
 
+let isEditing1 = false; // Flag to track edit state
+
+function chinhsua() {
+  const editButton = document.querySelector("#buttonEdit"); // Get the edit button
+  const inputEdit = document.querySelectorAll(".input"); // Get all input fields
+  let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
+  const phone = document.querySelector("#phone");
+  const address = document.querySelector(".contentTab-address");
+
+  if (editButton != null) {
+    editButton.addEventListener("click", () => {
+      if (isEditing1) {
+        // Save mode
+        inputEdit.forEach(function (e) {
+          e.setAttribute("readonly", true);
+          e.classList.remove("active"); // Remove active class when saving
+        });
+        let sonha = document.querySelector("#numberaddress");
+        let thanhpho = document.querySelector("#city");
+        let quan = document.querySelector("#district");
+        let huyen = document.querySelector("#ward");
+        if (sonha && thanhpho && quan && huyen) {
+          sonha = sonha.value.trim();
+          thanhpho = thanhpho.value.trim();
+          quan = quan.value.trim();
+          huyen = huyen.value.trim();
+
+          if (sonha && thanhpho && quan && huyen) {
+            let s = `${sonha}, ${huyen}, ${quan}, ${thanhpho}`;
+
+            // Cập nhật thông tin người dùng
+            usercurrent.phone = phone.value;
+            usercurrent.diachi = s;
+
+            // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
+            setTimeout(() => {
+              localStorage.setItem("currentUser", JSON.stringify(usercurrent));
+
+              // Cập nhật lại giao diện
+
+              address.innerHTML = s;
+              // Đổi nút thành "Chỉnh sửa"
+              buttonEdit.textContent = "Chỉnh sửa";
+            }, 500); // Thêm thời gian trì hoãn (500ms)
+          } else {
+            console.log("Các trường địa chỉ chưa đầy đủ!");
+          }
+        }
+        updateUserDetails(usercurrent); // Update the user details in storageUsers
+      } else {
+        // Edit mode
+        inputEdit.forEach(function (e) {
+          e.removeAttribute("readonly");
+          e.classList.add("active"); // Add active class when editing
+        });
+        // Thay thế phần address_user với các input/select mới
+        address.innerHTML = `
+          <input type="text" id="numberaddress" placeholder="Nhập số nhà & tên đường" />
+          <label for="city">Thành phố:</label>
+          <select id="city" onchange="populateDistricts()">
+            <option value="">Chọn Thành phố</option>
+          </select>
+          <label for="district">Quận/Huyện:</label>
+          <select id="district" onchange="populateWards()">
+            <option value="">Chọn Quận/Huyện</option>
+          </select>
+          <label for="ward">Phường/Xã:</label>
+          <select id="ward">
+            <option value="">Chọn Phường/Xã</option>
+          </select>`;
+
+        // Đảm bảo dữ liệu được hiển thị trong các select
+        populateCities();
+        editButton.textContent = "Lưu lại";
+      }
+      // Toggle edit state
+      isEditing1 = !isEditing1;
+    });
+  }
+}
+
 function thanhtoan() {
   let shopbagispay = JSON.parse(localStorage.getItem("shopbagispay")) || [];
   let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
@@ -1198,49 +1279,63 @@ function thanhtoan() {
   if (usercurrent.phone === "" || usercurrent.diachi === "") {
     toast({
       title: "ERROR",
-      message: "Vui lòng nhập đầy đủ số điện thoại và địa chỉ !",
+      message: "Vui lòng nhập đầy đủ số điện thoại và địa chỉ",
       type: "error",
       duration: 5000,
     });
     chinhsua();
   } else {
-    if (creditcard.checked && ispayed == false) {
+    if (creditcard.checked && ispayedshop === false) {
       creditcardform();
     } else {
       if (userIndex !== null) {
+        let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
         let arrayshopbag =
           JSON.parse(localStorage.getItem("arrayshopbag")) || [];
         for (let i = 0; i < arrayshopbag.length; i++) {
+          arrayshopbag[i].diachi = usercurrent.diachi;
           shopbagispay[userIndex].shopbagispayuser.push(arrayshopbag[i]);
         }
       } else {
+        let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
         let shopbagitem = {
           IDuser: usercurrent.userID,
           shopbagispayuser:
             JSON.parse(localStorage.getItem("arrayshopbag")) || [],
         };
+        for (let i = 0; i < shopbagitem.shopbagispayuser.length; i++) {
+          shopbagitem.shopbagispayuser[i].diachi = usercurrent.diachi;
+        }
         shopbagispay.push(shopbagitem);
       }
 
+      // Cập nhật lại danh sách giỏ hàng đã thanh toán vào localStorage
       localStorage.setItem("shopbagispay", JSON.stringify(shopbagispay));
 
-      // Ensure the correct list of items is passed for inventory adjustment
+      // Đảm bảo danh sách mặt hàng được điều chỉnh trong kho
       let itemsToAdjust =
-        userIndex !== null
-          ? shopbagispay[userIndex].shopbagispayuser
-          : JSON.parse(localStorage.getItem("arrayshopbag"));
+        JSON.parse(localStorage.getItem("arrayshopbag")) || [];
       dieuchinhsoluongtrongkho(itemsToAdjust);
 
-      // Clear user's shopping bag after checkout
-      let alluser = JSON.parse(localStorage.getItem("storageUsers"));
+      // Xóa giỏ hàng của người dùng sau khi thanh toán
+      let alluser = JSON.parse(localStorage.getItem("storageUsers")) || [];
       for (let i = 0; i < alluser.length; i++) {
-        if (alluser[i].userID == usercurrent.userID) {
+        if (alluser[i].userID === usercurrent.userID) {
           alluser[i].shopbag = [];
-          usercurrent.shopbag = [];
         }
       }
+
+      // Cập nhật lại thông tin người dùng vào localStorage
       localStorage.setItem("storageUsers", JSON.stringify(alluser));
       localStorage.setItem("currentUser", JSON.stringify(usercurrent));
+      toast({
+        title: "SUCCESS",
+        message: "Thanh toán thành công",
+        type: "success",
+        duration: 5000,
+      });
+      // Tùy chọn: Tải lại trang sau khi thanh toán thành công
+      location.reload();
     }
   }
 }

@@ -137,6 +137,7 @@ policy_btn.addEventListener("click", () => {
   }
 });
 function policycontent() {
+  loadpage();
   window.scrollTo(0, 0);
   midcontent.innerHTML = `<div id="privacy-policy">
       <h1 class="policy-content privacy">
@@ -216,6 +217,7 @@ function policycontent() {
     </div>`;
 }
 function FAQContent() {
+  loadpage();
   window.scrollTo(0, 0);
   midcontent.innerHTML = `<div id="FAQ-policy">
       <h1 class="policy-content FAQ">FAQ - CÂU HỎI THƯỜNG GẶP</h1>
@@ -252,6 +254,7 @@ function FAQContent() {
     </div>`;
 }
 function membershipcontent() {
+  loadpage();
   window.scrollTo(0, 0);
   midcontent.innerHTML = `<div id="membership-card-policy">
       <h1 class="policy-content membership-card">CHÍNH SÁCH THẺ THÀNH VIÊN</h1>
@@ -292,6 +295,7 @@ function membershipcontent() {
     </div>`;
 }
 function ExchangeCardPolicyContent() {
+  loadpage();
   window.scrollTo(0, 0);
   midcontent.innerHTML = `<div id="exchange-card-policy">
       <h1 class="policy-content exchange">CHÍNH SÁCH BẢO HÀNH VÀ ĐỔI TRẢ</h1>
@@ -324,6 +328,7 @@ function ExchangeCardPolicyContent() {
     </div>`;
 }
 function ShipCardPolicyContent() {
+  loadpage();
   window.scrollTo(0, 0);
   midcontent.innerHTML = `<div id="ship-card-policy">
       <h1 class="policy-content ship">CHÍNH SÁCH GIAO HÀNG HỎA TỐC</h1>

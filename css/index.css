@@ -877,6 +877,10 @@ body {
 .feature .feature-box h6:nth-child(6) {
   background-color: #fff2e5;
 }
+/* scrolltopage */
+.scroll-toppage {
+  font-size: 25px;
+}
 /* Responsive */
 @media (min-width: 340px) and (max-width: 700px) {
   .logo {

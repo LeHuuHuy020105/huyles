@@ -121,3 +121,7 @@
   height: 100vh;
   overflow-y: auto;
 }
+/* diachi */
+.address_user input {
+  padding: 8px;
+}

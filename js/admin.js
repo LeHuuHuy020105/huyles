@@ -862,29 +862,110 @@ function onload() {
 // tao danh sach nguoi dung
 function listAccounts() {
   let accounts = JSON.parse(localStorage.getItem("storageUsers")) || [];
-  // console.log(accounts);
   let s = "";
   accounts.forEach((account) => {
+    const classPrefix = `user-${account.userID}`; // Tạo tiền tố lớp hợp lệ
+
     s += `<div class="listAcc" style="text-align: center; border-bottom: 1px solid rgba(112, 112, 112, 0.3);">
         <span class="idAccount" style="width: 5%;">${account.userID}</span>
-        <span class="nameAccount" style="width: 26%;">${account.name}</span>
-        <span class="phoneAccount" style="width: 10%;">${account.phone}</span>
-        <span class="emailAccount" style="width: 10%;">${account.email}</span>
+        <span class="nameAccount" style="width: 21%;"><input type="text" class="${classPrefix}-name" readonly="readonly" value="${
+      account.name
+    }" /></span>
+        <span class="phoneAccount" style="width: 10%;"><input type="text" class="${classPrefix}-phone" readonly="readonly" value="${
+      account.phone
+    }" /></span>
+        <span class="emailAccount" style="width: 10%;"><input type="text" class="${classPrefix}-email" readonly="readonly" value="${
+      account.email
+    }" /></span>
         <span class="addressAccount" style="width: 17%;">${
           account.diachi
         }</span>
-        <span class="passwordAccount" style="width: 12%;">${
-          account.password
-        }</span>
+        <span class="passwordAccount" style="width: 12%;"><input type="text" class="${classPrefix}-password" readonly="readonly" value="${
+      account.password
+    }" /></span>
         <span class="statusAccount" style="width: 10%;">${
           account.statususer == "1" ? "Bình thường" : "Đã khoá"
         }</span>
         <button class="btnAccount" style="width: 10%;" onclick="toggleLockUser('${
           account.userID
         }')">${account.statususer == "0" ? "Mở khóa" : "Khóa"}</button>
+        <button class="change" style="width: 5%;" onclick='changeuserinfo("${
+          account.userID
+        }")'>Sửa</button>
       </div>`;
   });
   return s;
+}
+
+let isEditingaccountuser = false;
+
+function changeuserinfo(userID) {
+  const nameInput = document.querySelector(`.user-${userID}-name`);
+  const phoneInput = document.querySelector(`.user-${userID}-phone`);
+  const passwordInput = document.querySelector(`.user-${userID}-password`);
+  const emailInput = document.querySelector(`.user-${userID}-email`);
+  const editButton = document.querySelector(
+    `button.change[onclick*='${userID}']`
+  );
+
+  // Lấy danh sách tài khoản từ localStorage
+  let accounts = JSON.parse(localStorage.getItem("storageUsers")) || [];
+
+  // Kiểm tra xem email mới có trùng với bất kỳ tài khoản nào không
+  let isEmailDuplicate = false; // Biến để kiểm tra nếu email trùng
+
+  // Duyệt qua tất cả tài khoản trong localStorage
+  for (let i = 0; i < accounts.length; i++) {
+    const account = accounts[i];
+
+    // Kiểm tra nếu email của tài khoản khác trùng với email người dùng nhập vào
+    // Và kiểm tra tài khoản đó không phải là tài khoản hiện tại đang chỉnh sửa
+    if (account.userID !== userID && account.email === emailInput.value) {
+      isEmailDuplicate = true; // Nếu trùng thì đặt biến thành true
+      break; // Không cần kiểm tra tiếp, dừng vòng lặp
+    }
+  }
+
+  if (isEditingaccountuser) {
+    // Nếu có email trùng, hiển thị cảnh báo và không lưu
+    if (isEmailDuplicate) {
+      toast({
+        title: "ERROR",
+        message: "Email đã tồn tại",
+        type: "error",
+        duration: 5000,
+      });
+      return; // Dừng lại nếu email bị trùng
+    }
+
+    // Nếu không có email trùng, tiếp tục lưu thay đổi
+    [nameInput, phoneInput, passwordInput, emailInput].forEach((input) => {
+      input.setAttribute("readonly", true);
+      input.classList.remove("active");
+    });
+    editButton.textContent = "Sửa";
+
+    // Cập nhật thông tin người dùng vào localStorage
+    let account = accounts.find((acc) => acc.userID == userID);
+    if (account) {
+      console.log("tim thay");
+      account.name = nameInput.value;
+      account.phone = phoneInput.value;
+      account.password = passwordInput.value;
+      account.email = emailInput.value;
+      localStorage.setItem("storageUsers", JSON.stringify(accounts));
+    }
+  } else {
+    // Chế độ chỉnh sửa
+    [nameInput, phoneInput, passwordInput, emailInput].forEach((input) => {
+      input.removeAttribute("readonly");
+      input.classList.add("active");
+    });
+    editButton.textContent = "Lưu lại";
+  }
+
+  // Toggle trạng thái chỉnh sửa
+  isEditingaccountuser = !isEditingaccountuser;
 }
 
 function timkiemTheoID(id) {
@@ -968,13 +1049,14 @@ function renderqlnd() {
                     </div>
                     <div class="titleCol" style="text-align: center;">
                         <span class="idAccount" style="width: 5%;">ID</span>
-                        <span class="nameAccount" style="width: 26%;">Tên</span>
+                        <span class="nameAccount" style="width: 21%;">Tên</span>
                         <span class="phoneAccount" style="width: 10%;">SĐT</span>
                         <span class="emailAccount" style="width: 10%;">Email</span>
                         <span class="usernameAccoutn" style="width: 17%;">Địa chỉ</span>
                         <span class="passwordAccount" style="width: 12%;">Mật khẩu</span>
                         <span class="statusAccount" style="width: 10%;">Trạng thái</span>
                         <span class="Chitiet" style="width: 10%;">Chi tiết</span>
+                        <span style="width:5%;"></span>
                     </div>
                     <div id="manageCustomer-body">
                         
@@ -1606,7 +1688,6 @@ function signInButton(event) {
           <div class="L b3">QUẢN LÝ SẢN PHẢM</div>
           <div class="L b4">QUẢN LÝ NGƯỜI DÙNG</div>
         </div>
-        <div class="signout">Đăng xuất</div>
         <div class="L-e">
           <a href="./index.html">
             <i class="fa-solid fa-house"></i>TRỞ VỀ TRANG CHỦ</a
