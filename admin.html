@@ -24,44 +24,59 @@
     <link rel="stylesheet" href="./css/admin.css" />
     <title>Admin</title>
   </head>
+
   <body>
+    <div class="loader"><div class="loader-item"></div></div>
+    <div id="toast"></div>
     <div class="page">
-      <div class="page-left second-icon">
-        <div style="height: 10%" class="F-L"><h1>Tình Hình Hoạt Động</h1></div>
-        <div style="height: 60%" class="box-l">
-          <div class="L b1">QUẢN LÝ THỐNG KÊ</div>
-          <div class="L b2">QUẢN LÝ ĐƠN HÀNG</div>
-          <div class="L b3">QUẢN LÝ SẢN PHẢM</div>
-          <div class="L b4">QUẢN LÝ NGƯỜI DÙNG</div>
-        </div>
-        <div class="L-e">
-          <a href="../index.html">
-            <i class="fa-solid fa-house"></i>TRỞ VỀ TRANG CHỦ</a
-          >
-        </div>
-      </div>
-      <div class="page-right"></div>
-
-      <div class="btnAddproduct nonez"></div>
-      <div class="outbackround"></div>
-
-      <div class="viewmenu nonez"></div>
-
-      <div id="contextMenu" class="context-menu">
-        <button id="viewDetails">
-          <i style="margin-right: 5px" class="bx bxs-edit" id="button1-contextMenu"></i>Chỉnh sửa
-        </button>
-        <hr />
-        <button id="deleteProduct">
-          <i style="margin-right: 5px" class="bx bx-trash" id="button2-contextMenu"></i>Xóa sản phẩm
-        </button>
-      </div>
-
-      <div class="sb nonesb">
-        <h3>XÁC NHẬN</h3>
-        <div class="sub">
-          <button id="yes">YES</button>
-          <button id="no">NO</button>
+      <div class="box-login">
+        <div class="container">
+          <div class="content">
+            <h2>New Clothes</h2>
+            <div class="text-sci">
+              <h2 class="logo-form">
+                Welcome! <br /><span>To Our Website</span>
+              </h2>
+              <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias,
+                impedit?
+              </p>
+              <div class="social-icons">
+                <a href="#"><i class="bx bxl-facebook"></i></a>
+                <a href="#"><i class="bx bxl-instagram"></i></a>
+                <a href="#"><i class="bx bxl-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="logreg-box">
+            <div class="form-box login">
+              <form>
+                <h2>Sign In</h2>
+                <div class="input-box">
+                  <span class="icon"><i class="bx bxs-envelope"></i></span>
+                  <input type="email" id="Email" />
+                  <label>Email</label>
+                </div>
+                <div class="input-box">
+                  <span class="icon"><i class="bx bxs-lock-alt"></i></span>
+                  <input type="password" id="Password" />
+                  <label for="Password">Password</label>
+                </div>
+                <div class="remember-forgot">
+                  <label for=""><input type="checkbox" /> Remember me</label>
+                  <a href="#">Forgot password</a>
+                </div>
+                <button
+                  type="submit"
+                  class="btn"
+                  id="sign-in-button"
+                  onclick="signInButton(event);"
+                >
+                  Sign In
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
