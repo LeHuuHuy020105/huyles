@@ -472,6 +472,7 @@ function makeFilter() {
         item.checked = false;
         radiochecked = -1;
         filteredProducts = ProductArrBoth;
+        filteredProducts_copy = ProductArrBoth;
       }
       makeSP(1, sosptrongtrang, filteredProducts); // Hiển thị sản phẩm
       makeselectpage(1, filteredProducts); // Tạo phân trang
