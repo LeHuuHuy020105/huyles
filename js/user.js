@@ -216,7 +216,7 @@ function chinhsuainfo() {
             // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
             setTimeout(() => {
               localStorage.setItem("currentUser", JSON.stringify(usercurrent));
-
+              updateUserDetails(usercurrent);
               // Cập nhật lại giao diện
               profile();
 
