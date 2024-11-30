@@ -13,7 +13,6 @@ logout.forEach(function (e) {
 });
 login.forEach(function (e) {
   let user = JSON.parse(localStorage.getItem("currentUser"));
-  // console.log(user);
   e.addEventListener("click", () => {
     profile();
   });
@@ -225,7 +224,12 @@ function chinhsuainfo() {
               buttonEdit.textContent = "Chỉnh sửa";
             }, 500); // Thêm thời gian trì hoãn (500ms)
           } else {
-            console.log("Các trường địa chỉ chưa đầy đủ!");
+            toast({
+              title: "ERROR",
+              message: "Các trường địa chỉ chưa đầy đủ!",
+              type: "error",
+              duration: 5000,
+            });
           }
         }
       } else {

@@ -1659,7 +1659,12 @@ function chinhsua() {
               buttonEdit.textContent = "Chỉnh sửa";
             }, 500); // Thêm thời gian trì hoãn (500ms)
           } else {
-            console.log("Các trường địa chỉ chưa đầy đủ!");
+            toast({
+              title: "ERROR",
+              message: "Các trường địa chỉ chưa đầy đủ!",
+              type: "error",
+              duration: 5000,
+            });
           }
         }
         updateUserDetails(usercurrent); // Update the user details in storageUsers
