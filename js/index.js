@@ -362,7 +362,7 @@ let Productindex = [
     img3: "./img/products/p19-2.jpg",
   },
 ];
-
+loadpage();
 for (let i = 0; i < Productindex.length; i++) {
   Productindex[i].idproduct = Productindex[i].nametag + i;
 }
@@ -384,6 +384,23 @@ if (user != null) {
   logoutuser.forEach(function (e) {
     e.style.display = "block";
   });
+}
+let toppage = document.querySelector(".scroll-toppage");
+toppage.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+});
+function loadpage() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  const loader = document.querySelector(".loader");
+  // Start the loader animation
+  loader.classList.add("active");
+
+  setTimeout(function () {
+    loader.classList.remove("active");
+  }, 1000); // Duration should match the time for loader animation
 }
 
 // console.log(a);
@@ -449,7 +466,7 @@ login.forEach(function (e) {
               <h2>Sign Up</h2>
               <div class="input-box">
                 <span class="icon"><i class="bx bxs-user"></i></span>
-                <input type="text" required id="register-name" />
+                <input type="text" id="register-name" />
                 <label for="name">Name</label>
               </div>
               <div class="input-box">
@@ -491,14 +508,17 @@ login.forEach(function (e) {
     midcontent.style.padding = "0px";
   });
 });
-const home = document.querySelectorAll(".home"); //nut Home tren nav
-home.forEach(function (e) {
-  e.addEventListener("click", () => {
-    window.location.href = "index.html";
-    document.querySelector(".header .navbar .home").classList.add("active");
-    document.querySelector(".header .shop").classList.remove(active);
-  });
-});
+// const home = document.querySelectorAll(".home"); //nut Home tren nav
+// home.forEach(function (e) {
+//   e.addEventListener("click", () => {
+//
+//     document.querySelector(".header .navbar .home").classList.add("active");
+//     document.querySelector(".header .shop").classList.remove(active);
+//   });
+// });
+function hienthihome() {
+  window.location.href = "index.html";
+}
 
 const shop = document.querySelectorAll(".shop");
 shop.forEach(function (e) {
@@ -522,21 +542,82 @@ close_nav.addEventListener("click", () => {
 logonav.addEventListener("click", () => {
   window.location.href = "index.html";
 });
+function linkshop() {
+  window.href;
+}
+function toast({ title = "", message = "", type = "", duration = 5000 }) {
+  const main = document.getElementById("toast");
+  if (main) {
+    const toast = document.createElement("div");
 
-// footer
+    toast.onclick = function (e) {
+      if (e.target.closest(".toast__close")) {
+        main.removeChild(toast);
+      }
+    };
 
-// let flag_policy_btn = 0;
-// policy_btn.addEventListener("click", () => {
-//   if (flag_policy_btn == 0) {
-//     policy_btn.classList.add("active");
-//     content_policybtn.classList.add("active");
-//     flag_policy_btn = 1;
-//   } else {
-//     policy_btn.classList.remove("active");
-//     content_policybtn.classList.remove("active");
-//     flag_policy_btn = 0;
-//   }
-// });
+    const icons = {
+      success: "fa-solid fa-circle-check",
+      error: "fa-solid fa-circle-exclamation",
+    };
+    const icon = icons[type];
+
+    toast.classList.add("toast", `toast--${type}`);
+    toast.innerHTML = `
+        <div class="toast__icon">
+          <i class="${icon}"></i>
+        </div>
+        <div class="toast__body">
+          <h3 class="toast__title">${title}</h3>
+          <p class="toast__msg">${message}</p>
+        </div>
+        <div class="toast__close">
+          <i class="fa-solid fa-xmark"></i>
+        </div>
+    `;
+    main.appendChild(toast);
+  }
+}
+
+// khi thêm vào giỏ hàng
+
+function showSuccessToastAddToCart() {
+  toast({
+    title: "SUCCESS",
+    message: "Thêm vào giỏ hàng thành công",
+    type: "success",
+    duration: 5000,
+  });
+}
+
+function showErrorToastAddToCart() {
+  toast({
+    title: "ERROR",
+    message: "Thêm vào giỏ hàng thất bại",
+    type: "error",
+    duration: 5000,
+  });
+}
+
+// khi thanh toán
+
+function showSuccessToastToPay() {
+  toast({
+    title: "SUCCESS",
+    message: "Thanh toán thành công",
+    type: "success",
+    duration: 5000,
+  });
+}
+
+function showErrorToastToPay() {
+  toast({
+    title: "ERROR",
+    message: "Thanh toán thất bại",
+    type: "error",
+    duration: 5000,
+  });
+}
 
 // Midcontent
 const img_improptu = document.querySelectorAll(".imgsrc-impromptu");
@@ -619,7 +700,12 @@ function registerButton(event) {
   );
   getAgreeTermsConditions = document.querySelector("#agreeTermsConditions");
   if (getRegisterName.value.trim() === "") {
-    alert("Vui lòng nhập tên đăng ký!");
+    toast({
+      title: "ERROR",
+      message: "Vui lòng nhập tên đăng kí !",
+      type: "error",
+      duration: 5000,
+    });
     getRegisterName.focus();
     return;
   } else if (
@@ -627,27 +713,57 @@ function registerButton(event) {
     !getRegisterEmail.value.includes("@") ||
     !checkEmail(getRegisterEmail.value)
   ) {
-    alert("Vui lòng nhập đúng email!");
+    toast({
+      title: "ERROR",
+      message: "Vui lòng nhập đúng email !",
+      type: "error",
+      duration: 5000,
+    });
     getRegisterEmail.focus();
     return;
   } else if (doesEmailExistInLocalStorage(getRegisterEmail.value)) {
-    alert("Email này đã tồn tại!");
+    toast({
+      title: "ERROR",
+      message: "Email này đã tồn tại !",
+      type: "error",
+      duration: 5000,
+    });
     getRegisterEmail.focus();
     return;
   } else if (getRegisterPassword.value.trim() === "") {
-    alert("Vui lòng nhập mật khẩu!");
+    toast({
+      title: "ERROR",
+      message: "Vui lòng nhập mật khẩu !",
+      type: "error",
+      duration: 5000,
+    });
     getRegisterPassword.focus();
     return;
   } else if (getRegisterPasswordRetype.value.trim() === "") {
-    alert("Vui lòng nhập xác nhận mật khẩu!");
+    toast({
+      title: "ERROR",
+      message: "Vui lòng nhập xác nhận mật khẩu !",
+      type: "error",
+      duration: 5000,
+    });
     getRegisterPasswordRetype.focus();
     return;
   } else if (getRegisterPasswordRetype.value !== getRegisterPassword.value) {
-    alert("Mật khẩu xác nhận không khớp!");
+    toast({
+      title: "ERROR",
+      message: "Mật khẩu không khớp !",
+      type: "error",
+      duration: 5000,
+    });
     getRegisterPasswordRetype.focus();
     return;
   } else if (!getAgreeTermsConditions.checked) {
-    alert("Please agree terms and conditions");
+    toast({
+      title: "ERROR",
+      message: "Vui lòng đồng ý các điều khoản và điều kiện !",
+      type: "error",
+      duration: 5000,
+    });
     return;
   } else {
     let user = {
@@ -659,6 +775,7 @@ function registerButton(event) {
       shopbag: "",
       statususer: "1",
       password: "",
+      typeuser: "1",
     };
     user.name = getRegisterName.value;
     user.email = getRegisterEmail.value;
@@ -718,18 +835,33 @@ function signInButton(event) {
     !getEmailSignIn.value.includes("@") ||
     !checkEmail(getEmailSignIn.value)
   ) {
-    alert("Vui lòng nhập đúng email");
+    toast({
+      title: "ERROR",
+      message: "Vui lòng nhập đúng email!",
+      type: "error",
+      duration: 5000,
+    });
     getEmailSignIn.focus();
     return;
   } else if (getPasswordSignIn.value.trim() === "") {
-    alert("Vui lòng nhập mật khẩu");
+    toast({
+      title: "ERROR",
+      message: "Vui lòng nhập mật khẩu!",
+      type: "error",
+      duration: 5000,
+    });
     getPasswordSignIn.focus();
     return;
   }
   let user = findUserByEmail(getEmailSignIn.value);
   if (user !== null && user.password === getPasswordSignIn.value) {
     if (user.statususer == "0") {
-      alert("Tài khoản của bạn đã bị khoá!");
+      toast({
+        title: "ERROR",
+        message: "Tài khoản của bạn đã bị khoá!",
+        type: "error",
+        duration: 5000,
+      });
     } else {
       currentUser.email = user.email;
       currentUser.password = user.password;
@@ -740,7 +872,12 @@ function signInButton(event) {
       location.reload();
     }
   } else {
-    alert("Email hoặc mật khẩu không đúng!");
+    toast({
+      title: "ERROR",
+      message: "Email hoặc mật khẩu không đúng!",
+      type: "error",
+      duration: 5000,
+    });
     return;
   }
   // localStorage.setItem("CurrentUser", JSON.stringify(currentUser.userID));
@@ -756,36 +893,29 @@ contact.forEach(function (e) {
   });
 });
 
-//giohang
-const shoping1 = document.querySelectorAll(".Shoping");
-shoping1.forEach(function (e) {
-  e.addEventListener("click", () => {
-    const bag = document.querySelector(".cart");
-    bag.classList.add("active");
-    document.querySelector(".backgroud-menu-respon").style.display = "block";
-    shopinginfo(); // Hiển thị thông tin giỏ hàng khi mở
-  });
-});
 let soluong1 = 0; // Số lượng sản phẩm trong giỏ hàng
 let tongtien1 = 0;
 // Hiển thị thông tin giỏ hàng
 function shopinginfo() {
-  let menurespon = document.querySelector(".header1");
-  if (menurespon) {
-    menurespon.classList.remove("active");
-  }
-  let arrayshopbag = JSON.parse(localStorage.getItem("arrayshopbag"));
-  const cart = document.querySelector(".cart");
-  let s = `<div class="shoping-bag">
+  let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (currentUser != null) {
+    let menurespon = document.querySelector(".header1");
+    document.querySelector(".backgroud-menu-respon").style.display = "block";
+    if (menurespon) {
+      menurespon.classList.remove("active");
+    }
+    let arrayshopbag = JSON.parse(localStorage.getItem("arrayshopbag"));
+    const cart = document.querySelector(".cart");
+    let s = `<div class="shoping-bag">
         <div class="shoping-bag-header">
           <h3>Giỏ hàng</h3>
           <div class="close-shopping" onclick="closeall()">Đóng</div>
         </div>
         <div class="shoping-bag-info">`;
 
-  // Hiển thị các sản phẩm trong giỏ hàng
-  for (let i = 0; i < arrayshopbag.length; i++) {
-    s += `<div class="shoping-bag-info-item">
+    // Hiển thị các sản phẩm trong giỏ hàng
+    for (let i = 0; i < arrayshopbag.length; i++) {
+      s += `<div class="shoping-bag-info-item">
             <div class="shoping-bag-img">
               <img src="${arrayshopbag[i].img}" alt="" />
             </div>
@@ -803,8 +933,8 @@ function shopinginfo() {
               <div class="delete effect-for-btn" onclick="removeItem(${i})">Xoá</div>
             </div>
           </div>`;
-  }
-  s += `</div>
+    }
+    s += `</div>
         <div class="pay">
           <div class="main">
             <div class="info_bill">
@@ -828,9 +958,17 @@ function shopinginfo() {
         </div>
       </div>`;
 
-  cart.innerHTML = s;
-  cart.classList.add("active");
-  chitiethoadon1(); // Cập nhật lại thông tin giỏ hàng
+    cart.innerHTML = s;
+    cart.classList.add("active");
+    chitiethoadon1(); // Cập nhật lại thông tin giỏ hàng
+  } else {
+    toast({
+      title: "ERROR",
+      message: "Vui lòng đăng nhập !",
+      type: "error",
+      duration: 5000,
+    });
+  }
 }
 function chitiethoadon1() {
   let arrayshopbag = JSON.parse(localStorage.getItem("arrayshopbag"));
@@ -890,13 +1028,23 @@ function pay() {
   const creditcard = document.querySelector(".container_pay");
   creditcard.classList.remove("active");
   document.querySelector(".backgroud-menu-respon").style.display = "none";
-  alert("Credit card details submitted successfully.");
+  toast({
+    title: "SUCCESS",
+    message: "Chi tiết thẻ tín dụng đã được thêm thành công.",
+    type: "success",
+    duration: 5000,
+  });
 }
 
 function giaodienthanhtoan() {
   let arrayproducts = JSON.parse(localStorage.getItem("arrayshopbag")) || [];
   if (arrayproducts.length == 0) {
-    alert("Giỏ hàng rỗng");
+    toast({
+      title: "ERROR",
+      message: "Giỏ hàng rỗng !",
+      type: "error",
+      duration: 5000,
+    });
   } else {
     let tongtien = 0;
     getarrayshopbag();
@@ -1048,7 +1196,12 @@ function thanhtoan() {
   let creditcard = document.querySelector("#creditcard");
 
   if (usercurrent.phone === "" || usercurrent.diachi === "") {
-    alert("Vui lòng nhập đầy đủ số điện thoại và địa chỉ");
+    toast({
+      title: "ERROR",
+      message: "Vui lòng nhập đầy đủ số điện thoại và địa chỉ !",
+      type: "error",
+      duration: 5000,
+    });
     chinhsua();
   } else {
     if (creditcard.checked && ispayed == false) {
@@ -1088,9 +1241,36 @@ function thanhtoan() {
       }
       localStorage.setItem("storageUsers", JSON.stringify(alluser));
       localStorage.setItem("currentUser", JSON.stringify(usercurrent));
-      location.reload();
     }
   }
+}
+// scroll
+window.onload = function () {
+  const leftButton = document.querySelector(".scroll-left");
+  const rightButton = document.querySelector(".scroll-right");
+
+  if (leftButton != null) {
+    leftButton.addEventListener("click", scrollLeft);
+  }
+  if (rightButton != null) {
+    rightButton.addEventListener("click", scrollRight);
+  }
+};
+
+function scrollLeft() {
+  const container = document.querySelector(".collection-content");
+  container.scrollBy({
+    left: -300,
+    behavior: "smooth",
+  });
+}
+
+function scrollRight() {
+  const container = document.querySelector(".collection-content");
+  container.scrollBy({
+    left: 300,
+    behavior: "smooth",
+  });
 }
 
 function getarrayshopbag() {
@@ -1125,12 +1305,15 @@ function kiemtratontai(IDuser) {
   return null;
 }
 function dieuchinhsoluongtrongkho(arr) {
-  console.log(arr);
-  let products = JSON.parse(localStorage.getItem("arrayproducts"));
+  // Lấy danh sách sản phẩm từ localStorage
+  let products = JSON.parse(localStorage.getItem("arrayproducts")) || [];
+
+  // Lặp qua từng sản phẩm trong danh sách
   for (let i = 0; i < products.length; i++) {
+    // Lặp qua từng sản phẩm trong giỏ hàng
     for (let j = 0; j < arr.length; j++) {
-      if (arr[j].obj.idproduct == products[i].idproduct) {
-        // console.log(arr[j].obj.idproduct, products[i].idproduct);
+      if (arr[j].obj.idproduct === products[i].idproduct) {
+        // Giảm số lượng sản phẩm theo size
         switch (arr[j].size) {
           case "A":
             products[i].quantity.A =
@@ -1152,6 +1335,8 @@ function dieuchinhsoluongtrongkho(arr) {
       }
     }
   }
+
+  // Cập nhật lại danh sách sản phẩm vào localStorage
   localStorage.setItem("arrayproducts", JSON.stringify(products));
 }
 // Function to update user details in storageUsers
@@ -1202,6 +1387,7 @@ function hienthispindex(item) {
   window.location.href = "shop.html";
 }
 function hienthiblog() {
+  loadpage();
   window.scrollTo(0, 0);
   let menurespon = document.querySelector(".header1");
   document.title = "New Clothes | Blog";
@@ -1209,10 +1395,8 @@ function hienthiblog() {
     menurespon.classList.remove("active");
     document.querySelector(".backgroud-menu-respon").style.display = "none";
   }
-  midcontent.innerHTML = ` <!-- Tiêu Đề -->
+  midcontent.innerHTML = ` 
     <h1 id="title-god">Nội Dung "HOT"</h1>
-    <!-- Nd-->
- <!-- Carousel -->
  <div class="carousel">
   <div id="carouselImages" class="carousel-inner">
     <div class="carousel-item" onclick="viewDetails('blog3')">
@@ -1229,14 +1413,14 @@ function hienthiblog() {
   <button class="carousel-control-next" onclick="changeSlide(1)">&#10095;</button>
  </div>
 
-<!--Tabs-->
+
 <div class="tabs">
   <button class="tab-button active" onclick="openTab(event, 'tab1')">Xu hướng thời trang</button>
   <button class="tab-button" onclick="openTab(event, 'tab2')">Kiến thức thời trang</button>
 </div>
 
 <div id="tab1" class="tab-content active">
-  <!-- Blog Item-->
+  
   <div class="blog-items">
     <div id="blog1" class="blog-item" onclick="viewDetails('blog1')">
       <img class="content-image" src="./img/blog/blog1.webp" alt="">
@@ -1244,7 +1428,7 @@ function hienthiblog() {
       <p class="blog-snippet">Bạn đã sẵn sàng để đón nhận mùa Xuân Hè 2024 với phong cách thời trang vô cùng ấn tượng? Trong bài viết này, chúng tôi sẽ hướng dẫn bạn...</p>
       <h3 class="blog-title">Xem thêm</h3>
     </div>
-    <!-- noi dung blog -->
+
 <div class="hidden-content" id="content-blog1">
   <header>
     <div class="title-content">
@@ -1335,14 +1519,14 @@ function hienthiblog() {
     </main>
   </header>
 </div>
-    <!---->
+   
     <div id="blog2" class="blog-item" onclick="viewDetails('blog2')">
       <img class="content-image" src="./img/blog/blog2.webp" alt="">
       <h3 class="blog-title">Dự đoán 5+ họa tiết thời trang dẫn đầu xu hướng...</h3>
       <p class="blog-snippet">Họa tiết thời trang vẫn luôn là chủ đều được nhiều tín đồ quan tâm. Cùng Levents dự đoán những họa tiết thời trang sẽ thành xu hướng 2024</p>
       <h3 class="blog-title">Xem thêm</h3>  
     </div>
-      <!-- noi dung blog -->
+     
 <div class="hidden-content" id="content-blog2">
   <header>
   <div class="title-content">
@@ -1414,14 +1598,14 @@ function hienthiblog() {
 </header>
   
 </div>
-  <!---->
+ 
     <div id="blog3" class="blog-item" onclick="viewDetails('blog3')">
       <img class="content-image" src="./img/blog/blog3.webp" alt="">
       <h3 class="blog-title">“Share your color” - Cổ vũ tiếng nói cá nhân củ...</h3>
       <p class="blog-snippet">Gen Z hiện đang là một thế hệ đóng vai trò chủ lực trong thị trường tiêu thụ tại Việt Nam, đặc biệt là trong lĩnh vực thời trang. Khác...</p>
       <h3 class="blog-title">Xem thêm</h3>
     </div>
-      <!-- noi dung blog -->
+     
 <div class="hidden-content" id="content-blog3">
   <header>
     <div class="title-content">
@@ -1470,14 +1654,14 @@ function hienthiblog() {
     </main>
   </header>
 </div>
-  <!---->
+  
     <div id="blog4" class="blog-item" onclick="viewDetails('blog4')">
       <img class="content-image" src="./img/blog/blog4.webp" alt="">
       <h3 class="blog-title">Những lý do khiến cho các local brand ngày càng... </h3>
       <p class="blog-snippet">Cùng Lì Ven tìm hiểu Local Brand là gì và tại sao các thương hiệu này ngày càng phổ biến và ưa chuộng trong giới trẻ nhé!</p>
       <h3 class="blog-title">Xem thêm</h3>
     </div>
-      <!-- noi dung blog -->
+     
 <div class="hidden-content" id="content-blog4">
   <header>
     <div class="title-content">
@@ -1560,14 +1744,14 @@ function hienthiblog() {
   </main>
 </header>
 </div>
-  <!---->
+  
     <div id="blog5" class="blog-item" onclick="viewDetails('blog5')">
       <img class="content-image" src="./img/blog/blog5.webp" alt="">
       <h3 class="blog-title">LEVENTS® - Local Brand Streetwear với hoạt động...</h3>
       <p class="blog-snippet">Trong những năm gần đây, Streetwear đã trở thành một trào lưu được thế hệ Gen Z cực kỳ “săn đón” nhờ sự năng động, thoải mái cũng như tính...</p>
       <h3 class="blog-title">Xem thêm</h3>
     </div>
-      <!-- noi dung blog -->
+     
 <div class="hidden-content" id="content-blog5">
   <header>
     <div class="title-content">
@@ -1630,14 +1814,14 @@ function hienthiblog() {
     </main>
   </header>
 </div>
-  <!---->
+  
     <div id="blog6" class="blog-item" onclick="viewDetails('blog6')">
       <img class="content-image" src="./img/blog/blog6.webp" alt="">
       <h3 class="blog-title">LEVENTS® CLASSIC - Nét chấm phá nổi bật cho Gen...</h3>
       <p class="blog-snippet">LEVENTS là một trong những thương hiệu dẫn đầu xu hướng thời trang đường phố với phong cách thiết kế đơn giản, hiện đại và tập trung vào tính ứng...</p>
       <h3 class="blog-title">Xem thêm</h3>
     </div>
-      <!-- noi dung blog -->
+     
 <div class="hidden-content" id="content-blog6">
   <header>
     <div class="title-content">
@@ -1698,11 +1882,11 @@ function hienthiblog() {
     </main>
   </header>
 </div>
-  <!---->
+ 
   </div>
 </div>
 <div id="tab2" class="tab-content">
-  <!-- Blog Item-->
+ 
   <div class="blog-items">
       <div id="blog7" class="blog-item" onclick="viewDetails('blog7')">
         <img class="content-image" src="./img/blog/blog7.webp" alt="">
@@ -1710,7 +1894,7 @@ function hienthiblog() {
       <p class="blog-snippet">Bạn đã bao giờ tự hỏi rằng quần xanh lá mặc với áo màu gì sẽ tạo nên một bộ trang phục ấn tượng và thời thượng? Quần xanh lá...</p>
       <h3 class="blog-title">Xem thêm</h3>
       </div>
-        <!-- noi dung blog -->
+        
 <div class="hidden-content" id="content-blog7">
   <header>
     <div class="title-content">
@@ -1817,14 +2001,14 @@ function hienthiblog() {
     </main>
   </header>
 </div>
-  <!---->
+  
       <div id="blog8" class="blog-item" onclick="viewDetails('blog8')">
         <img class="content-image" src="./img/blog/blog8.jpg" alt="">
         <h3 class="blog-title">Vải Modal là gì? So sánh chất liệu vải Modal và...</h3>
       <p class="blog-snippet">Modal là một loại sợi mới lạ đối với nhiều người yêu thời trang, tuy nhiên sợi này đã được áp dụng rộng rãi trên thị trường hiện nay. Vậy...</p>
       <h3 class="blog-title">Xem thêm</h3>
       </div>
-        <!-- noi dung blog -->
+        
 <div class="hidden-content" id="content-blog8">
   <header>
     <div class="title-content">
@@ -1876,14 +2060,14 @@ function hienthiblog() {
       </main>
         </header>
 </div>
-  <!---->
+  
       <div id="blog9" class="blog-item" onclick="viewDetails('blog9')">
         <img class="content-image" src="./img/blog/blog9.webp" alt="">
         <h3 class="blog-title">Vải bông là gì? Ứng dụng đặc biệt trong thời tr...</h3>
       <p class="blog-snippet">“Vải bông là gì?” khi nhìn thấy chất liệu này được in trên nhãn mác áo quần. Câu trả lời sẽ được Levents bật mí ngay hôm nay.</p>
       <h3 class="blog-title">Xem thêm</h3>
     </div>
-      <!-- noi dung blog -->
+      
 <div class="hidden-content" id="content-blog9">
 <header>
   <div class="title-content">
@@ -1922,14 +2106,14 @@ function hienthiblog() {
   </main>
 </header>
 </div>
-  <!---->
+ 
     <div id="blog10" class="blog-item" onclick="viewDetails('blog10')">
       <img class="content-image" src="./img/blog/blog10.webp" alt="">
       <h3 class="blog-title">VẢI POPLIN LÀ GÌ? ĐẶC ĐIỂM, PHÂN LOẠI, ỨNG DỤNG...</h3>
       <p class="blog-snippet">Vải Poplin là gì? Đây là loại vải được tạo nên từ việc dệt trơn với những sợi dọc mịn và ngang thô. Theo chân Levents để tìm hiểu ngay...</p>
       <h3 class="blog-title">Xem thêm</h3>
     </div>
-      <!-- noi dung blog -->
+      
 <div class="hidden-content" id="content-blog10">
 <header>
   <div class="title-content">
@@ -1957,14 +2141,14 @@ function hienthiblog() {
   </main>
 </header>
 </div>
-  <!---->
+  
     <div id="blog11" class="blog-item" onclick="viewDetails('blog11')">
       <img class="content-image" src="./img/blog/blog11.webp" alt="">
       <h3 class="blog-title">Vải Recycle là gì? Xu hướng thời trang bảo vệ m...</h3>
       <p class="blog-snippet">Vải Recycle là gì mà góp phần khắc phục tình trạng ô nhiễm môi trường và biến đổi khí hậu. Cùng Levents khám phá ngay bài viết bên dưới nhé!</p>
       <h3 class="blog-title">Xem thêm</h3>
     </div>
-      <!-- noi dung blog -->
+     
 <div class="hidden-content" id="content-blog11">
 <header>
   <div class="title-content">
@@ -1997,14 +2181,14 @@ function hienthiblog() {
   </main>
 </header>
 </div>
-  <!---->
+ 
     <div id="blog12" class="blog-item" onclick="viewDetails('blog12')">
       <img class="content-image" src="./img/blog/blog12.jpg" alt="">
       <h3 class="blog-title">Phong cách Business Core - Trào lưu doanh nhân ...</h3>
       <p class="blog-snippet">Là một trong những xu hướng thời trang khá mới mẻ, phong cách Business Core đang được đón nhận rất nồng nhiệt. Cùng Levents tìm hiểu ngay!</p>
       <h3 class="blog-title">Xem thêm</h3>
     </div>
-      <!-- noi dung blog -->
+     
 <div class="hidden-content" id="content-blog12">
   <header>
     <div class="title-content">
@@ -2054,11 +2238,1274 @@ function hienthiblog() {
 </div>
 
 
-<!--modal-->
+
 <div id="blogModal" class="modal">
   <span class="close" onclick="closeModal()">&times;</span>
   <div id="modalContent" class="modal-content">
-    <!--modal content will be set dynamically-->
+   
   </div>
 </div>`;
+}
+function hienthicollection(item) {
+  loadpage();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  let choice = item.id;
+  switch (choice) {
+    case "collection1":
+      midcontent.innerHTML = `<div class="collection-1">
+      <div class="collection-1-header">
+        <div class="collection-1-header-img">
+          <img src="./img/collection_list.jpeg" alt="" />
+        </div>
+        <div class="collection-1-header-info">
+          <div class="collection-1-header-info-left">
+            <h2>LEVENTS® 4TH ANNIVERSARY - 4 YEARS OF LEVENTS® LEGACY</h2>
+          </div>
+          <div class="collection-1-header-info-right">
+            <p>HAPPY LEVENTS® 4 YEARS ANNIVERSARY</p>
+            <p>
+              Mở đầu năm 2024, đồng thời kỉ niệm hành trình 4 năm phát triển của
+              Levents®, Nhà Lì chính thức mang đến bộ sưu tập đặc biệt không chỉ
+              để ghi dấu cột mốc đầy ý nghĩa này mà còn là để tri ân khách hàng
+              vì đã luôn đồng hành và ủng hộ Nhà Lì trong suốt 4 năm vừa qua!
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="collection-1-content">
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>HAPPY LEVENTS® 4 YEARS ANNIVERSARY</h3>
+            <p>
+              Nhân dịp kỉ niệm 4 năm phát triển, Levents® chính thức mang đến bộ
+              sưu tập đặc biệt không chỉ để ghi dấu cột mốc đầy ý nghĩa này mà
+              còn là để tri ân khách hàng vì đã luôn đồng hành và ủng hộ Nhà Lì
+              trong suốt 4 năm vừa qua
+            </p>
+            <p>Danh mục sản phẩm 4 Years Anniversary:</p>
+            <p>Levents® 4 Years Anniversary Hoodie</p>
+            <p>Levents® 4 Years Anniversary Tee</p>
+            <p>
+              Trong năm 2024 này, tụi mình sẽ tiếp tục mang đến thêm nhiều sản
+              phẩm mới và không ngừng nâng cấp thiết kế và chất lượng sản phẩm
+              để các bạn có thể tự tin thể hiện phong cách cá nhân, chất riêng
+              của bản thân khi diện lên mình các sản phẩm đến từ Levents®.
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collectionlist0/1.jpg" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collectionlist0/2.jpg" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>[PRODUCT CONCEPT] LEVENTS® 4TH ANNIVERSARY</h3>
+            <p>Danh mục sản phẩm 4 Years Anniversary:</p>
+            <p>Levents® 4 Years Anniversary Hoodie</p>
+            <p>Levents® 4 Years Anniversary Tee</p>
+            <p>Levents® 4 Years Anniversary Airpod Case</p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>[MINI LOOKBOOK] LEVENTS® 4TH ANNIVERSARY</h3>
+            <p>
+              Levents® 4 Years Anniversary - một bộ sưu tập kết hợp giữa thiết
+              kế độc đáo, sáng tạo, mang đậm dấu ấn phát triển xuyên suốt 4 năm
+              qua của Nhà Lì cùng chất liệu cao cấp đem đến độ bền cao, cảm giác
+              thoải mái và mềm mịn khi sử dụng. Phù hợp với mọi giới tính và đa
+              dạng phong cách.
+            </p>
+            <p>
+              Levents® 4 Years Anniversary Hoodie được thiết kế với form
+              Oversized rộng rãi, thoải mái cùng chất liệu nỉ chân cua cao cấp
+              đem đến độ mềm mại, ấm áp nhưng vẫn thoáng khí khi sử dụng
+            </p>
+            <p>
+              Levents® 4 Years Anniversary Tee sử dụng chất vải Lì Ven Fabric
+              cao cấp với 100% cotton mềm mịn, chống nhăn cùng độ thoáng khí và
+              thấm hút tốt
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collectionlist0/3.jpg" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collectionlist0/4.jpg" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>100 GIFTS FOR LEVENTS® 4 YEARS ANNIVERSARY</h3>
+            <p>
+              Nhân dịp sinh nhật 4 tuổi, Nhà Lì xin gửi tặng những phần quà hấp
+              dẫn với mong muốn lan tỏa tình yêu và lòng biết ơn đến những người
+              bạn tuyệt vời, những khách hàng thân yêu đã luôn đồng hành và ủng
+              hộ Levents® trong suốt thời gian qua.
+            </p>
+            <p>
+              Hy vọng các bạn sẽ tiếp tục đồng hành cùng Levents® trong thời
+              gian sắp tới nhé!
+            </p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>[GIVEAWAY] LEVENTS® 4 YEARS ANNIVERSARY</h3>
+            <p>
+              Đánh dấu 4 năm hành trình phát triển đầy mạnh mẽ, Levents® rất
+              trân trọng và biết ơn sự yêu mến và ủng hộ của các bạn trong suốt
+              thời gian qua. Để cảm ơn tình yêu thương to lớn này, Levents® đã
+              chuẩn bị các phần quà vô cùng giá trị dành tặng cho các bạn
+              nèeeeee
+            </p>
+            <p>+ PHẦN THƯỞNG:</p>
+            <p>1. 2 (hai) giải nhất dành cho 2 bạn may mắn trị giá (+ ∞) vnd</p>
+            <p>2. 4 (bốn) giải nhì dành cho 4 bạn may mắn trị giá (+ ∞) vnd:</p>
+            <p>Dành cho tất cả những bạn yêu thích Levents®</p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collectionlist0/5.jpg" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collectionlist0/6.jpg" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>[MINI FEEDBACK] LEVENTS® 4 YEARS ANNIVERSARY</h3>
+            <h4>[MINI FEEDBACK] LEVENTS® 4 YEARS ANNIVERSARY</h4>
+            <p>Color: White</p>
+            <p>Materials: Lì Ven Fabric</p>
+            <p>Size: A/B/C/D</p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>[MINI FEEDBACK] LEVENTS® 4 YEARS ANNIVERSARY</h3>
+            <h4>LEVENTS® 4 YEARS ANNIVERSARY HOODIE/ BLACK</h4>
+            <p>Color: Black</p>
+            <p>Materials: Nỉ</p>
+            <p>Size: A/B/C/D</p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collectionlist0/7.jpg" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collectionlist0/8.jpg" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>LEVENTS® 4TH ANNIVERSARY - 4 YEARS OF LEVENTS LEGACY</h3>
+            <p>
+              Một lần nữa, Levents® xin chân thành cảm ơn tất cả các bạn đã đồng
+              hành và ủng hộ dự án LEVENTS® 4TH ANNIVERSARY - 4 YEARS OF LEVENTS
+              LEGACY.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>`;
+      break;
+    case "collection2":
+      midcontent.innerHTML = `<div class="collection-1">
+      <div class="collection-1-header">
+        <div class="collection-1-header-img">
+          <img src="./img/collection1/1.webp" alt="" />
+        </div>
+        <div class="collection-1-header-info">
+          <div class="collection-1-header-info-left">
+            <h2>LEVENTS® COLLECTION NEW BRANDING - SHARE YOUR COLOR</h2>
+          </div>
+          <div class="collection-1-header-info-right">
+            <p>
+              Your colors reflect your inner self. Embrace them and let them
+              tell your story!
+            </p>
+            <p>SHARE YOUR COLOR 🌈</p>
+          </div>
+        </div>
+      </div>
+      <div class="collection-1-content">
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [PRODUCT CONCEPT] NEW PRODUCT LINE LEVENTS® CLASSIC - FALL/ WINTER
+              2023 COLLECTION
+            </h3>
+            <p>
+              Levents® quyết định cho ra mắt dòng sản phẩm mới chưa từng có từ
+              trước đến nay - LEVENTS® CLASSIC.
+            </p>
+            <p>
+              Dòng sản phẩm nhấn mạnh về sự kết hợp tinh tế giữa chất liệu vượt
+              trội và thiết kế basic với đa dạng màu sắc, form dáng. Để mọi
+              người có thể tự do sáng tạo trang phục theo phong cách riêng của
+              mình. Với mong muốn tạo ra dòng sản phẩm “EVERY WEAR” hứa hẹn mang
+              đến trải nghiệm mua sắm dễ dàng dành cho giới trẻ.
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection1/2.jpg" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection1/3.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>WHAT IS LEVENTS® CLASSIC?</h3>
+            <p>
+              Levents® chính thức cho ra mắt dòng sản phẩm mới chưa từng có từ
+              trước đến nay - LEVENTS® CLASSIC.
+            </p>
+            <p>
+              LEVENTS® CLASSIC với mục tiêu trở thành dòng sản phẩm "EVERY WEAR"
+              là sự kết hợp tinh tế giữa thiết kế đơn giản, hiện đại và form
+              dáng cổ điển, tập trung về chất liệu và màu sắc đa dạng.
+            </p>
+            <p>
+              Các sản phẩm sẽ được ra mắt liên tục tại website và toàn bộ hệ
+              thống sớm nhất.
+            </p>
+            <p>Levents® Classic - all Time Classic</p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [SHOWCASE LOOKBOOK] OFFICIAL LEVENTS® NEW BRANDING BIG CAMCAMPAIGN
+            </h3>
+            <p>
+              Levents tin rằng mỗi cá thể đều mang một màu sắc khác nhau và tất
+              cả mọi người đều có cách để làm nổi bật màu sắc cá tính của mình.
+              Với hơn 3 năm kinh nghiệm trong lĩnh vực thời trang streetwear,
+              Levents mong muốn được đồng hành và cùng bạn phát triển bản thân,
+              tự tin chia sẻ màu sắc cá nhân trong cuộc sống hằng ngày , đơn
+              giản từ việc lựa chọn và kết hợp các sản phẩm của Levents.
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection1/4.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection1/5.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>[GIVE AWAY] OFFICIAL LEVENTS® NEW BRANDING BIG CAMPAIGN</h3>
+            <p>+ PHẦN THƯỞNG:</p>
+            <p>
+              1. 1 (một) giải nhất dành cho duy nhất 1 bạn may mắn trị giá (+ ∞)
+              vnd:
+            </p>
+            <p>
+              - 3 (ba) LEVENTS® CLASSIC REGULAR TEE - sản phẩm mới nhất dành cho
+              người thắng cuộc và 2 bạn được tag.
+            </p>
+            <p>2. 2 (hai) giải nhì dành cho 2 bạn may mắn trị giá (+ ∞) vnd:</p>
+            <p>
+              - 3 (ba) LEVENTS® CLASSIC REGULAR TEE - sản phẩm mới nhất dành cho
+              người thắng cuộc và 2 bạn được tag.
+            </p>
+            <p>Dành cho tất cả những bạn yêu thích Levents®</p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [LOOKBOOK] NEW PRODUCT LINE LEVENTS® CLASSIC - F/W23 COLLECTION
+            </h3>
+            <p>
+              Collection cho dòng sản phẩm mới lần này với danh mục đa dạng:
+            </p>
+            <p>LEVENTS® CLASSIC REGULAR POLO</p>
+            <p>LEVENTS® CLASSIC STRIPED LONG SLEEVE SHIRT</p>
+            <p>LEVENTS® CLASSIC SWEATER</p>
+            <p>LEVENTS® CLASSIC HOODIE</p>
+            <p>LEVENTS® CLASSIC ZIPPER HOODIE</p>
+            <p>LEVENTS® CLASSIC SHORTPANTS</p>
+            <p>LEVENTS® CLASSIC TRACK PANTS</p>
+            <p>LEVENTS® CLASSIC LINE TRACK PANTS</p>
+            <p>LEVENTS® CLASSIC WASH STRAIGHT JEANS</p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection1/6.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection1/7.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              Let's confidence empowered you with new product line LEVENTS®
+              CLASSIC 💙
+            </h3>
+            <p>
+              Những items mới nhất từ Nhà Lì đều được trau chuốt tỉ mỉ tới từng
+              thiết kế, màu sắc, chất vải và form dáng. Đem lại sự thoải mái khi
+              mặc nhưng vẫn đề cao sự nổi bật, cá tính để bạn có thể tự tin là
+              chính mình khi khoác lên những sản phẩm đến từ Levents®.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>`;
+      break;
+    case "collection3":
+      midcontent.innerHTML = `<div class="collection-1">
+      <div class="collection-1-header">
+        <div class="collection-1-header-img">
+          <img src="./img/collection2/1.webp" alt="" />
+        </div>
+        <div class="collection-1-header-info">
+          <div class="collection-1-header-info-left">
+            <h2>LEVENTS® 3RD ANNIVERSARY “ONE WORLD ONE LOVE”</h2>
+          </div>
+          <div class="collection-1-header-info-right">
+            <p>
+              Mở đầu năm 2023, Levents® mang đến dự án chào mừng thương hiệu
+              tròn 3 năm tuổi, tụi mình mang đến bộ sưu tập đặc biệt như một ấn
+              phẩm ghi dấu cột mốc đặc biệt này.
+            </p>
+            <br />
+            <p>
+              Từ những người đam mê thời trang đường phố đến thương hiệu hàng
+              đầu được yêu thích tròn 3 năm tuổi dưới sự yêu thương của các bạn
+              trẻ. Dự án lần này không chỉ là dịp để tụi mình tri ân khách hàng
+              mà còn là cơ hội thực hiện ước mơ đưa thương hiệu trở nên ý nghĩa
+              hơn đối với cộng đồng, cùng giới trẻ tạo nên những dấu ấn tích cực
+              cho xã hội.
+            </p>
+            <br />
+            <p>
+              Hãy cùng tụi mình điểm qua các sự kiện đặc biệt trong dự án này
+              nhé!
+            </p>
+            <br />
+          </div>
+        </div>
+      </div>
+      <div class="collection-1-content">
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [MINI CONCEPT LOOKBOOK] LEVENTS® 3RD ANNIVERSARY "ONE WORLD ONE
+              LOVE"
+            </h3>
+            <p>
+              Hành trình 3 năm, tụi mình đã và đang mang đến những dòng sản phẩm
+              thời trang phong cách đường phố cao cấp dẫn đầu xu hướng mới nhất.
+              Nhân dịp kỉ niệm cột mốc đặc biệt này tụi mình muốn đưa bạn đến
+              với thế giới của Levents® đã xây dựng thời gian qua với góc nhìn
+              mộng mơ hơn.
+            </p>
+            <br />
+            <p>
+              Trong năm thứ 3 của thương hiệu, tụi mình sẽ tiếp tục mang đến
+              thêm nhiều sản phẩm mới và không ngừng nâng cấp chất lượng sản
+              phẩm, dịch vụ để các bạn có những trải nghiệm mới tuyệt vời hơn,
+              theo tiêu chuẩn đẹp, xịn hơn nữa.
+            </p>
+            <br />
+            <p>
+              Kết thúc chặng đường 3 năm, mở một khởi đầu mới, một giá trị vĩnh
+              cửu “Levents® forever”.
+            </p>
+            <br />
+            <p>Happy Birthday Levents® 3rd Anniversary</p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection2/2.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection2/3.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              [PRODUCT CONCEPT] LEVENTS® 3RD ANNIVERSARY "ONE WORLD ONE LOVE"
+            </h3>
+            <p>Danh mục sản phẩm:</p>
+            <br />
+            <p>LEVENTS® 3RD ANNIVERSARY TEE/ WHITE</p>
+            <p>LEVENTS® 3RD ANNIVERSARY TOTE BAG/ OFF WHITE</p>
+            <p>
+              LEVENTS® 3RD ANNIVERSARY THANK YOU CARD (Special Gift dành cho
+              1000 chiếc áo đầu tiên)
+            </p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [MINI LOOKBOOK] SPECIAL COLLECTION "MAKE EVERYTHING POPULAR"
+              DORAEMON | LEVENTS®
+            </h3>
+            <p>
+              Sản phẩm LEVENTS® 3RD ANNIVERSARY TEE được sử dụng chất liệu vải
+              LÌ VEN ORIGINAL 2.0 được bán với mức giá hấp dẫn TRI ÂN.
+            </p>
+            <p>
+              Sản phẩm LEVENTS® 3RD ANNIVERSARY TOTE BAG được thiết kế theo form
+              MỚI chưa bao giờ xuất hiện trong các BST của Levents® với chất
+              liệu Canvas dày dặn, có độ chắc tay cao.
+            </p>
+            <p>
+              Đặc biệt cả 2 sản phẩm đều có chi tiết tag da xịn xò, cao cấp hứa
+              hẹn sẽ là trải nghiệm hoàn toàn MỚI và THÚ VỊ dành cho bạn.
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection2/4.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection2/5.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              HƠN 1000 CHIẾC THIỆP ĐƯỢC GỬI TẶNG LAN TỎA CHIẾN DỊCH CỘNG ĐỒNG
+              LEVENTS® 3RD ANNIVERSARY "ONE WORLD ONE LOVE"
+            </h3>
+            <p>+ PHẦN THƯỞNG:</p>
+            <p>
+              1. 1 (một) giải nhất dành cho duy nhất 1 bạn may mắn trị giá (+ ∞)
+              vnd:
+            </p>
+            <p>
+              - 3 (ba) LEVENTS® CLASSIC REGULAR TEE - sản phẩm mới nhất dành cho
+              người thắng cuộc và 2 bạn được tag.
+            </p>
+            <p>2. 2 (hai) giải nhì dành cho 2 bạn may mắn trị giá (+ ∞) vnd:</p>
+            <p>
+              - 3 (ba) LEVENTS® CLASSIC REGULAR TEE - sản phẩm mới nhất dành cho
+              người thắng cuộc và 2 bạn được tag.
+            </p>
+            <p>Dành cho tất cả những bạn yêu thích Levents®</p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              TỪ THIỆN 10% DOANH THU LEVENTS® 3RD ANNIVERSARY "ONE WORLD ONE
+              LOVE"
+            </h3>
+            <p>
+              Chúng mình đã trích 10% doanh thu 1000 chiếc áo, 200 chiếc túi
+              quyên góp trao tặng nhiều phần quà đến các em nhỏ tại làng trẻ em
+              sos trong dự án levents® 3rd anniversary "one world one love".
+            </p>
+            <br />
+            <p>
+              Cảm ơn tất cả các bạn vì đã hỗ trợ và góp phần cùng tụi mình mang
+              đến một mùa Tết ấm áp và trọn vẹn hơn bao giờ hết đến các em nhỏ
+              khó khăn tại Làng trẻ em SOS Gò Vấp.
+            </p>
+            <br />
+            <p>
+              Ngày 15/01 vừa qua, tụi mình đã có một chuyến đi đến Làng trẻ em
+              SOS Gò vấp gửi tặng phần quà hiện kim, hiện vật và đặc biệt trao
+              tặng 50 chiếc áo kỉ niệm 3 tuổi. Tất cả quà tặng được quy đổi
+              tương đương với số tiền được trích ra 10% DOANH THU 1000 CHIẾC ÁO,
+              200 CHIẾC TÚI ĐẦU TIÊN trong dự án chào mừng thương hiệu tròn 3
+              năm tuổi.
+            </p>
+            <br />
+            <p>
+              Trong tương lai, Team Levents sẽ cố gắng hơn nữa để có thể tổ chức
+              thêm nhiều hoạt động ý nghĩa và mang lại những thông điệp tích cực
+              cho cộng đồng.
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection2/6.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection2/7.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>[GIVE AWAY] LEVENTS® 3RD ANNIVERSARY "ONE WORLD ONE LOVE"</h3>
+            <p style="font-weight: 550">+ PHẦN THƯỞNG:</p>
+            <p>
+              1 (một) giải nhất dành cho duy nhất 1 bạn may mắn trị giá (+ ∞)
+              vnd:
+            </p>
+            <p>- 1 (một) LEVENTS® 3RD ANNIVERSARY TEE</p>
+            <p>- 1 (một) LEVENTS® 3RD ANNIVERSARY TOTE BAG</p>
+            <p>
+              - 3 (ba) LEVENTS® COLOR TEE - sản phẩm mới nhất chưa phát hành
+              dành cho người thắng cuộc và 2 bạn được tag.
+            </p>
+            <p>- 1 (một) LEVENTS® PUNCH VARSITY</p>
+            <p>- 1 (một) LEVENTS® BASIC KNIT SWEATE</p>
+            <br />
+            <p>2 (hai) giải nhì dành cho 2 bạn may mắn trị giá (+ ∞) vnd:</p>
+            <p>- 1 (một) LEVENTS® 3RD ANNIVERSARY TEE</p>
+            <p>- 1 (một) LEVENTS® 3RD ANNIVERSARY TOTE BAG</p>
+            <p>
+              - 3 (ba) LEVENTS® COLOR TEE - sản phẩm mới nhất chưa phát hành
+              dành cho người thắng cuộc và 2 bạn được tag.
+            </p>
+            <br />
+            <p style="font-weight: 550">
+              + ĐỐI TƯỢNG : Tất cả những bạn yêu thích Levents®
+            </p>
+            <p>+ THỂ LỆ THAM GIA:</p>
+            <p>
+              Bước 1: Like, share post ở chế độ công khai, kèm hashtag
+              #Levents3rdAnniversary #Oneworldonelove
+            </p>
+            <p>https://www.facebook.com/groups/786344802261777</p>
+            <p>
+              Bước 3: Comment vào post "" và tag 2 người bạn của bạn vào để tham
+              gia cùng.
+            </p>
+            <p style="font-weight: 550">+ CÁCH THỨC CÔNG BỐ:</p>
+            <p>Thời gian kết thúc mini game: 24h ngày 12.01.2025</p>
+            <p>Thời gian công bố: 19h00 ngày 20.01.2025</p>
+            <p>Kết quả sẽ được công bố tại group Levents Crew.</p>
+            <p>Cách thức chọn:</p>
+            <p>
+              Chọn ngẫu nhiên 3 tài khoản may mắn trên mỗi kênh bằng phần mềm
+              https://commentpicker.com/ để nhận phần quà đặc biệt.
+            </p>
+            <br />
+            <p style="font-weight: 550">+ LƯU Ý:</p>
+            <p>
+              - Levents® sẽ chọn các comments trên kênh Facebook và comments
+              trên kênh Instagrams nên các bạn có thể tham gia mini game trên cả
+              2 kênh để tăng khả năng thắng cuộc nhé.
+            </p>
+            <p>- Không giới hạn số lần tham gia.</p>
+            <br />
+            <p>Chúc các bạn may mắn nheeeee!</p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [MINI FEEDBACK LOOKBOOK] LEVENTS® 3RD ANNIVERSARY "ONE WORLD ONE
+              LOVE"
+            </h3>
+            <p>
+              Dự án đặc biệt này sẽ chính thức được mở bán: 18h, ngày 06.01.2025
+            </p>
+            <p>Danh mục sản phẩm:</p>
+            <p>LEVENTS® 3RD ANNIVERSARY TEE/ WHITE</p>
+            <p>LEVENTS® 3RD ANNIVERSARY TOTE BAG/ OFF WHITE</p>
+            <p>
+              LEVENTS® 3RD ANNIVERSARY THANK YOU CARD (Special Gift dành cho
+              1000 chiếc áo đầu tiên)
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection2/8.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection2/9.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              [MINI FEEDBACK LOOKBOOK] LEVENTS® 3RD ANNIVERSARY "ONE WORLD ONE
+              LOVE"
+            </h3>
+            <p>
+              MATERIAL: LÌ VEN ORIGINAL và các dòng vải đặc trưng khác của
+              Levents®. Ngoài ra, sản phẩm LEVENTS® 3RD ANNIVERSARY TOTE BAG
+              được thiết kế theo form MỚI chưa bao giờ xuất hiện trong các BST
+              của Levents® với chất liệu Canvas dày dặn, có độ chắc tay cao hứa
+              hẹn sẽ là trải nghiệm hoàn toàn MỚI và THÚ VỊ dành cho bạn.
+            </p>
+            <br />
+            <p>SPECIAL PRICE/ LOVE PRODUCT FOR CHILDERN</p>
+            <p>OFFICAL RELEASE : 18h00 - 06.01.2025</p>
+            <p>AT ALL STORE, WEBSITE, E - COM Levents®</p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [MINI FEEDBACK LOOKBOOK] LEVENTS® 3RD ANNIVERSARY "ONE WORLD ONE
+              LOVE"
+            </h3>
+            <p>Ngoài ra chúng mình còn có TUẦN LỄ VÀNG TRI ÂN MỌI HÓA ĐƠN</p>
+            <p>- Thời gian: 06.01.2023 - 13.01.2023</p>
+            <p>
+              - Kênh áp dụng: Hệ thống cửa hàng, Website, IG & FB của Levents®
+              (Không áp dụng đơn hàng trên sàn TMĐT)
+            </p>
+            <p>
+              - Cách thức: Không có cách thức nào khó khăn cả chỉ cần bạn mua
+              hàng các sản phẩm của Levents® trong tuần lễ vàng:
+            </p>
+            <p>
+              Hạng Member: Chỉ cần bạn đăng kí tạo khoản sẽ được áp dụng mua
+              hàng ưu đãi 5% cho mỗi hóa đơn
+            </p>
+            <p>
+              Hạng Rare Member: ưu đãi theo hạng thành viên 7% + ưu đãi tuần lễ
+              vàng 3%, áp dụng cho hoá đơn tối đa 3.000.000vnd
+            </p>
+            <p>
+              Hạng Super Rare Member: ưu đãi theo hạng thành viên 15% + ưu đãi
+              tuần lễ vàng 3%, áp dụng cho hoá đơn tối đa 3.000.000vnd
+            </p>
+            <p>
+              Hạng Ultra Rare Member: ưu đãi theo hạng thành viên 20% + ưu đãi
+              tuần lễ vàng 3%, áp dụng cho hoá đơn tối đa 3.000.000vnd
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection2/10.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection2/11.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>LEVENTS® 3RD ANNIVERSARY "ONE WORLD ONE LOVE"</h3>
+            <p>
+              Một lần nữa, chân thành cảm ơn tất cả các bạn đã đồng hành và ủng
+              hộ dự án LEVENTS® 3RD ANNIVERSARY "ONE WORLD ONE LOVE".
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>`;
+      break;
+    case "collection4":
+      midcontent.innerHTML = `<div class="collection-1">
+      <div class="collection-1-header">
+        <div class="collection-1-header-img">
+          <img src="./img/collection3/1.webp" alt="" />
+        </div>
+        <div class="collection-1-header-info">
+          <div class="collection-1-header-info-left">
+            <h2>
+              LEVENTS® | POPPOP Collaboration - Special Collection "MAKE POPPOP
+              FAMOUS"
+            </h2>
+          </div>
+          <div class="collection-1-header-info-right">
+            <p>
+              LEVENTS® | POPPOP FIGURE là một sản phẩm đặc biệt trong dự án Kết
+              hợp lần này. Sản phẩm được đầu tư chỉnh chu, được thực hiện bởi
+              nghệ nhân và được làm 100% thủ công.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="collection-1-content">
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+                QUÁ TRÌNH TẠO RA MÔ HÌNH LEVENTS® | POPPOP, SẢN PHẨM ĐẶC BIỆT CỦA DỰ ÁN “MAKE POPPOP FAMOUS”
+            </h3>
+            <p>
+             LEVENTS® | POPPOP FIGURE là một sản phẩm đặc biệt trong dự án Kết hợp lần này. Sản phẩm được đầu tư chỉnh chu, được thực hiện bởi nghệ nhân và được làm 100% thủ công.
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/2.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/3.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              LEVENTS® | POPPOP COLLABORATION - SPECIAL COLLECTION "MAKE POPPOP
+              FAMOUS"
+            </h3>
+            <p>
+              Dự án với mục tiêu Levents® đồng hành cùng người bạn Poppop thực
+              hiện được ước mơ chung cùng vươn xa, trở thành "Dream comes true".
+            </p>
+            <br />
+            <p>Dự án đặc biệt này sẽ chính thức được mở bán 2 giai đoạn:</p>
+            <p>
+              + Giai đoạn 1 bắt đầu vào 18h, ngày 11.12, diễn ra duy nhất tại
+              Cửa hàng bán lẻ độc quyền ở The New Playground, Lê Lai.
+            </p>
+            <p>+ Giai đoạn 2 sẽ được bật mí sau nhéee!</p>
+            <br />
+            <p>Bộ sưu tập đặc biệt với danh mục sản phẩm đa dạng:</p>
+            <p>LEVENTS® | POPPOP FRIENDS TEE</p>
+            <p>LEVENTS® | POPPOP CHAT TEE</p>
+            <p>LEVENTS® | POPPOP TOY WASH TEE</p>
+            <p>LEVENTS® | POPPOP WORD HOODIE ZIP</p>
+            <p>LEVENTS® | POPPOP JACKET</p>
+            <p>LEVENTS® | POPPOP CARGO PANTS</p>
+            <p>LEVENTS® | POPPOP PUFFER SHOULDER BAG</p>
+            <p>LEVENTS® | POPPOP PIN SET</p>
+            <p>LEVENTS® | POPPOP FIGURE (SPECIAL PRODUCT)</p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>BAO BÌ CỦA SPECIAL COLLECTION "MAKE POPPOP FAMOUS"</h3>
+            <p>
+              Các sản phẩm được sử dụng 1 trong những dòng vải chất lượng cải
+              tiến vượt trội - LÌ VEN FABRIC và dòng vải mới nhất LÌ VEN WASH
+              cùng các dòng vải đặc trưng khác của Levents®, cùng nhiều kĩ thuật
+              in độc đáo khác chưa từng có trong các sản phẩm trước đó.
+            </p>
+            <br />
+            <p>
+              Đồng hành cùng sự kiện đặc biệt này tụi mình còn mang đến bộ bao
+              bì và nhãn mác dệt, nhãn mác độc quyền của Bộ sưu tập.
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/4.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/5.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              [GIVE AWAY] LEVENTS® X POPPOP COLLABORATION - SPECIAL COLLECTION
+              "MAKE POPPOP FAMOUS"
+            </h3>
+            <p style="font-weight: 550">+ PHẦN THƯỞNG:</p>
+            <p>
+              1 (một) giải nhất dành cho duy nhất 1 bạn may mắn trị giá (+ ∞)
+              vnd:
+            </p>
+            <p>
+              - 1 (một) LEVENTS® | POPPOP FIGURE - sản phẩm đặc biệt trong Bộ
+              sưu tập
+            </p>
+            <p>- 1 (một) LEVENTS® | POPPOP COLLECTION COMBO gồm:</p>
+            <p>
+              + 3 (ba) LEVENTS® | POPPOP FRIENDS TEE dành cho người thắng cuộc
+              và 2 bạn được tag.
+            </p>
+            <p>+ 1 (một) LEVENTS® | POPPOP PIN SET</p>
+            <p>+ 1 (một) LEVENTS® | POPPOP JACKET</p>
+            <p>+ 1 (một) LEVENTS® | POPPOP WORD HOODIE ZIP</p>
+            <p>2 (hai) giải nhì dành cho 2 bạn may mắn trị giá (+ ∞) vnd:</p>
+            <p>
+              - 3 (ba) LEVENTS® | POPPOP FRIENDS TEE dành cho người thắng cuộc
+              và 2 bạn được tag.
+            </p>
+            <p>- 1 (một) LEVENTS® | POPPOP PIN SET</p>
+            <p>- 1 (một) LEVENTS® | POPPOP JACKET</p>
+            <br />
+            <p style="font-weight: 550">
+              + ĐỐI TƯỢNG : Tất cả những bạn yêu thích Levents®
+            </p>
+            <br />
+            <p style="font-weight: 550">+ LƯU Ý:</p>
+            <p>
+              - Levents® sẽ chọn các bình luận trên kênh Facebook và bình luận
+              trên kênh Instagrams nên các bạn có thể tham gia mini game trên cả
+              2 kênh để tăng khả năng thắng cuộc nhé.
+            </p>
+            <p>- Không giới hạn số lần tham gia.</p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [THANK YOU EVERYONE] AT POP UP PROJECT "MAKE POPPOP FAMOUS" -
+              LEVENTS® | POPPOP COLLABORATION
+            </h3>
+            <p>
+              [100 PHẦN QUÀ CHO 100 NGƯỜI ĐẦU TIÊN TẠI POP UP] LEVENTS® | POPPOP
+              Collaboration - Special Collection "MAKE POPPOP FAMOUS"
+            </p>
+            <br />
+            <p>
+              Sự kiện POP UP RELEASE - Ra mắt chính thức Special Collection cùng
+              ưu đãi đặc biệt lớn nhất trong năm
+            </p>
+            <p>- Địa điểm: The New Playground Lê Lai - Store Levents®</p>
+            <p>- Thời gian: 18h, ngày 11.12.2024</p>
+            <p>- Hoạt động:</p>
+            <p>Check in Pop up & nhận quà tặng dành riêng cho sự kiện</p>
+            <p>Trải nghiệm không gian, sản phẩm ra mắt độc quyền tại Pop up</p>
+            <p>Gặp gỡ các khách mời nổi tiếng, thân thiết của Lì ven</p>
+            <p>Tham gia các chương trình thú vị khác nhận quà tặng</p>
+            <p>
+              Hãy là 100 người đầu tiên được nhận các ưu đãi có giá trị cao,
+              chương trình hấp dẫn tại Pop up.
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/6.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/7.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              [THE MAP] FOR POP UP PROJECT "MAKE POPPOP FAMOUS" - LEVENTS® |
+              POPPOP COLLABORATION
+            </h3>
+            <p>
+              Hãy là 1 trong 100 người đầu tiên để có cơ hội nhận được các món
+              quà đặc biệt giá trị nha. Cùng chúng mình khám phá bản đồ check in
+              Pop up để khum bị lạc nhéeee!
+            </p>
+            <p>
+              Lưu ý: Với khách mời nhận thư mời, các bạn vui lòng lưu hình thư
+              mời đưa nhân viên kiểm tra để vào cổng nàaa.
+            </p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [100 PHẦN QUÀ CHO 100 NGƯỜI ĐẦU TIÊN TẠI POP UP] LEVENTS® | POPPOP
+              COLLABORATION - SPECIAL COLLECTION "MAKE POPPOP FAMOUS"
+            </h3>
+            <p>
+              TẶNG 100 PHẦN QUÀ MIỄN PHÍ cho 100 KHÁCH HÀNG ĐẦU TIÊN tại sự kiện
+              Pop up ngày 11.12.2024.
+            </p>
+            <br />
+            <p>
+              - Phần quà: Trải nghiệm và nhận quà tặng giá trị cao độc quyền tại
+              Pop up.
+            </p>
+            <p>- Để nhận quà vui lòng đọc kỹ hướng dẫn dưới đây:</p>
+            <p>+ Thời gian mở tặng: Duy nhất từ 18h, ngày 11.12.2022</p>
+            <p>+ Kênh áp dụng: The New Playground Lê Lai - Store Levents®</p>
+            <p>
+              + Cách thức: Không có cách thức nào cả chỉ cần bạn là 1 trong 100
+              khách hàng đến dự sự kiện sớm nhất trong lúc mở bán, bạn sẽ được
+              tham gia Raffle Gift với tỉ lệ 100% trúng quà và được nhận (+ ∞)
+              Special Gift.
+            </p>
+            <br />
+            <p>Lưu ý:</p>
+            <p>
+              + Chương trình giới hạn Free 100 Gift. Mỗi khách hàng chỉ được
+              nhận 1 lần.
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/8.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/9.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              [100 PHẦN QUÀ CHO 100 NGƯỜI ĐẦU TIÊN TẠI POP UP] LEVENTS® | POPPOP
+              COLLABORATION - SPECIAL COLLECTION "MAKE POPPOP FAMOUS"
+            </h3>
+            <p>
+              Chương trình Raffle Sticker Collection tại Pop up ngày 11.12, The
+              New Playground Lê Lai, Store Levents®:
+            </p>
+            <br />
+            <p>- Phần quà: LEVENTS® | POPPOP STICKER</p>
+            <p>- Để nhận quà vui lòng đọc kỹ hướng dẫn dưới đây:</p>
+            <p>+ Thời gian mở tặng: 18h, ngày 11.12.2024</p>
+            <p>
+              + Cách thức: Chỉ cần bạn là 1 trong những khách hàng đến dự sự
+              kiện, bạn sẽ được tham gia trò chơi để rước về các sticker thiết
+              kế độc quyền chỉ có tại sự kiện.
+            </p>
+            <br />
+            <p>
+              + Chương trình áp dụng Free với 100 khách hàng đầu tiên dự sự
+              kiện.
+            </p>
+            <p>
+              + Bắt đầu từ khách hàng 101, chương trình sẽ áp dụng có hóa đơn và
+              sẽ kết thúc khi đã tặng hết số lượng theo quy định.
+            </p>
+            <p>
+              + Mỗi hóa đơn được tặng 1 lần. Một tài khoản tối đa 3 lần nhận
+              Gift.
+            </p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [100 PHẦN QUÀ CHO 100 NGƯỜI ĐẦU TIÊN TẠI POP UP] LEVENTS® | POPPOP
+              COLLABORATION - SPECIAL COLLECTION "MAKE POPPOP FAMOUS"
+            </h3>
+            <p>
+              TẶNG LEVENTS® | POPPOP POPCORN cho TOÀN BỘ khách hàng có mặt tại
+              sự kiện:
+            </p>
+            <br />
+            <p>- Phần quà: LEVENTS® | POPPOP POPCORN</p>
+            <p>- Để nhận quà vui lòng đọc kỹ hướng dẫn dưới đây:</p>
+            <p>+ Thời gian mở tặng: 18h, ngày 11.12.2024</p>
+            <p>
+              + Cách thức: Chỉ cần bạn là 1 trong những khách hàng đến dự sự
+              kiện, bạn sẽ được nhận Popcorn được chính tay tụi mình chế biến,
+              thiết kế riêng.
+            </p>
+            <p>Lưu ý:</p>
+            <p>
+              + Chương trình áp dụng Free với toàn bộ khách hàng dự sự kiện.
+            </p>
+            <p>
+              + Chương trình kết thúc khi đã tặng hết số lượng theo quy định.
+            </p>
+            <p>
+              Lên lịch cùng với bạn bè và cùng chung vui với tụi mình tại sự
+              kiện nhaaa
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/10.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/11.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              [MINI LOOKBOOK] LEVENTS® | POPPOP COLLABORATION - SPECIAL
+              COLLECTION "MAKE POPPOP FAMOUS"
+            </h3>
+            <h4>LEVENTS® | POPPOP FRIENDS TEE</h4>
+            <br />
+            <p>
+              Sản phẩm nổi bật với 2 phối màu sành điệu BEIGE & GREY, phù hợp
+              với mọi outfit của các bạn.
+            </p>
+            <br />
+            <p>
+              Sử dụng chất liệu LÌ VEN ORIGINAL 2.0 mang lại cảm giác thoáng mát
+              và khắc phục tình trạng bị nhăn của sản phẩm. Kết hợp cùng kỹ
+              thuật in dập nổi các họa tiết đặc trưng của nhà Lì ven được cải
+              tiến theo phong cách của Poppop.
+            </p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [MINI LOOKBOOK] LEVENTS® | POPPOP COLLABORATION - SPECIAL
+              COLLECTION "MAKE POPPOP FAMOUS"
+            </h3>
+            <h4>LEVENTS® | POPPOP TOY WASH TEE</h4>
+            <br />
+            <p>
+              Phiên bản Tee với 2 phối màu BEIGE & BLUE độc đáo cùng với chất
+              liệu vải Wash hoàn toàn mới đến từ nhà Lì ven.
+            </p>
+            <br />
+            <p>
+              Chất vải Wash được cải tiến trong cách xử lý chất liệu, làm bạc
+              màu vải tạo cảm giác retro và ấm áp nhưng không ảnh hưởng đến chất
+              lượng của sản phẩm. Kết hợp với các hình in tối giản phù hợp với
+              mọi outfit.
+            </p>
+            <br />
+            <p>
+              Kết hợp với Decal Kim tuyến trên hình ảnh chú Poppop biểu tượng.
+              Sản phẩm hứa hẹn sẽ mang đến những trải nghiệm thú vị dành cho các
+              bạn.
+            </p>
+            <br />
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/12.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/13.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              [MINI LOOKBOOK] LEVENTS® | POPPOP COLLABORATION - SPECIAL
+              COLLECTION "MAKE POPPOP FAMOUS"
+            </h3>
+            <h4>LEVENTS® | POPPOP CHAT TEE</h4>
+            <br />
+            <p>
+              Sản phẩm với 2 phối màu vô cùng được yêu thích BLACK & WHITE. Sử
+              dụng chất liệu vải được cải tiến vượt trội - LÌ VEN FABRIC.
+            </p>
+            <br />
+            <p>
+              Các chi tiết trên áo được tạo điểm nhấn bằng chất liệu Decal Dạ
+              quang, mang lại sự nổi bật cho sản phẩm
+            </p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [MINI LOOKBOOK] LEVENTS® | POPPOP COLLABORATION - SPECIAL
+              COLLECTION "MAKE POPPOP FAMOUS"
+            </h3>
+            <h4>LEVENTS® | POPPOP WORD HOODIE ZIP</h4>
+            <br />
+            <p>
+              Phiên bản Hoodie sử dụng form crop hoàn toàn mới tạo cảm giác khác
+              biệt khi trải nghiệm, kết hợp với phối màu Hunter hoàn toàn mới và
+              chất vải Nỉ (chân cua) quen thuộc của nhà Lì ven.
+            </p>
+            <br />
+            <p>
+              Đặc biệt, sản phẩm Hoodie Zip có thể tháo zip ở cả 2 đầu, tạo nên
+              sự tiện lợi khi sử dụng. Sản phẩm hứa hẹn sẽ mang đến những trải
+              nghiệm vô cùng thú vị dành cho các bạn!
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/14.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/15.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              [MINI LOOKBOOK] LEVENTS® | POPPOP COLLABORATION - SPECIAL
+              COLLECTION "MAKE POPPOP FAMOUS"
+            </h3>
+            <h4>LEVENTS® | POPPOP JACKET</h4>
+            <br />
+            <p>
+              Phiên bản Jacket với phối màu BLACK đặc trưng, cùng kỹ thuật thêu
+              xù mang đến sự chắc chắn và ấm áp cho các bạn.
+            </p>
+            <br />
+            <p>
+              Sử dụng chất liệu Khaki với độ bền cao, ít bị nhăn và không bị xù
+              lông. Sản phẩm LEVENTS® | POPPOP JACKET hứa sẽ sẽ mang đến trải
+              nghiệm thú vị dành chol các bạn!
+            </p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>
+              [MINI LOOKBOOK] LEVENTS® | POPPOP COLLABORATION - SPECIAL
+              COLLECTION "MAKE POPPOP FAMOUS"
+            </h3>
+            <h4>LEVENTS® | POPPOP CARGO PANTS</h4>
+            <br />
+            <p>
+              Sản phẩm sử dụng chất liệu Khaki tạo cảm giác thoải mái và sành
+              điệu với phối màu đen đặc trưng. Phiên bản CARGO PANTS sử dụng kỹ
+              thuật in dập nổi vô cùng chắc chắn đảm bảo chất lượng sản phẩm sau
+              thời gian dài sử dụng.
+            </p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/16.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection3/17.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>
+              [LỊCH BÁN GIAI ĐOẠN 2] LEVENTS® | POPPOP COLLABORATION - SPECIAL
+              COLLECTION "MAKE POPPOP FAMOUS"
+            </h3>
+            <br />
+            <p>Thông tin mở bán giai đoạn 2:</p>
+            <br />
+            <p>Tại hệ thống WEB, FB & IG của Levents®:</p>
+            <p>+ TIME: 18:00, 13.12.2024</p>
+            <p>
+              + Chương trình: 200 đơn hàng đầu tiên được tặng bộ Sticker xịn xò
+              (đã ra mắt độc quyền tại Pop - up).
+            </p>
+            <p>+ Lưu ý:</p>
+            <p>Áp dụng 1 lần/ hóa đơn</p>
+            <p>1 tài khoản được nhận quà tối đa 3 lần</p>
+            <p>
+              Chương trình kết thúc khi số lượng quà tặng hết theo quy định.
+            </p>
+            <br />
+            <p>Tại hệ thống SHOPEE, LAZADA của Levents®:</p>
+            <p>+ TIME: 00:00, 14.12.2024.</p>
+            <p>+ Chương trình: Các voucher 15k, 20k dành cho mọi hóa đơn</p>
+            <p>Tại hệ thống TIKTOKSHOP của Levents®:</p>
+            <p>+ TIME: 20:00, 16.12.2024.</p>
+            <p>
+              + Chương trình: Ra mắt độc quyền trên Tiktok Livestream của Tiktok
+              Levents® cùng với các voucher, chương trình tài trợ từ Tiktok
+              Shop.
+            </p>
+            <p>
+              Ngoài ra collection cũng đã có mặt trên toàn bộ hệ thống cửa hàng
+              của Levents®.
+            </p>
+            <br />
+            <p>+ LEVENTS OFFICIAL STORE:</p>
+            <p>842 Sư Vạn Hạnh, Quận 10, HCM.</p>
+            <p>325 Hoàng Sa, Tân Định, Quận 1, HCM.</p>
+            <p>The New Playground, 04 Phạm Ngũ Lão, Quận 1, HCM.</p>
+            <p>
+              54 Mậu Thân, phường Xuân Khánh, Quận Ninh Kiều, Thành Phố Cần Thơ.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>`;
+      break;
+    case "collection5":
+      midcontent.innerHTML = `<div class="collection-1">
+      <div class="collection-1-header">
+        <div class="collection-1-header-img">
+          <img src="./img/collection4/1.webp" alt="" />
+        </div>
+        <div class="collection-1-header-info">
+          <div class="collection-1-header-info-left">
+            <h2>Bộ sưu tập SRING/ SUMMER 2022</h2>
+          </div>
+          <div class="collection-1-header-info-right">
+            <p>
+              Tại 2022, tụi mình mang đến những phiên bản mới với chất liệu vải
+              được cải tiến cùng những tông màu nổi bật và sành điệu, thêm vào
+              đó là sự kết hợp với những gam màu trung tính, mang đến cảm giác
+              tối giản nhưng vẫn nổi bật.
+            </p>
+            <br />
+            <p>
+              Ngoài ra, còn có sự xuất hiện của nhiều dòng sản phẩm khác đa dạng
+              hơn vẫn mang đặc trưng về thiết kế và chất lượng của Levents®.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="collection-1-content">
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>LEVENTS® POPULAR LOGO 2.0 - NEW LOGO TEE, NEW SEASON 2022</h3>
+            <br />
+            <p>Bao gồm các sản phẩm:</p>
+            <br />
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ WHITE</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ BLACK</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ RED</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ GREEN</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ YELLOW</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ YELLOW</p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection4/2.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection4/3.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>LEVENTS® COLLECTION SPRING/ SUMMER 2022</h3>
+            <br />
+            <p>Bao gồm các sản phẩm:</p>
+            <p>+ LEVENTS® TRAVEL TEE</p>
+            <p>+ LEVENTS® PINEAPPLE TEE</p>
+            <p>+ LEVENTS® SUMMER VIBE TEE</p>
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>LEVENTS® COLLECTION SPRING/ SUMMER 2022</h3>
+            <br />
+            <p>Bao gồm các sản phẩm:</p>
+            <p>+ LEVENTS® TRAVEL HOODIE</p>
+            <p>+ LEVENTS® MINI LOGO ZIPPER HOODIE</p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection4/4.webp" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>`;
+      break;
+    case "collection6":
+      midcontent.innerHTML = `<div class="collection-1">
+      <div class="collection-1-header">
+        <div class="collection-1-header-img">
+          <img src="./img/collection5/1.webp" alt="" />
+        </div>
+        <div class="collection-1-header-info">
+          <div class="collection-1-header-info-left">
+            <h2>LEVENTS® POPULAR LOGO - Popular Streetwear Brand</h2>
+          </div>
+          <div class="collection-1-header-info-right">
+            <p>
+              Dòng sản phẩm mang đặc trưng về thiết kế và chất lượng của
+              Levents® với mục tiêu trở thành dòng sản phẩm đại chúng của thế hệ
+              trẻ.
+            </p>
+            <br />
+            <p>
+              Phiên bản POPULAR LOGO với 2 phiên bản 2021 và 2022 luôn được sử
+              dụng chất liệu vải được cải tiến vượt trội, cùng với các phối màu
+              sành điệu, phù hợp với mọi bộ phối.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="collection-1-content">
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-text">
+            <h3>LEVENTS® POPULAR LOGO 2.0</h3>
+            <br />
+            <p>Bao gồm các sản phẩm:</p>
+            <br />
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ GREEN</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ BLACK</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ WHITE</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ BLUE</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ RED</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ YELLOW</p>
+          </div>
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection5/2.webp" alt="" />
+          </div>
+        </div>
+        <div class="collection-1-content-item">
+          <div class="collection-1-content-item-img">
+            <img src="./img/collection5/3.webp" alt="" />
+          </div>
+          <div class="collection-1-content-item-text">
+            <h3>LEVENTS® POPULAR LOGO 2.0</h3>
+            <br />
+            <p>Bao gồm các sản phẩm:</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ GREEN</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ BLACK</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ WHITE</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ BLUE</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ RED</p>
+            <p>+ LEVENTS® POPULAR LOGO 2.0 TEE/ YELLOW</p>
+          </div>
+        </div>
+      </div>
+    </div>`;
+      break;
+  }
 }

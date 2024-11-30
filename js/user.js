@@ -62,13 +62,7 @@ login.forEach(function (e) {
           </div>
           <div class="contentTab">
             <span>Address</span>
-            <input
-            type="text"
-            class="input"
-            id="address"
-            value="${user.diachi}"
-            readonly
-          />
+            <div class="address_user">${user.diachi}</div>
           </div>
       </div>
       <div id="buttonEdit" onclick="chinhsuainfo()">Chỉnh sửa</div>
@@ -117,13 +111,7 @@ function profile() {
           </div>
           <div class="contentTab">
             <span>Address</span>
-            <input
-            type="text"
-            class="input"
-            id="address"
-            value="${user.diachi}"
-            readonly
-          />
+            <div class="address_user">${user.diachi}</div>
           </div>
         </div>
       </div>
@@ -160,7 +148,6 @@ function kiemtrangtrangthai(item) {
 }
 
 function statusProduct(arr) {
-  console.log(arr);
   let rightcontent = document.querySelector(".rightpage");
   document.querySelector(".statusbtn").classList.add("active");
   document.querySelector(".profilebtn").classList.remove("active");
@@ -239,6 +226,7 @@ function chinhsuainfo() {
   const name = document.querySelector("#name");
   const phone = document.querySelector("#phone");
   const address = document.querySelector("#address");
+  const address_user = document.querySelector(".address_user");
   if (buttonEdit != null) {
     buttonEdit.addEventListener("click", () => {
       if (isEdit) {
@@ -246,10 +234,17 @@ function chinhsuainfo() {
           e.setAttribute("readonly", true);
           e.classList.remove("active");
         });
+        let sonha = document.querySelector("#numberaddress").value;
+        console.log(sonha);
+        let thanhpho = document.querySelector("#city").value;
+        let quan = document.querySelector("#district").value;
+        let huyen = document.querySelector("#ward").value;
+        let s = `${sonha} , ${huyen} , ${quan} , ${thanhpho}`;
+        address_user.innerHTML = s;
         // Save updated user information
         usercurrent.name = name.value;
         usercurrent.phone = phone.value;
-        usercurrent.diachi = address.value;
+        usercurrent.diachi = s;
         localStorage.setItem("currentUser", JSON.stringify(usercurrent));
         updateUserDetails(usercurrent); // Update the user details in storageUsers
         buttonEdit.textContent = "Chỉnh sửa";
@@ -258,6 +253,22 @@ function chinhsuainfo() {
           e.removeAttribute("readonly");
           e.classList.add("active");
         });
+        address_user.innerHTML = `<input type="text" id="numberaddress" placeholder="Nhập số nhà & tên đường" />
+    <label for="city">Thành phố:</label>
+    <select id="city" onchange="populateDistricts()">
+      <option value="">Chọn Thành phố</option>
+    </select>
+
+    <label for="district">Quận/Huyện:</label>
+    <select id="district" onchange="populateWards()">
+      <option value="">Chọn Quận/Huyện</option>
+    </select>
+
+    <label for="ward">Phường/Xã:</label>
+    <select id="ward">
+      <option value="">Chọn Phường/Xã</option>
+    </select>`;
+        populateCities();
         buttonEdit.textContent = "Lưu lại";
       }
     });

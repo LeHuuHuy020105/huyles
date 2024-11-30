@@ -107,15 +107,18 @@
     <link rel="stylesheet" href="./css/user.css" />
     <link rel="stylesheet" href="./css/blog.css" />
     <link rel="stylesheet" href="./css/thanhtoan.css" />
+    <link rel="stylesheet" href="./css/collection.css" />
   </head>
 
   <body>
     <div class="backgroud-menu-respon" onclick="closeall()"></div>
+    <div class="loader"><div class="loader-item"></div></div>
+    <div id="toast"></div>
     <!-- Nav-login -->
     <div class="header">
       <div class="logo"><img src="./img/New Clothes.gif" alt="" /></div>
       <div class="navbar" id="navbar-responsive-close">
-        <div class="home">Home</div>
+        <div class="home" onclick="hienthihome()">Home</div>
         <div class="shop">Shop</div>
         <div class="blog" onclick="hienthiblog()">Blog</div>
         <div class="contact">Contact</div>
@@ -131,7 +134,7 @@
     <div class="header header1">
       <div class="close-nav"><i class="bx bx-x"></i></div>
       <div class="navbar">
-        <div class="home">Home</div>
+        <div class="home" onclick="hienthihome()">Home</div>
         <div class="shop">Shop</div>
         <div class="blog" onclick="hienthiblog()">Blog</div>
         <div class="contact">Contact</div>
@@ -140,7 +143,7 @@
         <div class="logout">Đăng xuất</div>
       </div>
     </div>
-
+    <div class="scroll-toppage"><i class="fa-solid fa-arrow-turn-up"></i></div>
     <div class="mid-content">
       <div class="embed-responsive embed-responsive-16by9" id="head">
         <video
@@ -152,6 +155,32 @@
         ></video>
       </div>
       <div class="mid-content-info">
+        <div class="feature">
+          <div class="feature-box">
+            <img src="./img/feature/f1.png" alt="" />
+            <h6>Free Shipping</h6>
+          </div>
+          <div class="feature-box">
+            <img src="./img/feature/f2.png" alt="" />
+            <h6>Online Order</h6>
+          </div>
+          <div class="feature-box">
+            <img src="./img/feature/f3.png" alt="" />
+            <h6>Save Money</h6>
+          </div>
+          <div class="feature-box">
+            <img src="./img/feature/f4.png" alt="" />
+            <h6>Promotions</h6>
+          </div>
+          <div class="feature-box">
+            <img src="./img/feature/f5.png" alt="" />
+            <h6>Happy Sell</h6>
+          </div>
+          <div class="feature-box">
+            <img src="./img/feature/f6.png" alt="" />
+            <h6>F24/7 Support</h6>
+          </div>
+        </div>
         <div class="trend">
           <h2>XU HƯỚNG</h2>
           <div class="content-trend">
@@ -181,72 +210,171 @@
             </div>
           </div>
         </div>
-        <div class="impromptu">
-          <h2>NGẪU HỨNG</h2>
-          <div class="content-impromptu">
-            <div class="content-impromptu-item">
-              <div class="img-content-impromptu">
-                <img
-                  class="imgsrc-impromptu"
-                  src="./img/products/body_1.jpg"
-                  alt=""
-                />
-              </div>
-              <div
-                class="img-info"
-                id="hoodie#13"
-                onclick="hienthispindex(this)"
-              >
-                Xem thêm
-              </div>
+      </div>
+      <div class="levents">
+        <div class="levents-video">
+          <video src="./img/videolevents.mp4" autoplay loop muted></video>
+        </div>
+        <div class="levents-info">
+          <div class="levents-info-content">
+            <h3>UNIQUELY CLASSIC CAMPAIGN | FW24</h3>
+            <p>
+              “Mỗi cá thể là một màu sắc riêng biệt!”, đó cũng là nguồn cảm hứng
+              lớn nhất để phát triển nên bộ sưu tập Uniquely Classic. Với châm
+              ngôn bất biến tôn vinh những giá trị độc bản của mỗi người, từng
+              thiết kế trong BST được kết hợp đan xen lẫn nhau giữa sự đơn giản
+              trường tồn và những nét tinh tế đương đại, hệ thống phom dáng được
+              nghiên cứu chuyên sâu hơn để luôn theo dòng chảy của thời đại, và
+              với một bảng màu nhã nhặn cho cảm giác dễ chịu, tất cả sự kết hợp
+              đó chỉ một sứ mệnh duy nhất là giúp khách hàng tự tin thể hiện
+              phong cách riêng biệt tránh đi sự rập khuôn. Bộ sưu tập Uniquely
+              Classic không chỉ mang tính thời trang mà còn là lời khẳng định về
+              phong cách, sự khác biệt và sự tự tin, để mỗi cá nhân trở thành
+              “classic” theo cách riêng của mình.
+            </p>
+          </div>
+          <div class="btn-index btn-shop" onclick="hienthispindex()">
+            Xem thêm
+          </div>
+        </div>
+      </div>
+      <div class="collection">
+        <div class="collection-header">
+          <h2>OUR COLLECTION</h2>
+          <div class="btn-index btn-collection">Xem tất cả</div>
+        </div>
+        <div class="collection-content">
+          <div
+            class="collection-content-item"
+            id="collection1"
+            onclick="hienthicollection(this)"
+          >
+            <div class="collection-content-item-img">
+              <img src="./img/collection_list.jpeg" alt="" />
             </div>
-            <div class="content-impromptu-item">
-              <div class="img-content-impromptu">
-                <img
-                  class="imgsrc-impromptu"
-                  src="./img/products/body_2.jpg"
-                  alt=""
-                />
-              </div>
-              <div
-                class="img-info"
-                id="aothun#1"
-                onclick="hienthispindex(this)"
-              >
-                Xem thêm
-              </div>
+            <div class="collection-content-item-tittle">
+              LEVENTS® 4TH ANNIVERSARY
             </div>
-            <div class="content-impromptu-item">
-              <div class="img-content-impromptu">
-                <img
-                  class="imgsrc-impromptu"
-                  src="./img/products/body_3.jpg"
-                  alt=""
-                />
-              </div>
-              <div
-                class="img-info"
-                id="aothun#1"
-                onclick="hienthispindex(this)"
-              >
-                Xem thêm
-              </div>
+          </div>
+          <div
+            class="collection-content-item"
+            id="collection2"
+            onclick="hienthicollection(this)"
+          >
+            <div class="collection-content-item-img">
+              <img src="./img/collection_list1.jpg" alt="" />
             </div>
-            <div class="content-impromptu-item">
-              <div class="img-content-impromptu">
-                <img
-                  class="imgsrc-impromptu"
-                  src="./img/products/body_4.jpg"
-                  alt=""
-                />
-              </div>
-              <div
-                class="img-info"
-                id="aothun#2"
-                onclick="hienthispindex(this)"
-              >
-                Xem thêm
-              </div>
+            <div class="collection-content-item-tittle">
+              LEVENTS® COLLECTION NEW BRANDING - SHARE YOUR COLOR
+            </div>
+          </div>
+          <div
+            class="collection-content-item"
+            id="collection3"
+            onclick="hienthicollection(this)"
+          >
+            <div class="collection-content-item-img">
+              <img src="./img/collection_list2.jpg" alt="" />
+            </div>
+            <div class="collection-content-item-tittle">
+              LEVENTS® 3RD ANNIVERSARY “ONE WORLD ONE LOVE”
+            </div>
+          </div>
+          <div
+            class="collection-content-item"
+            id="collection4"
+            onclick="hienthicollection(this)"
+          >
+            <div class="collection-content-item-img">
+              <img src="./img/collection_list3.jpg" alt="" />
+            </div>
+            <div class="collection-content-item-tittle">
+              LEVENTS® | POPPOP COLLAB – SPECIAL COLLECTION “MAKE POPPOP FAMOUS”
+            </div>
+          </div>
+          <div
+            class="collection-content-item"
+            id="collection5"
+            onclick="hienthicollection(this)"
+          >
+            <div class="collection-content-item-img">
+              <img src="./img/collection_list4.jpg" alt="" />
+            </div>
+            <div class="collection-content-item-tittle">
+              LEVENTS® COLLECTION SPRING/ SUMMER 2022
+            </div>
+          </div>
+          <div
+            class="collection-content-item"
+            id="collection6"
+            onclick="hienthicollection(this)"
+          >
+            <div class="collection-content-item-img">
+              <img src="./img/collection_list5.jpg" alt="" />
+            </div>
+            <div class="collection-content-item-tittle">
+              LEVENTS® COLLECTION POPULAR LOGO
+            </div>
+          </div>
+        </div>
+        <div class="scroll-buttons">
+          <div class="scroll-left" onclick="scrollLeft()">
+            <i class="fa fa-chevron-left"></i>
+          </div>
+          <div class="scroll-right" onclick="scrollRight()">
+            <i class="fa fa-chevron-right"></i>
+          </div>
+        </div>
+      </div>
+      <div class="impromptu">
+        <h2>NGẪU HỨNG</h2>
+        <div class="content-impromptu">
+          <div class="content-impromptu-item">
+            <div class="img-content-impromptu">
+              <img
+                class="imgsrc-impromptu"
+                src="./img/products/body_1.jpg"
+                alt=""
+              />
+            </div>
+            <div class="img-info" id="hoodie#13" onclick="hienthispindex(this)">
+              Xem thêm
+            </div>
+          </div>
+          <div class="content-impromptu-item">
+            <div class="img-content-impromptu">
+              <img
+                class="imgsrc-impromptu"
+                src="./img/products/body_2.jpg"
+                alt=""
+              />
+            </div>
+            <div class="img-info" id="aothun#1" onclick="hienthispindex(this)">
+              Xem thêm
+            </div>
+          </div>
+          <div class="content-impromptu-item">
+            <div class="img-content-impromptu">
+              <img
+                class="imgsrc-impromptu"
+                src="./img/products/body_3.jpg"
+                alt=""
+              />
+            </div>
+            <div class="img-info" id="aothun#1" onclick="hienthispindex(this)">
+              Xem thêm
+            </div>
+          </div>
+          <div class="content-impromptu-item">
+            <div class="img-content-impromptu">
+              <img
+                class="imgsrc-impromptu"
+                src="./img/products/body_4.jpg"
+                alt=""
+              />
+            </div>
+            <div class="img-info" id="aothun#2" onclick="hienthispindex()">
+              Xem thêm
             </div>
           </div>
         </div>
@@ -256,6 +384,7 @@
     <!-- Footer -->
     <div class="footer"></div>
     <div id="bottom-footer"></div>
+    <script src="./js/dvhcvn.js"></script>
     <script src="./js/index.js"></script>
     <script src="./js/blog.js"></script>
     <script src="./js/policy.js"></script>

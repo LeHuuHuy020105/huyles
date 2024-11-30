@@ -37,11 +37,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
   </head>
   <div class="backgroud-menu-respon" onclick="closeall()"></div>
+  <div class="loader"><div class="loader-item"></div></div>
+  <div class="scroll-toppage"><i class="fa-solid fa-arrow-turn-up"></i></div>
+  <div id="toast"></div>
     <!-- Nav-login -->
     <div class="header">
       <div class="logo"><img src="./img/New Clothes.gif" alt="" /></div>
       <div class="navbar" id="navbar-responsive-close">
-        <div class="home">Home</div>
+        <div class="home" onclick="hienthihome()">Home</div>
         <div class="shop">Shop</div>
         <div class="blog" onclick="hienthiblog()">Blog</div>
         <div class="contact" >Contact</div>
@@ -57,7 +60,7 @@
     <div class="header header1">
       <div class="close-nav"><i class="bx bx-x"></i></div>
       <div class="navbar">
-        <div class="home">Home</div>
+        <div class="home" onclick="hienthihome()">Home</div>
         <div class="shop">Shop</div>
         <div class="blog">Blog</div>
         <div class="contact">Contact</div>
@@ -110,6 +113,7 @@
     <div class="footer"></div>
     <div id="bottom-footer"></div>
     <script src="./js/index.js"></script>
+    <script src="./js/dvhcvn.js"></script>
     <script src="./js/shop.js"></script>
     <script src="./js/policy.js"></script>
     <script src="./js/blog.js"></script>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Select Example</title>
+  </head>
+  <body>
+    <input type="text" placeholder="Nhập số nhà & tên đường" />
+    <label for="city">Thành phố:</label>
+    <select id="city" onchange="populateDistricts()">
+      <option value="">Chọn Thành phố</option>
+    </select>
+
+    <label for="district">Quận/Huyện:</label>
+    <select id="district" onchange="populateWards()">
+      <option value="">Chọn Quận/Huyện</option>
+    </select>
+
+    <label for="ward">Phường/Xã:</label>
+    <select id="ward">
+      <option value="">Chọn Phường/Xã</option>
+    </select>
+    <script src="./js/dvhcvn.js"></script>
+  </body>
+</html>

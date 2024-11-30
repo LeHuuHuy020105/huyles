@@ -1,4 +1,5 @@
-function abc() {
+loadpage();
+function effecttext() {
   document.addEventListener("DOMContentLoaded", function () {
     const newclothes = document.querySelector(".newclothes");
     const addresses = document.querySelectorAll(".addr");
@@ -31,7 +32,7 @@ function abc() {
     fadeDown();
   });
 }
-abc();
+effecttext();
 // const addresses = document.querySelectorAll(".addr");
 // // mang dia chi
 // let addressData = [
