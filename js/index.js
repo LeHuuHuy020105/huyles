@@ -804,6 +804,7 @@ let currentUser = {
   password: "",
   shopbag: "",
   statususer: "",
+  typeuser: ""
 };
 function saveCurrentUser(user) {
   localStorage.setItem("currentUser", JSON.stringify(user));
@@ -867,6 +868,7 @@ function signInButton(event) {
       currentUser.password = user.password;
       currentUser.name = user.name;
       currentUser.userID = user.userID;
+      currentUser.typeuser = user.typeuser;
       saveCurrentUser(currentUser);
       console.log(currentUser);
       location.reload();

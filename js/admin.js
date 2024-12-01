@@ -625,9 +625,9 @@ function renderqltk() {
          <div class="boder">
               <div class="left-boder">
                   <h2 style="color: blue;">${Arrsell.reduce(
-                    (i, n) => i + n.soluong,
-                    0
-                  )}</h2>
+    (i, n) => i + n.soluong,
+    0
+  )}</h2>
                   <h2 style="font-weight: 200;">ĐÃ BÁN</h2> 
               </div>
               <div class="right-boder"><i style="font-size: 40px;font-weight: 200;" class='bx bx-cart-alt'></i></div>   
@@ -635,12 +635,12 @@ function renderqltk() {
          <div class="boder">
               <div class="left-boder">
                   <h2 style="color: blue;">${Arrsell.reduce(
-                    (i, n) => i + n.soluong * n.obj.price,
-                    0
-                  ).toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  })}</h2>
+    (i, n) => i + n.soluong * n.obj.price,
+    0
+  ).toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  })}</h2>
                   <h2 style="font-weight: 200;">DOANH THU</h2>
               </div>
               <div class="right-boder"><i style="font-size: 40px;font-weight: 200;" class='bx bx-money-withdraw'></i></div>   
@@ -699,11 +699,11 @@ function rankProfit(arrs) {
             <span style="width: 30%;" class="name">${i.obj.nameSP}</span>
             <span style="width: 30%;" class="sold">${i.soluong}</span>
             <span style="width: 10%;  class="profits">${(
-              i.obj.price * i.soluong
-            ).toLocaleString("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            })}</span>
+        i.obj.price * i.soluong
+      ).toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      })}</span>
            </div>`;
   });
   document.getElementById("rankProfit-body").innerHTML = s;
@@ -868,30 +868,22 @@ function listAccounts() {
 
     s += `<div class="listAcc" style="text-align: center; border-bottom: 1px solid rgba(112, 112, 112, 0.3);">
         <span class="idAccount" style="width: 5%;">${account.userID}</span>
-        <span class="nameAccount" style="width: 21%;"><input type="text" class="${classPrefix}-name" readonly="readonly" value="${
-      account.name
-    }" /></span>
-        <span class="phoneAccount" style="width: 10%;"><input type="text" class="${classPrefix}-phone" readonly="readonly" value="${
-      account.phone
-    }" /></span>
-        <span class="emailAccount" style="width: 10%;"><input type="text" class="${classPrefix}-email" readonly="readonly" value="${
-      account.email
-    }" /></span>
-        <span class="addressAccount" style="width: 17%;">${
-          account.diachi
-        }</span>
-        <span class="passwordAccount" style="width: 12%;"><input type="text" class="${classPrefix}-password" readonly="readonly" value="${
-      account.password
-    }" /></span>
-        <span class="statusAccount" style="width: 10%;">${
-          account.statususer == "1" ? "Bình thường" : "Đã khoá"
-        }</span>
-        <button class="btnAccount" style="width: 10%;" onclick="toggleLockUser('${
-          account.userID
-        }')">${account.statususer == "0" ? "Mở khóa" : "Khóa"}</button>
-        <button class="change" style="width: 5%;" onclick='changeuserinfo("${
-          account.userID
-        }")'>Sửa</button>
+        <span class="nameAccount" style="width: 21%;"><input type="text" class="${classPrefix}-name" readonly="readonly" value="${account.name
+      }" /></span>
+        <span class="phoneAccount" style="width: 10%;"><input type="text" class="${classPrefix}-phone" readonly="readonly" value="${account.phone
+      }" /></span>
+        <span class="emailAccount" style="width: 10%;"><input type="text" class="${classPrefix}-email" readonly="readonly" value="${account.email
+      }" /></span>
+        <span class="addressAccount" style="width: 17%;">${account.diachi
+      }</span>
+        <span class="passwordAccount" style="width: 12%;"><input type="text" class="${classPrefix}-password" readonly="readonly" value="${account.password
+      }" /></span>
+        <span class="statusAccount" style="width: 10%;">${account.statususer == "1" ? "Bình thường" : "Đã khoá"
+      }</span>
+        <button class="btnAccount" style="width: 10%;" onclick="toggleLockUser('${account.userID
+      }')">${account.statususer == "0" ? "Mở khóa" : "Khóa"}</button>
+        <button class="change" style="width: 5%;" onclick='changeuserinfo("${account.userID
+      }")'>Sửa</button>
       </div>`;
   });
   return s;
@@ -1221,7 +1213,9 @@ function showDetailInformation(event, element) {
       if (idProduct === getShopBag[i].shopbagispayuser[j].obj.idproduct) {
         order = {
           IDuser: getShopBag[i].IDuser,
+          diachi: getShopBag[i].shopbagispayuser[j].diachi,
           shopbagispayuser: [getShopBag[i].shopbagispayuser[j]],
+          time: getShopBag[i].shopbagispayuser[j].time
         };
         flag = true;
         break;
@@ -1237,13 +1231,12 @@ function showDetailInformation(event, element) {
   let quantity = order.shopbagispayuser[0].soluong;
   let typeProduct = "";
   let nameOfCustomer = "";
-  let addressOfCustomer = "";
+  let timeOfOrder = order.time;
+  let addressOfCustomer = order.diachi;
   let getStorageUsers = JSON.parse(localStorage.getItem("storageUsers"));
-  console.log(getStorageUsers);
   for (let i = 0; i < getStorageUsers.length; i++) {
     if (parseInt(userID) === getStorageUsers[i].userID) {
       nameOfCustomer = getStorageUsers[i].name;
-      addressOfCustomer = getStorageUsers[i].diachi;
       break;
     }
   }
@@ -1267,21 +1260,17 @@ function showDetailInformation(event, element) {
       typeProduct = "Không xác định";
   }
 
-  //chi tiết đơn hàng
-  // Lấy phần tử chứa chữ "Chỉnh sửa"
+  // Chi tiết đơn hàng
+  // Lấy phần tử chứa "Chỉnh sửa"
   let getButton1ContextMenu = document.getElementById(
     "button1-contextMenu"
   ).nextSibling;
-
-  // Thay đổi nội dung của phần tử đó thành "Chi tiết"
+  // Thay đổi "Chỉnh sửa" thành "Chi tiết"
   getButton1ContextMenu.nodeValue = "Chi tiết";
-
-  // Ẩn nút button khi chạy đoạn mã này
+  // Ẩn button deleteProduct khi chạy đoạn mã này
   document.getElementById("deleteProduct").style.display = "none";
 
   document.getElementById("viewDetails").addEventListener("click", () => {
-    getButton1ContextMenu.nodeValue = "Chỉnh sửa";
-    document.getElementById("deleteProduct").style.display = "block";
     document.querySelector(".outbackround").classList.add("actoutbackground");
     document.querySelector(".viewmenu").classList.add("actz");
     document.querySelector(".viewmenu").classList.remove("nonez");
@@ -1337,6 +1326,10 @@ function showDetailInformation(event, element) {
               <span>Loại </span>
               <input readonly type="text" value="${typeProduct}" id="typeAddProduct">
             </div>
+            <div class="contentTab">
+              <span>Thời gian mua </span>
+              <input readonly type="text" value="${timeOfOrder}" id="timeOfOrder">
+            </div>
           </div>
         </div>
       </form>
@@ -1361,6 +1354,8 @@ function listDH(ordersOfUser) {
       stringStatus = "Vận chuyển";
     else if (ordersOfUser.shopbagispayuser[i].status === "4")
       stringStatus = "Hoàn thành";
+    else if (ordersOfUser.shopbagispayuser[i].status === "5")
+      stringStatus = "Đã hủy";
     s += `
             <div oncontextmenu="showDetailInformation(event, this)" class="list">
                 <span style="width: 10%" class="userID">${ordersOfUser.IDuser}</span>
@@ -1415,16 +1410,25 @@ function setDH() {
       }
     }
   } else {
+    checkboxPositionArray = [];
+    getAllCheckbox = document.querySelectorAll(".myCheckbox");
+    for (let i = 0; i < getAllCheckbox.length; i++) {
+      if (getAllCheckbox[i].checked) {
+        checkboxPositionArray.push(i + 1);
+      }
+    }
     let getProductID = document.querySelectorAll(".idProduct");
     let getUserID = document.querySelectorAll(".userID");
     let storageTmp = [];
     let obj = {};
     for (let i = 1; i < getProductID.length; i++) {
-      obj = {
-        IDuser: getUserID[i].innerText,
-        idproduct: getProductID[i].innerText,
-      };
-      storageTmp.push(obj);
+      if (checkboxPositionArray.includes(i)) {
+        let obj = {
+          IDuser: getUserID[i].innerText,
+          idproduct: getProductID[i].innerText,
+        };
+        storageTmp.push(obj);
+      }
     }
     let indexOfStorageTmp = 0;
     for (let i = 0; i < getShopBag.length; i++) {
@@ -1459,33 +1463,11 @@ function setDH() {
       filteredProducts[i].shopbagispayuser[0].status = "3";
     } else if (getDeliveryStatusSelection === "3") {
       filteredProducts[i].shopbagispayuser[0].status = "4";
+    } else if (getDeliveryStatusSelection === "4") {
+      filteredProducts[i].shopbagispayuser[0].status = "5";
     }
   }
   // push lên localStorage
-  let index = 0;
-  for (let i = 0; i < filteredProducts.length; i++) {
-    for (let j = 0; j < getShopBag[j].length; ) {
-      // tìm kiếm theo IDuser
-      if (filteredProducts[i].IDuser === getShopBag[j].IDuser) {
-        // duyệt qua hết shopbagispayuser của getShopBag[j] thì nhảy qua getShopBag[j + 1]
-        if (index === getShopBag[j].shopbagispayuser.length) {
-          j++;
-          continue;
-        }
-        // tìm kiếm theo idproduct
-        if (
-          filteredProducts[i].shopbagispayuser[0].obj.idproduct ===
-          getShopBag[j].shopbagispayuser[index].obj.idproduct
-        ) {
-          getShopBag[j].shopbagispayuser[index] =
-            filteredProducts[i].shopbagispayuser[0];
-          index = 0;
-          break;
-        }
-        index++;
-      }
-    }
-  }
   localStorage.setItem("shopbagispay", JSON.stringify(getShopBag));
   // lấy tất cả đơn hàng
   getShopBag = JSON.parse(localStorage.getItem("shopbagispay"));
@@ -1504,6 +1486,7 @@ function setDH() {
     <option value="1">Đang gói hàng</option>
     <option value="2">Vận chuyển</option>
     <option value="3">Hoàn thành</option>
+    <option value="4">Đã hủy</option>
   `;
 }
 
@@ -1533,6 +1516,7 @@ function filteredByDeliveryStatus() {
         stringStatus = "Đang gói hàng";
       else if (getFilteredDeliveryStatus === "2") stringStatus = "Vận chuyển";
       else if (getFilteredDeliveryStatus === "3") stringStatus = "Hoàn thành";
+      else if (getFilteredDeliveryStatus === "4") stringStatus = "Đã hủy";
       s += `
               <div oncontextmenu="showDetailInformation(event, this)" class="list">
                   <span style="width: 10%" class="userID">${getShopBag[i].IDuser}</span>
@@ -1560,19 +1544,85 @@ function filteredByDeliveryStatus() {
     <option value="1">Đang gói hàng</option>
     <option value="2">Vận chuyển</option>
     <option value="3">Hoàn thành</option>
+    <option value="4">Đã hủy</option>
   `;
 }
+function getDistrict(district) {
+  let tmpArray = district.split(", ");
+  return tmpArray[2];
+}
 
+function createDistrictOption() {
+  let districtArray = [];
+  getShopBag = JSON.parse(localStorage.getItem("shopbagispay")) || [];
+  for (let i = 0; i < getShopBag.length; i++) {
+    for (let j = 0; j < getShopBag[i].shopbagispayuser.length; j++) {
+      if (!districtArray.includes(getDistrict(getShopBag[i].shopbagispayuser[j].diachi))) {
+        districtArray.push(getDistrict(getShopBag[i].shopbagispayuser[j].diachi));
+      }
+    }
+  }
+  let getFilteredDistrictSelection = document.querySelector('#filteredDistrict');
+  let s = `<option value="" disabled selected>Lọc theo quận</option>`;
+  console.log(districtArray);
+  for (let i = 0; i < districtArray.length; i++) {
+    s += `<option value="">${districtArray[i]}</option>`;
+  }
+  getFilteredDistrictSelection.innerHTML = s;
+  console.log(s);
+}
+
+function filteredByDistrict() {
+  getShopBag = JSON.parse(localStorage.getItem("shopbagispay")) || [];
+  let selectElement = document.getElementById("filteredDistrict");
+  let selectedText = selectElement.options[selectElement.selectedIndex].text;
+  let s = "";
+  for (let i = 0; i < getShopBag.length; i++) {
+    for (let j = 0; j < getShopBag[i].shopbagispayuser.length; j++) {
+      if (getDistrict(getShopBag[i].shopbagispayuser[j].diachi) === selectedText) {
+        let Price = getShopBag[i].shopbagispayuser[j].obj.price.toLocaleString(
+          "vi-VN",
+          { style: "currency", currency: "VND" }
+        );
+        let stringStatus = "";
+        if (getShopBag[i].shopbagispayuser[j].status === "1") stringStatus = "Chờ xác nhận";
+        else if (getShopBag[i].shopbagispayuser[j].status === "2")
+          stringStatus = "Đang gói hàng";
+        else if (getShopBag[i].shopbagispayuser[j].status === "3") stringStatus = "Vận chuyển";
+        else if (getShopBag[i].shopbagispayuser[j].status === "4") stringStatus = "Hoàn thành";
+        else if (getShopBag[i].shopbagispayuser[j].status === "5") stringStatus = "Đã hủy";
+        s += `
+                <div oncontextmenu="showDetailInformation(event, this)" class="list">
+                    <span style="width: 10%" class="userID">${getShopBag[i].IDuser}</span>
+                    <div style="width: 5%; display: flex; justify-content: left;">
+                      <input type="checkbox" class="myCheckbox"/>
+                    </div>
+                    <span style="width: 10%" class="idProduct">${getShopBag[i].shopbagispayuser[j].obj.idproduct}</span>
+                    <img style="width: 20%" src="${getShopBag[i].shopbagispayuser[j].obj.img}" class="imgProduct" alt="Ảnh lỗi">
+                    <span style="width: 30%" class="nameProduct">${getShopBag[i].shopbagispayuser[j].obj.nameSP}</span>
+                    <span style="width: 5%" class="countProduct">${getShopBag[i].shopbagispayuser[j].soluong}</span>
+                    <span style="width: 10%" class="priceProduct">${Price}</span>
+                    <span style="width: 10%" class="deliveryStatus">${stringStatus}</span>
+                </div>
+        `;
+      }
+    }
+  }
+  document.querySelector("#storage-body").innerHTML = s;
+}
 function renderqldh() {
   document.querySelector(".page-right").innerHTML = `<div class="qldh">
                 <div class="title"><h1>QUẢN LÝ ĐƠN HÀNG</h1></div>
                 <div class="groupOption">
+                        <select name="" class="box" id="filteredDistrict" onchange="filteredByDistrict()" >
+                        </select>
                         <select name="" class="box" id="filteredDeliveryStatus" onchange="filteredByDeliveryStatus()">
                             <option value="" disabled selected>Lọc trạng thái</option>
                             <option value="0">Chờ xác nhận</option>
                             <option value="1">Đang gói hàng</option>
                             <option value="2">Vận chuyển</option>
                             <option value="3">Hoàn thành</option>
+                            <option value="4">Đã hủy</option>
                         </select>
                         <select name="" class="box" id="deliveryStatusSelection">
                             <option value="" disabled selected>Chỉnh trạng thái</option>
@@ -1580,6 +1630,7 @@ function renderqldh() {
                             <option value="1">Đang gói hàng</option>
                             <option value="2">Vận chuyển</option>
                             <option value="3">Hoàn thành</option>
+                            <option value="4">Đã hủy</option>
                         </select>
                         <button class="box" id="acceptChangeStatus" style="width: 10%;
                           box-shadow: 0 7px 25px rgba(0, 0, 0, 0.2);
@@ -1609,22 +1660,53 @@ function renderqldh() {
                     <span style="width: 10%" class="deliveryStatus">Vận chuyển</span>
                 </div>
                 <div id="storage-body"></div>`;
+  createDistrictOption();
   let s = "";
   for (let i = 0; i < getShopBag.length; i++) {
     s += listDH(getShopBag[i]);
   }
   document.querySelector("#storage-body").innerHTML = s;
+  let countOrder = 0;
+  for (let i = 0; i < getShopBag.length; i++) {
+    for (let j = 0; j < getShopBag[i].shopbagispayuser.length; j++) {
+      countOrder++;
+    }
+  }
+  document.querySelector("#amountOfProduct").innerText = countOrder;
 }
 // login
-let adminAccount = {
-  email: "admin@gmail.com",
-  password: "admin",
-  typeuser: "0",
-};
 let getSignInButton = "";
 let getEmailSignIn = "";
 let getPasswordSignIn = "";
+function checkSignInAdminAccount(email, password) {
+  let adminAccount = JSON.parse(localStorage.getItem("adminAccount"));
+  if (adminAccount.email === email && adminAccount.password === password) {
+    return true;
+  }
+  return false;
+}
 
+function pushFirstAdminAccount() {
+  let adminAccount = JSON.parse(localStorage.getItem("adminAccount"));
+  let flagAdminAccount = JSON.parse(localStorage.getItem("flagAdminAccount"));
+  // nếu adminAccount bị xóa hoặc flag = null (chưa put lần nào) thì push adminAccount
+  if (flagAdminAccount === null || adminAccount === null) {
+    localStorage.setItem("flagAdminAccount", JSON.stringify(false));
+    adminAccount = {
+      email: "admin@gmail.com",
+      password: "admin",
+      typeuser: "0"
+    };
+    localStorage.setItem("adminAccount", JSON.stringify(adminAccount));
+    localStorage.setItem("flagAdminAccount", JSON.stringify(true));
+  }
+  // nếu flag khác null => true => return vì đã push
+  if (flagAdminAccount) {
+    return;
+  }
+}
+
+pushFirstAdminAccount();
 function checkEmail(str) {
   let idx = str.indexOf("@");
   let idxWhiteSpace = str.indexOf(" ");
@@ -1673,10 +1755,10 @@ function signInButton(event) {
     getPasswordSignIn.focus();
     return;
   }
-  if (
-    getEmailSignIn.value === adminAccount.email &&
-    getPasswordSignIn.value === adminAccount.password
-  ) {
+  console.log(getEmailSignIn.value);
+  console.log(getPasswordSignIn.value);
+  console.log(checkSignInAdminAccount(getEmailSignIn.value, getPasswordSignIn.value));
+  if (checkSignInAdminAccount(getEmailSignIn.value, getPasswordSignIn.value)) {
     loadpage();
     let getPage = document.querySelector(".page");
     getPage.innerHTML = `
@@ -1688,6 +1770,7 @@ function signInButton(event) {
           <div class="L b3">QUẢN LÝ SẢN PHẢM</div>
           <div class="L b4">QUẢN LÝ NGƯỜI DÙNG</div>
         </div>
+        <div class="signout">Đăng xuất</div>
         <div class="L-e">
           <a href="./index.html">
             <i class="fa-solid fa-house"></i>TRỞ VỀ TRANG CHỦ</a
@@ -1720,6 +1803,14 @@ function signInButton(event) {
       </div>
         `;
     onload();
+    return;
+  } else {
+    toast({
+      title: "ERROR",
+      message: "Sai email hoặc mật khẩu !",
+      type: "error",
+      duration: 5000,
+    });
     return;
   }
 }
