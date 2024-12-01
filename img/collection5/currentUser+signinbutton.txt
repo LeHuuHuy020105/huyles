@@ -1,0 +1,18 @@
+let currentUser = {
+  userID: "",
+  name: "",
+  email: "",
+  password: "",
+  shopbag: "",
+  statususer: "",
+  typeuser: ""
+};
+
+currentUser.email = user.email;
+      currentUser.password = user.password;
+      currentUser.name = user.name;
+      currentUser.userID = user.userID;
+      currentUser.typeuser = user.typeuser;
+      saveCurrentUser(currentUser);
+      console.log(currentUser);
+      location.reload();

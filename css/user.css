@@ -178,3 +178,12 @@
 .Buy:hover {
   background-color: #ff8c00; /* Màu nền khi hover cho nút Mua lại */
 }
+.filter-item.active {
+  background-color: #007bff; /* Màu nền cho mục được chọn */
+  color: #ffffff; /* Màu chữ cho mục được chọn */
+  border-radius: 5px; /* Tạo góc bo tròn cho mục được chọn */
+  padding: 5px; /* Khoảng cách bên trong */
+}
+.typepay{
+  color:#ff6347;
+}

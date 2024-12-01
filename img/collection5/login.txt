@@ -1,0 +1,121 @@
+// login
+let getSignInButton = "";
+let getEmailSignIn = "";
+let getPasswordSignIn = "";
+function checkSignInAdminAccount(email, password) {
+  let adminAccount = JSON.parse(localStorage.getItem("adminAccount"));
+  if (adminAccount.email === email && adminAccount.password === password) {
+    return true;
+  }
+  return false;
+}
+
+function pushFirstAdminAccount() {
+  let adminAccount = JSON.parse(localStorage.getItem("adminAccount"));
+  let flagAdminAccount = JSON.parse(localStorage.getItem("flagAdminAccount"));
+  // nếu adminAccount bị xóa hoặc flag = null (chưa put lần nào) thì push adminAccount
+  if (flagAdminAccount === null || adminAccount === null) {
+    localStorage.setItem("flagAdminAccount", JSON.stringify(false));
+    adminAccount = {
+      email: "admin@gmail.com",
+      password: "admin",
+      typeuser: "0"
+    };
+    localStorage.setItem("adminAccount", JSON.stringify(adminAccount));
+    localStorage.setItem("flagAdminAccount", JSON.stringify(true));
+  }
+  // nếu flag khác null => true => return vì đã push
+  if (flagAdminAccount) {
+    return;
+  }
+}
+
+pushFirstAdminAccount();
+
+function signInButton(event) {
+  event.preventDefault();
+  getSignInButton = document.querySelector("#sign-in-button");
+  getEmailSignIn = document.querySelector("#Email");
+  getPasswordSignIn = document.querySelector("#Password");
+  if (
+    getEmailSignIn.value.trim() === "" ||
+    !getEmailSignIn.value.includes("@") ||
+    !checkEmail(getEmailSignIn.value)
+  ) {
+    toast({
+      title: "ERROR",
+      message: "Vui lòng nhập đúng Email !",
+      type: "error",
+      duration: 5000,
+    });
+    getEmailSignIn.focus();
+    return;
+  } else if (getPasswordSignIn.value.trim() === "") {
+    toast({
+      title: "ERROR",
+      message: "Vui lòng nhập mật khẩu !",
+      type: "error",
+      duration: 5000,
+    });
+    getPasswordSignIn.focus();
+    return;
+  }
+  console.log(getEmailSignIn.value);
+  console.log(getPasswordSignIn.value);
+  console.log(checkSignInAdminAccount(getEmailSignIn.value, getPasswordSignIn.value));
+  if (checkSignInAdminAccount(getEmailSignIn.value, getPasswordSignIn.value)) {
+    loadpage();
+    let getPage = document.querySelector(".page");
+    getPage.innerHTML = `
+      <div class="page-left second-icon">
+        <div style="height: 10%" class="F-L"><h1>Tình Hình Hoạt Động</h1></div>
+        <div style="height: 60%" class="box-l">
+          <div class="L b1">QUẢN LÝ THỐNG KÊ</div>
+          <div class="L b2">QUẢN LÝ ĐƠN HÀNG</div>
+          <div class="L b3">QUẢN LÝ SẢN PHẢM</div>
+          <div class="L b4">QUẢN LÝ NGƯỜI DÙNG</div>
+        </div>
+        <div class="signout">Đăng xuất</div>
+        <div class="L-e">
+          <a href="./index.html">
+            <i class="fa-solid fa-house"></i>TRỞ VỀ TRANG CHỦ</a
+          >
+        </div>
+      </div>
+      <div class="page-right"></div>
+
+      <div class="btnAddproduct nonez"></div>
+      <div class="outbackround"></div>
+
+      <div class="viewmenu nonez"></div>
+
+      <div id="contextMenu" class="context-menu">
+        <button id="viewDetails">
+          <i style="margin-right: 5px" class="bx bxs-edit" id="button1-contextMenu"></i>Chỉnh sửa
+        </button>
+        <hr />
+        <button id="deleteProduct">
+          <i style="margin-right: 5px" class="bx bx-trash" id="button2-contextMenu"></i>Xóa sản phẩm
+        </button>
+      </div>
+
+      <div class="sb nonesb">
+        <h3>XÁC NHẬN</h3>
+        <div class="sub">
+          <button id="yes">YES</button>
+          <button id="no">NO</button>
+        </div>
+      </div>
+        `;
+    onload();
+    return;
+  } else {
+    toast({
+      title: "ERROR",
+      message: "Sai email hoặc mật khẩu !",
+      type: "error",
+      duration: 5000,
+    });
+    return;
+  }
+}

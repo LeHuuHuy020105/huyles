@@ -276,23 +276,26 @@ function statusProduct(arr) {
               <div class="address-order">
                 <span>Địa chỉ: ${arr[i].diachi}</span>
               </div>
-              
-              <!-- Di chuyển phần tiền xuống dưới cùng -->
-              <div class="money">
-                <div class="thanhtien">Thành tiền:</div>
-                <div class="intomoney">${
-                  parseInt(arr[i].obj.price) * parseInt(arr[i].soluong)
-                }đ</div>
-              </div>
+              <div class="typepay">${
+                arr[i].paymenttype == "1"
+                  ? "Thanh toán bằng ngân hàng"
+                  : "Thanh toán khi nhận hàng"
+              }</div>
             </div>
-          </div>`;
-
-    // Các nút hành động sẽ được hiển thị ở cuối
-    s += `<div class="actions">`;
+          </div>
+          <div class="money">
+            <div class="thanhtien">Thành tiền:</div>
+            <div class="intomoney">${
+              parseInt(arr[i].obj.price) * parseInt(arr[i].soluong)
+            }đ</div>
+          </div>
+          <div class="actions">`;
 
     // Trạng thái "Chờ xác nhận" và "Đang đóng gói" có thêm nút "Huỷ đơn"
     if (arr[i].status == 1 || arr[i].status == 2) {
-      s += `<div class="cancelorder" onclick="cancelorderproduct(${i})">Huỷ đơn</div>`;
+      s += `<div class="cancelorder" onclick='cancelorderproduct(${JSON.stringify(
+        arr[i]
+      )})'>Huỷ đơn</div>`;
     }
 
     // Trạng thái "Đã Huỷ" có thêm nút "Mua lại"
@@ -304,8 +307,7 @@ function statusProduct(arr) {
               </div>`;
     }
 
-    // Đóng phần tử các hành động
-    s += `</div></div></div>`;
+    s += `</div></div>`;
   }
 
   s += `</div>`;
@@ -415,35 +417,82 @@ function mangtheofilter(statusid, arr) {
   }
   return mang;
 }
+function mangtheofilter(statusid, arr) {
+  let mang = [];
+  if (statusid == "btnStatusDelivery" || statusid == "all") {
+    mang = arr;
+  } else {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].status == statusid) {
+        mang.push(arr[i]);
+      }
+    }
+  }
+  return mang;
+}
+
 function hienthitheofilter(item) {
-  loadpage();
+  loadpage(); // Làm mới trang nếu cần
+
   let mang = [];
   let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
   let arrayshopbagispay =
     JSON.parse(localStorage.getItem("shopbagispay")) || [];
+
+  // Lấy lại mảng giỏ hàng của người dùng hiện tại
   for (let i = 0; i < arrayshopbagispay.length; i++) {
     if (arrayshopbagispay[i].IDuser == usercurrent.userID) {
       mang = arrayshopbagispay[i].shopbagispayuser;
     }
   }
+
+  // Áp dụng bộ lọc theo trạng thái
   let mangfilter = mangtheofilter(item.id, mang);
-  statusProduct(mangfilter);
+  statusProduct(mangfilter); // Hiển thị lại sản phẩm sau khi lọc
 }
-function cancelorderproduct(index) {
+
+function cancelorderproduct(item) {
   let user = JSON.parse(localStorage.getItem("currentUser"));
-  let shopbagispay = JSON.parse(localStorage.getItem("shopbagispay"));
-  console.log("abc");
-  let productcancel = "";
+  let shopbagispay = JSON.parse(localStorage.getItem("shopbagispay")) || [];
+
+  // Tìm sản phẩm trong giỏ hàng của người dùng
   for (let i = 0; i < shopbagispay.length; i++) {
-    if (user.userID == shopbagispay[i].IDuser) {
-      productcancel = shopbagispay[i].shopbagispayuser[index];
-      shopbagispay[i].shopbagispayuser[index].status = "5";
+    if (shopbagispay[i].IDuser == user.userID) {
+      // Cập nhật trạng thái của sản phẩm
+      for (let j = 0; j < shopbagispay[i].shopbagispayuser.length; j++) {
+        if (shopbagispay[i].shopbagispayuser[j].time === item.time) {
+          // So sánh bằng thời gian để tìm đúng sản phẩm
+          shopbagispay[i].shopbagispayuser[j].status = "5"; // Thay đổi trạng thái "Đã Huỷ"
+          console.log(
+            "Trạng thái sau khi thay đổi:",
+            shopbagispay[i].shopbagispayuser[j]
+          );
+        }
+      }
     }
   }
-  updatewarehouse(productcancel);
-  localStorage.setItem("shopbagispay", JSON.stringify(shopbagispay));
-  hienthitheofilter({ id: "all" });
+
+  // Kiểm tra xem có sản phẩm nào được hủy không
+  if (item) {
+    // Cập nhật lại localStorage sau khi thay đổi
+    localStorage.setItem("shopbagispay", JSON.stringify(shopbagispay));
+
+    // Log để kiểm tra sau khi cập nhật
+    console.log(
+      "Đã cập nhật localStorage:",
+      JSON.parse(localStorage.getItem("shopbagispay"))
+    );
+
+    // Cập nhật kho
+    updatewarehouse(item);
+
+    // Sau khi huỷ đơn, bạn cần làm mới giao diện và áp dụng lại bộ lọc
+    hienthitheofilter({ id: "all" }); // Truyền đối tượng { id: "all" } để hiển thị tất cả sản phẩm
+  } else {
+    console.log("Không tìm thấy sản phẩm để huỷ.");
+  }
 }
+
 function updatewarehouse(item) {
   let products = JSON.parse(localStorage.getItem("arrayproducts"));
   for (let i = 0; i < products.length; i++) {
