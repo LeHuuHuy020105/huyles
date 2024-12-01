@@ -1351,7 +1351,9 @@ function thanhtoan() {
       });
 
       // Tùy chọn: Tải lại trang sau khi thanh toán thành công
-      location.reload();
+      setTimeout(function () {
+        location.reload();
+      }, 1000);
     }
   }
 }
