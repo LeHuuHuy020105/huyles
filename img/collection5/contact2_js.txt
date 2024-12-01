@@ -35,9 +35,8 @@ function abc() {
 abc();
 
 function showNewStore() {
-  loadpage();
   window.scrollTo(0, 0);
-  document.querySelector(".contact_section").innerHTML = `
+  document.querySelector('.contact_section').innerHTML = `
       <div class="new_store">
         <h1>NEWCLOTHES CHÍNH THỨC CÓ MẶT TẠI VINCOM MEGA MALL VINHOMES GRANDPARK, QUẬN 9</h1>
         <p>Đăng bởi: Newclothes</p>
@@ -62,9 +61,8 @@ function showNewStore() {
 }
 
 function showEventAnniversary() {
-  loadpage();
   window.scrollTo(0, 0);
-  document.querySelector(".contact_section").innerHTML = `
+  document.querySelector('.contact_section').innerHTML =`
       <div class="event">
         <h1 class="title">NEWCLOTHES 4TH ANNIVERSARY - 4 YEARS OF NEWCLOTHES LEGACY</h1>
         <p>Đăng bởi: Newclothes</p>
@@ -104,9 +102,8 @@ function showEventAnniversary() {
 }
 
 function showTrendPedia() {
-  loadpage();
   window.scrollTo(0, 0);
-  document.querySelector(".contact_section").innerHTML = `
+  document.querySelector('.contact_section').innerHTML =`
   <div class="trendpedia">
     <h1 class="title">[TRENDPEDIA] Y2K LÀ XU HƯỚNG GÌ MÀ LẠI LÀM KHUYNH ĐẢO GIỚI THỜI TRANG?</h1>
     <p>Đăng bởi: Newclothes</p>
@@ -169,5 +166,5 @@ function showTrendPedia() {
       tee) mới ra của Newclothes sẽ là một lựa chọn base layer cực kì hoàn hảo cho các nàng nha!
     </p>
   </div>
-  `;
+  `; 
 }

@@ -107,11 +107,14 @@
 
   <body>
     <div class="backgroud-menu-respon" onclick="closeall()"></div>
+    <div class="loader"><div class="loader-item"></div></div>
+    <div id="toast"></div>
+    <div class="scroll-toppage"><i class="fa-solid fa-arrow-turn-up"></i></div>
     <!-- Nav-login -->
     <div class="header">
       <div class="logo"><img src="./img/New Clothes.gif" alt="" /></div>
       <div class="navbar" id="navbar-responsive-close">
-        <div class="home">Home</div>
+        <div class="home" onclick="hienthihome()">Home</div>
         <div class="shop">Shop</div>
         <div class="blog" onclick="hienthiblog()">Blog</div>
         <div class="contact">Contact</div>
@@ -127,12 +130,13 @@
     <div class="header header1">
       <div class="close-nav"><i class="bx bx-x"></i></div>
       <div class="navbar">
-        <div class="home">Home</div>
+        <div class="home" onclick="hienthihome()">Home</div>
         <div class="shop">Shop</div>
         <div class="blog" onclick="hienthiblog()">Blog</div>
         <div class="contact">Contact</div>
         <div class="Shoping" onclick="shopinginfo();">Shoping</div>
         <div class="login-btn">Login</div>
+        <div class="logout">Đăng xuất</div>
       </div>
     </div>
     <div class="mid-content">
@@ -213,10 +217,7 @@
               <h4>Bài viết liên quan</h4>
               <div class="post_list">
                 <div class="col_3 post_img" onclick="showNewStore();">
-                  <img
-                    src="./img/97M02533-scaled_69690e57-aa0c-4013-9574-05c121ab3f68.webp"
-                    alt=""
-                  />
+                  <img src="./img/1.webp" alt="" />
                   <div class="post-content">
                     <h3>New Store</h3>
                     <p>
@@ -225,17 +226,14 @@
                   </div>
                 </div>
                 <div class="col_3 post_img" onclick="showEventAnniversary();">
-                  <img src="./img/phong-cach-thoi-trang-don-gian.png" alt="" />
+                  <img src="./img/2.webp" alt="" />
                   <div class="post-content">
                     <h3>Event</h3>
                     <p>Happy Newclothes 4 years anniversary</p>
                   </div>
                 </div>
                 <div class="col_3 post_img" onclick="showTrendPedia();">
-                  <img
-                    src="./img/123218993_1076154616180005_2003073362585706610_n.jpeg"
-                    alt=""
-                  />
+                  <img src="./img/3.jpeg" alt="" />
                   <div class="post-content">
                     <h3>TRENDPEDIA</h3>
                     <p>Xu hướng thời trang Y2K</p>

@@ -101,6 +101,10 @@ ul {
   color: white;
   background-color: #1a1a1a;
 }
+.img-info:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.5); /* Màu đen mờ */
+}
 /* carousel */
 .carousel {
   position: relative; /*không làm thay đổi vị trí ban đầu của phần tử trên bố cục. */
