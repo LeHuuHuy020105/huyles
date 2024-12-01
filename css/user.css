@@ -67,6 +67,7 @@
   flex-wrap: nowrap;
 }
 .item-content {
+  line-height: 1.8;
   width: 90%;
   margin-left: 20px;
   display: flex;
@@ -124,4 +125,56 @@
 /* diachi */
 .address_user input {
   padding: 8px;
+}
+/* Container chứa các nút */
+.shoping-list-item-info .details,
+.shoping-list-item-info .cancelorder,
+.shoping-list-item-info .Buy-details {
+  display: flex; /* Sử dụng Flexbox để căn chỉnh các nút */
+  gap: 10px; /* Khoảng cách giữa các nút */
+  margin-top: 10px; /* Khoảng cách từ các mục trên */
+}
+
+/* Nút Chi tiết */
+.details,
+.cancelorder,
+.Buy {
+  padding: 8px 15px; /* Khoảng cách bên trong nút */
+  background-color: #4caf50; /* Màu nền của nút */
+  color: white; /* Màu chữ */
+  border: none; /* Bỏ border */
+  border-radius: 5px; /* Bo góc của nút */
+  cursor: pointer; /* Hiển thị con trỏ chuột dạng tay */
+  font-size: 14px; /* Kích thước chữ */
+  text-align: center; /* Căn giữa nội dung trong nút */
+  transition: background-color 0.3s ease; /* Hiệu ứng khi hover */
+  width: max-content;
+  margin: 10px auto;
+}
+
+/* Hiệu ứng hover cho các nút */
+.details:hover,
+.cancelorder:hover,
+.Buy:hover {
+  background-color: #45a049; /* Màu nền khi hover */
+}
+.details,
+.cancelorder {
+  width: max-content;
+}
+/* Thêm kiểu cho các nút "Huỷ đơn" và "Mua lại" nếu cần */
+.cancelorder {
+  background-color: #ff6347; /* Màu nền đỏ cho nút Huỷ đơn */
+}
+
+.cancelorder:hover {
+  background-color: #ff4500; /* Màu nền khi hover cho nút Huỷ đơn */
+}
+
+.Buy {
+  background-color: #ffd700; /* Màu nền vàng cho nút Mua lại */
+}
+
+.Buy:hover {
+  background-color: #ff8c00; /* Màu nền khi hover cho nút Mua lại */
 }

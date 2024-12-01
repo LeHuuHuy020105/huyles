@@ -1280,6 +1280,10 @@ function thanhtoan() {
   let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
   let userIndex = kiemtratontai(usercurrent.userID);
   let creditcard = document.querySelector("#creditcard");
+  let paymentType = creditcard.checked ? 1 : 0;
+
+  // Lấy thời gian hiện tại và chuyển thành chuỗi
+  let currentTime = new Date().toLocaleString(); // Lấy thời gian dưới dạng chuỗi
 
   if (usercurrent.phone === "" || usercurrent.diachi === "") {
     toast({
@@ -1299,6 +1303,8 @@ function thanhtoan() {
           JSON.parse(localStorage.getItem("arrayshopbag")) || [];
         for (let i = 0; i < arrayshopbag.length; i++) {
           arrayshopbag[i].diachi = usercurrent.diachi;
+          arrayshopbag[i].paymenttype = paymentType;
+          arrayshopbag[i].time = currentTime; // Thêm thời gian vào mỗi mặt hàng
           shopbagispay[userIndex].shopbagispayuser.push(arrayshopbag[i]);
         }
       } else {
@@ -1310,6 +1316,8 @@ function thanhtoan() {
         };
         for (let i = 0; i < shopbagitem.shopbagispayuser.length; i++) {
           shopbagitem.shopbagispayuser[i].diachi = usercurrent.diachi;
+          shopbagitem.shopbagispayuser[i].paymenttype = paymentType;
+          shopbagitem.shopbagispayuser[i].time = currentTime; // Thêm thời gian vào mỗi mặt hàng
         }
         shopbagispay.push(shopbagitem);
       }
@@ -1333,12 +1341,14 @@ function thanhtoan() {
       // Cập nhật lại thông tin người dùng vào localStorage
       localStorage.setItem("storageUsers", JSON.stringify(alluser));
       localStorage.setItem("currentUser", JSON.stringify(usercurrent));
+
       toast({
         title: "SUCCESS",
         message: "Thanh toán thành công",
         type: "success",
         duration: 5000,
       });
+
       // Tùy chọn: Tải lại trang sau khi thanh toán thành công
       location.reload();
     }
