@@ -108,7 +108,7 @@
 .collection-1-content-item {
   margin-bottom: 30px;
 }
-@media (min-width: 600px) and (max-width: 1099px) {
+@media (min-width: 300px) and (max-width: 1099px) {
   .levents {
     display: block;
   }
