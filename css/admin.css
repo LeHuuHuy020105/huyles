@@ -122,8 +122,6 @@
   justify-content: space-between;
   padding: 10px;
   /* border: 1px solid; */
-  top: 0;
-  z-index: 100;
   background-color: white;
 }
 
@@ -1575,6 +1573,7 @@
 .phoneAccount input.active,
 .emailAccount input.active,
 .passwordAccount input.active {
+  width: 100%;
   padding: 3px;
   border: 1px solid #ccc; /* Thêm kiểu border khi ở trạng thái chỉnh sửa */
 }
