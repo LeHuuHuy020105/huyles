@@ -1628,91 +1628,92 @@ function thanhtoan() {
   }
 }
 
-let isEditing = false; // Flag to track edit state
+// let isEditing = false; // Flag to track edit state
 
-function chinhsua() {
-  const editButton = document.querySelector("#buttonEdit"); // Get the edit button
-  const inputEdit = document.querySelectorAll(".input"); // Get all input fields
-  let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
-  const phone = document.querySelector("#phone");
-  const address = document.querySelector(".contentTab-address");
+// function chinhsua() {
+//   const editButton = document.querySelector("#buttonEdit"); // Get the edit button
+//   const inputEdit = document.querySelectorAll(".input"); // Get all input fields
+//   let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
+//   const phone = document.querySelector("#phone");
+//   const address = document.querySelector(".contentTab-address");
 
-  if (editButton != null) {
-    editButton.addEventListener("click", () => {
-      if (isEditing) {
-        // Save mode
-        inputEdit.forEach(function (e) {
-          e.setAttribute("readonly", true);
-          e.classList.remove("active"); // Remove active class when saving
-        });
-        let sonha = document.querySelector("#numberaddress");
-        let thanhpho = document.querySelector("#city");
-        let quan = document.querySelector("#district");
-        let huyen = document.querySelector("#ward");
-        if (sonha && thanhpho && quan && huyen) {
-          sonha = sonha.value.trim();
-          thanhpho = thanhpho.value.trim();
-          quan = quan.value.trim();
-          huyen = huyen.value.trim();
+//   if (editButton != null) {
+//     editButton.addEventListener("click", () => {
+//       if (isEditing) {
+//         console.log(isEditing);
+//         // Save mode
+//         inputEdit.forEach(function (e) {
+//           e.setAttribute("readonly", true);
+//           e.classList.remove("active"); // Remove active class when saving
+//         });
+//         let sonha = document.querySelector("#numberaddress");
+//         let thanhpho = document.querySelector("#city");
+//         let quan = document.querySelector("#district");
+//         let huyen = document.querySelector("#ward");
+//         if (sonha && thanhpho && quan && huyen) {
+//           sonha = sonha.value.trim();
+//           thanhpho = thanhpho.value.trim();
+//           quan = quan.value.trim();
+//           huyen = huyen.value.trim();
 
-          if (sonha && thanhpho && quan && huyen) {
-            let s = `${sonha}, ${huyen}, ${quan}, ${thanhpho}`;
+//           if (sonha && thanhpho && quan && huyen) {
+//             let s = `${sonha}, ${huyen}, ${quan}, ${thanhpho}`;
 
-            // Cập nhật thông tin người dùng
-            usercurrent.phone = phone.value;
-            usercurrent.diachi = s;
+//             // Cập nhật thông tin người dùng
+//             usercurrent.phone = phone.value;
+//             usercurrent.diachi = s;
 
-            // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
-            setTimeout(() => {
-              localStorage.setItem("currentUser", JSON.stringify(usercurrent));
+//             // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
+//             setTimeout(() => {
+//               localStorage.setItem("currentUser", JSON.stringify(usercurrent));
 
-              // Cập nhật lại giao diện
+//               // Cập nhật lại giao diện
 
-              address.innerHTML = s;
-              // Đổi nút thành "Chỉnh sửa"
-              buttonEdit.textContent = "Chỉnh sửa";
-            }, 500); // Thêm thời gian trì hoãn (500ms)
-          } else {
-            toast({
-              title: "ERROR",
-              message: "Các trường địa chỉ chưa đầy đủ!",
-              type: "error",
-              duration: 5000,
-            });
-          }
-        }
-        updateUserDetails(usercurrent); // Update the user details in storageUsers
-      } else {
-        // Edit mode
-        inputEdit.forEach(function (e) {
-          e.removeAttribute("readonly");
-          e.classList.add("active"); // Add active class when editing
-        });
-        // Thay thế phần address_user với các input/select mới
-        address.innerHTML = `
-          <input type="text" id="numberaddress" placeholder="Nhập số nhà & tên đường" />
-          <label for="city">Thành phố:</label>
-          <select id="city" onchange="populateDistricts()">
-            <option value="">Chọn Thành phố</option>
-          </select>
-          <label for="district">Quận/Huyện:</label>
-          <select id="district" onchange="populateWards()">
-            <option value="">Chọn Quận/Huyện</option>
-          </select>
-          <label for="ward">Phường/Xã:</label>
-          <select id="ward">
-            <option value="">Chọn Phường/Xã</option>
-          </select>`;
+//               address.innerHTML = s;
+//               // Đổi nút thành "Chỉnh sửa"
+//               buttonEdit.textContent = "Chỉnh sửa";
+//             }, 500); // Thêm thời gian trì hoãn (500ms)
+//           } else {
+//             toast({
+//               title: "ERROR",
+//               message: "Các trường địa chỉ chưa đầy đủ!",
+//               type: "error",
+//               duration: 5000,
+//             });
+//           }
+//         }
+//         updateUserDetails(usercurrent); // Update the user details in storageUsers
+//       } else {
+//         // Edit mode
+//         inputEdit.forEach(function (e) {
+//           e.removeAttribute("readonly");
+//           e.classList.add("active"); // Add active class when editing
+//         });
+//         // Thay thế phần address_user với các input/select mới
+//         address.innerHTML = `
+//           <input type="text" id="numberaddress" placeholder="Nhập số nhà & tên đường" />
+//           <label for="city">Thành phố:</label>
+//           <select id="city" onchange="populateDistricts()">
+//             <option value="">Chọn Thành phố</option>
+//           </select>
+//           <label for="district">Quận/Huyện:</label>
+//           <select id="district" onchange="populateWards()">
+//             <option value="">Chọn Quận/Huyện</option>
+//           </select>
+//           <label for="ward">Phường/Xã:</label>
+//           <select id="ward">
+//             <option value="">Chọn Phường/Xã</option>
+//           </select>`;
 
-        // Đảm bảo dữ liệu được hiển thị trong các select
-        populateCities();
-        editButton.textContent = "Lưu lại";
-      }
-      // Toggle edit state
-      isEditing = !isEditing;
-    });
-  }
-}
+//         // Đảm bảo dữ liệu được hiển thị trong các select
+//         populateCities();
+//         editButton.textContent = "Lưu lại";
+//       }
+//       // Toggle edit state
+//       isEditing = !isEditing;
+//     });
+//   }
+// }
 
 // Function to update user details in storageUsers
 function updateUserDetails(user) {

@@ -324,60 +324,59 @@ function chinhsuainfo() {
   const address_user = document.querySelector(".address_user");
 
   if (buttonEdit != null) {
-    buttonEdit.addEventListener("click", () => {
-      if (isEdit) {
-        input.forEach(function (e) {
-          e.setAttribute("readonly", true);
-          e.classList.remove("active");
-        });
+    if (isEdit) {
+      input.forEach(function (e) {
+        e.setAttribute("readonly", true);
+        e.classList.remove("active");
+      });
 
-        let sonha = document.querySelector("#numberaddress");
-        let thanhpho = document.querySelector("#city");
-        let quan = document.querySelector("#district");
-        let huyen = document.querySelector("#ward");
+      let sonha = document.querySelector("#numberaddress");
+      let thanhpho = document.querySelector("#city");
+      let quan = document.querySelector("#district");
+      let huyen = document.querySelector("#ward");
+
+      if (sonha && thanhpho && quan && huyen) {
+        sonha = sonha.value.trim();
+        thanhpho = thanhpho.value.trim();
+        quan = quan.value.trim();
+        huyen = huyen.value.trim();
 
         if (sonha && thanhpho && quan && huyen) {
-          sonha = sonha.value.trim();
-          thanhpho = thanhpho.value.trim();
-          quan = quan.value.trim();
-          huyen = huyen.value.trim();
+          let s = `${sonha}, ${huyen}, ${quan}, ${thanhpho}`;
 
-          if (sonha && thanhpho && quan && huyen) {
-            let s = `${sonha}, ${huyen}, ${quan}, ${thanhpho}`;
+          // Cập nhật thông tin người dùng
+          usercurrent.name = name.value;
+          usercurrent.phone = phone.value;
+          usercurrent.diachi = s;
 
-            // Cập nhật thông tin người dùng
-            usercurrent.name = name.value;
-            usercurrent.phone = phone.value;
-            usercurrent.diachi = s;
+          // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
+          setTimeout(() => {
+            localStorage.setItem("currentUser", JSON.stringify(usercurrent));
+            updateUserDetails(usercurrent);
+            // Cập nhật lại giao diện
+            profile();
 
-            // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
-            setTimeout(() => {
-              localStorage.setItem("currentUser", JSON.stringify(usercurrent));
-              updateUserDetails(usercurrent);
-              // Cập nhật lại giao diện
-              profile();
-
-              // Đổi nút thành "Chỉnh sửa"
-              buttonEdit.textContent = "Chỉnh sửa";
-            }, 500); // Thêm thời gian trì hoãn (500ms)
-          } else {
-            toast({
-              title: "ERROR",
-              message: "Các trường địa chỉ chưa đầy đủ!",
-              type: "error",
-              duration: 5000,
-            });
-          }
+            // Đổi nút thành "Chỉnh sửa"
+            buttonEdit.textContent = "Chỉnh sửa";
+          }, 500); // Thêm thời gian trì hoãn (500ms)
+        } else {
+          toast({
+            title: "ERROR",
+            message: "Các trường địa chỉ chưa đầy đủ!",
+            type: "error",
+            duration: 5000,
+          });
         }
-      } else {
-        // Nếu là chế độ chỉnh sửa, mở các trường input
-        input.forEach(function (e) {
-          e.removeAttribute("readonly");
-          e.classList.add("active");
-        });
+      }
+    } else {
+      // Nếu là chế độ chỉnh sửa, mở các trường input
+      input.forEach(function (e) {
+        e.removeAttribute("readonly");
+        e.classList.add("active");
+      });
 
-        // Thay thế phần address_user với các input/select mới
-        address_user.innerHTML = `
+      // Thay thế phần address_user với các input/select mới
+      address_user.innerHTML = `
           <input type="text" id="numberaddress" placeholder="Nhập số nhà & tên đường" />
           <label for="city">Thành phố:</label>
           <select id="city" onchange="populateDistricts()">
@@ -392,16 +391,15 @@ function chinhsuainfo() {
             <option value="">Chọn Phường/Xã</option>
           </select>`;
 
-        // Đảm bảo dữ liệu được hiển thị trong các select
-        populateCities();
+      // Đảm bảo dữ liệu được hiển thị trong các select
+      populateCities();
 
-        // Đổi nút thành "Lưu lại"
-        buttonEdit.textContent = "Lưu lại";
-      }
+      // Đổi nút thành "Lưu lại"
+      buttonEdit.textContent = "Lưu lại";
+    }
 
-      // Toggle trạng thái chỉnh sửa
-      isEdit = !isEdit;
-    });
+    // Toggle trạng thái chỉnh sửa
+    isEdit = !isEdit;
   }
 }
 function mangtheofilter(statusid, arr) {
@@ -460,7 +458,10 @@ function cancelorderproduct(item) {
     if (shopbagispay[i].IDuser == user.userID) {
       // Cập nhật trạng thái của sản phẩm
       for (let j = 0; j < shopbagispay[i].shopbagispayuser.length; j++) {
-        if (shopbagispay[i].shopbagispayuser[j].time === item.time) {
+        if (
+          shopbagispay[i].shopbagispayuser[j].time == item.time &&
+          shopbagispay[i].shopbagispayuser[j].size == item.size
+        ) {
           // So sánh bằng thời gian để tìm đúng sản phẩm
           shopbagispay[i].shopbagispayuser[j].status = "5"; // Thay đổi trạng thái "Đã Huỷ"
           console.log(
@@ -472,25 +473,14 @@ function cancelorderproduct(item) {
     }
   }
 
-  // Kiểm tra xem có sản phẩm nào được hủy không
-  if (item) {
-    // Cập nhật lại localStorage sau khi thay đổi
-    localStorage.setItem("shopbagispay", JSON.stringify(shopbagispay));
+  // Cập nhật lại localStorage sau khi thay đổi
+  localStorage.setItem("shopbagispay", JSON.stringify(shopbagispay));
 
-    // Log để kiểm tra sau khi cập nhật
-    console.log(
-      "Đã cập nhật localStorage:",
-      JSON.parse(localStorage.getItem("shopbagispay"))
-    );
+  // Cập nhật kho
+  updatewarehouse(item);
 
-    // Cập nhật kho
-    updatewarehouse(item);
-
-    // Sau khi huỷ đơn, bạn cần làm mới giao diện và áp dụng lại bộ lọc
-    hienthitheofilter({ id: "all" }); // Truyền đối tượng { id: "all" } để hiển thị tất cả sản phẩm
-  } else {
-    console.log("Không tìm thấy sản phẩm để huỷ.");
-  }
+  // Sau khi huỷ đơn, bạn cần làm mới giao diện và áp dụng lại bộ lọc
+  hienthitheofilter({ id: "all" }); // Truyền đối tượng { id: "all" } để hiển thị tất cả sản phẩm
 }
 
 function updatewarehouse(item) {
