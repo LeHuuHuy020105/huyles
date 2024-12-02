@@ -466,9 +466,10 @@ function makeFilter() {
     item.addEventListener("click", (e) => {
       if (item.checked && radiochecked !== i) {
         radiochecked = i;
-        let span = item.nextElementSibling.textContent.trim(); // Lấy giá trị span
+        let span = item.id; // Lấy giá trị span
+        console.log(span);
         filteredProducts = mangproduct_radio(span, ProductArrBoth);
-      } else if (radiochecked >= 0 && i === radiochecked) {
+      } else if (item.checked && i === radiochecked) {
         item.checked = false;
         radiochecked = -1;
         filteredProducts = ProductArrBoth;
