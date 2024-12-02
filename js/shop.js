@@ -463,6 +463,7 @@ function makeFilter() {
   const radio_btn = document.querySelectorAll(".radio-btn");
   let radiochecked = "";
   radio_btn.forEach((item, i) => {
+    loadpage();
     item.addEventListener("click", (e) => {
       if (item.checked && radiochecked !== i) {
         radiochecked = i;
@@ -692,6 +693,7 @@ function mangproduct_radio(radio, arr) {
 let filteredProducts = ProductArrBoth; // Khởi tạo mảng ban đầu
 let filteredProducts_copy = JSON.parse(JSON.stringify(filteredProducts));
 function searchByName() {
+  loadpage();
   const searchName = document
     .getElementById("searchName")
     .value.trim()
@@ -706,21 +708,24 @@ function searchByName() {
 
 function hienSPTheoFilter(item) {
   // x = item.id;
+  loadpage();
+  let search = document.querySelector("#searchName");
+  search.value = "";
+  let nodePrice_1 = document.querySelector("#nodePrice_1");
+  let nodePrice_2 = document.querySelector("#nodePrice_2");
+  nodePrice_1.value = "";
+  nodePrice_2.value = "";
+  let sort = document.querySelectorAll("#sort");
+  sort.forEach((select) => {
+    select.selectedIndex = 1;
+  });
   filteredProducts = mangproduct_radio(item.id, ProductArrBoth);
   filteredProducts_copy = JSON.parse(JSON.stringify(filteredProducts));
   makeSP(1, sosptrongtrang, filteredProducts);
 }
-// console.log(x);
-// let indexcheck = document.getElementById(x);
-// // console.log(indexcheck);
-// // if (indexcheck != null) {
-// //   indexcheck.addEventListener("click", () => {
-// //     // indexcheck.checked = false;
-// //     console.log("a");
-// //   });
-// // }
 
 function Sort(item) {
+  loadpage();
   let choice = parseInt(item.value);
   // Sử dụng bản sao của mảng gốc để khôi phục khi cần
   filteredProducts_copy1 = JSON.parse(JSON.stringify(filteredProducts_copy));
@@ -740,6 +745,7 @@ function Sort(item) {
   makeselectpage(1, filteredProducts_copy1);
 }
 function Loc() {
+  loadpage();
   let price1 = document.getElementById("nodePrice_1").value;
   let price2 = document.getElementById("nodePrice_2").value;
   let mang = [];
@@ -947,22 +953,22 @@ function clickC_1(e, color, img) {
   const srcold = e.closest(".both_").querySelector(".srcimg"); //tim phan tu cha -> con co class srcimg
   srcold.setAttribute("src", dataimg);
 }
-function timkiemSP(arr, id) {
-  for (let i = 0; i < arr.length; i++) {
-    if (id == arr[i].idproduct) {
-      return arr[i];
-    }
-  }
-  return null;
-}
-function reloadpage() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const productid = urlParams.get("productID");
-  const item = timkiemSP(ProductArrBoth, productid);
-  if (item) {
-    loadSingleProduct(item);
-  }
-}
+// function timkiemSP(arr, id) {
+//   for (let i = 0; i < arr.length; i++) {
+//     if (id == arr[i].idproduct) {
+//       return arr[i];
+//     }
+//   }
+//   return null;
+// }
+// function reloadpage() {
+//   const urlParams = new URLSearchParams(window.location.search);
+//   const productid = urlParams.get("productID");
+//   const item = timkiemSP(ProductArrBoth, productid);
+//   if (item) {
+//     loadSingleProduct(item);
+//   }
+// }
 
 //nut tro lai
 function goBack() {

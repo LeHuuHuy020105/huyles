@@ -668,7 +668,7 @@ body {
   top: 50%;
   left: 50%;
   z-index: 9999999;
-  transform: translate(-50%, -125%);
+  transform: translate(-50%, -50%);
   transition: transfrom 0.5s ease;
   height: 40px;
   animation: spin 2s linear infinite;
