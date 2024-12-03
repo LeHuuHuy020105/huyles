@@ -1509,17 +1509,16 @@ function hienthiblog() {
     document.querySelector(".backgroud-menu-respon").style.display = "none";
   }
   midcontent.innerHTML = ` 
-    <h1 id="title-god">Nội Dung "HOT"</h1>
  <div class="carousel">
   <div id="carouselImages" class="carousel-inner">
     <div class="carousel-item" onclick="viewDetails('blog3')">
-      <img src="./img/blog/blog3.webp" alt="1" />
+      <img src="./img/collection1/1.webp" alt="1" />
     </div>
     <div class="carousel-item" onclick="viewDetails('blog6')">
-      <img src="./img/blog/blog6.webp" alt="2" />
+      <img src="./img/collection4/1.webp" alt="2" />
     </div>
     <div class="carousel-item" onclick="viewDetails('blog9')">
-      <img src="./img/blog/blog9.webp" alt="3" />
+      <img src="./img/blog/blog8.jpg" alt="3" />
     </div>
   </div>
   <button class="carousel-control-prev" onclick="changeSlide(-1)">&#10094;</button>

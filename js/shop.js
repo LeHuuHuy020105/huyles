@@ -696,6 +696,10 @@ let arrsearch = JSON.parse(JSON.stringify(filteredProducts));
 let arrfilterprice = JSON.parse(JSON.stringify(filteredProducts));
 function searchByName() {
   loadpage();
+  let sort = document.querySelectorAll("#sort");
+  sort.forEach((select) => {
+    select.selectedIndex = 1;
+  });
   const searchName = document
     .getElementById("searchName")
     .value.trim()
@@ -758,6 +762,10 @@ function Sort(item) {
 }
 function Loc() {
   loadpage();
+  let sort = document.querySelectorAll("#sort");
+  sort.forEach((select) => {
+    select.selectedIndex = 1;
+  });
   let search = document.querySelector("#searchName");
   let price1 = document.getElementById("nodePrice_1").value;
   let price2 = document.getElementById("nodePrice_2").value;
