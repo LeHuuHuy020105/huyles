@@ -692,13 +692,23 @@ function mangproduct_radio(radio, arr) {
 }
 let filteredProducts = ProductArrBoth; // Khởi tạo mảng ban đầu
 let filteredProducts_copy = JSON.parse(JSON.stringify(filteredProducts));
+let arrsearch = JSON.parse(JSON.stringify(filteredProducts));
+let arrfilterprice = JSON.parse(JSON.stringify(filteredProducts));
 function searchByName() {
   loadpage();
   const searchName = document
     .getElementById("searchName")
     .value.trim()
     .toLowerCase();
-  const filteredProducts = filteredProducts_copy.filter((product) =>
+  let nodePrice_1 = document.querySelector("#nodePrice_1");
+  let nodePrice_2 = document.querySelector("#nodePrice_2");
+  let arr = "";
+  if (nodePrice_1.value == "" && nodePrice_2.value == "") {
+    arr = arrsearch;
+  } else {
+    arr = filteredProducts_copy;
+  }
+  const filteredProducts = arr.filter((product) =>
     product.nameSP.toLowerCase().includes(searchName)
   );
   filteredProducts_copy = filteredProducts;
@@ -720,7 +730,9 @@ function hienSPTheoFilter(item) {
     select.selectedIndex = 1;
   });
   filteredProducts = mangproduct_radio(item.id, ProductArrBoth);
+  arrsearch = JSON.parse(JSON.stringify(filteredProducts));
   filteredProducts_copy = JSON.parse(JSON.stringify(filteredProducts));
+  arrfilterprice = JSON.parse(JSON.stringify(filteredProducts));
   makeSP(1, sosptrongtrang, filteredProducts);
 }
 
@@ -746,15 +758,19 @@ function Sort(item) {
 }
 function Loc() {
   loadpage();
+  let search = document.querySelector("#searchName");
   let price1 = document.getElementById("nodePrice_1").value;
   let price2 = document.getElementById("nodePrice_2").value;
+  let arr = "";
+  if (search.value == "") {
+    arr = arrfilterprice;
+  } else {
+    arr = filteredProducts_copy;
+  }
   let mang = [];
-  for (let i = 0; i < filteredProducts_copy.length; i++) {
-    if (
-      parseInt(filteredProducts_copy[i].price) >= price1 &&
-      parseInt(filteredProducts_copy[i].price) <= price2
-    ) {
-      mang.push(filteredProducts_copy[i]);
+  for (let i = 0; i < arr.length; i++) {
+    if (parseInt(arr[i].price) >= price1 && parseInt(arr[i].price) <= price2) {
+      mang.push(arr[i]);
     }
   }
   filteredProducts_copy = mang;
