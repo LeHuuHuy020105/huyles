@@ -47,15 +47,23 @@
   object-fit: contain;
 }
 .nameProduct,
-.colorProduct,
-.countProduct {
+.colorProduct {
   width: 30%;
   text-align: center;
 }
 .colorProduct,
-.countProduct,
-.priceProduct {
+.countProduct {
+  text-align: center;
   width: 10%;
+}
+.priceProduct,
+.countProduct {
+  text-align: center;
+  width: 6%;
+}
+.sizeProduct {
+  text-align: center;
+  width: 8%;
 }
 #viewCart-body {
   height: 250px;

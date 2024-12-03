@@ -948,7 +948,6 @@ function resetsize() {
 function clickC_1(e, color, img) {
   objcolorcurrent.color = color;
   objcolorcurrent.img = img;
-  console.log(objcolorcurrent);
   const dataimg = e.getAttribute("data-src");
   const srcold = e.closest(".both_").querySelector(".srcimg"); //tim phan tu cha -> con co class srcimg
   srcold.setAttribute("src", dataimg);
@@ -1030,9 +1029,12 @@ function shopinginfo() {
           <div class="close-shopping" onclick="closeall()">Đóng</div>
         </div>
         <div class="shoping-bag-info">`;
-
+    let tongtien1 = 0;
+    let soluong1 = 0;
     // Hiển thị các sản phẩm trong giỏ hàng
     for (let i = 0; i < arrayshopbag.length; i++) {
+      tongtien1 += arrayshopbag[i].soluong * arrayshopbag[i].obj.price;
+      soluong1 += arrayshopbag[i].soluong;
       s += `<div class="shoping-bag-info-item">
             <div class="shoping-bag-img">
               <img src="${arrayshopbag[i].img}" alt="" />
@@ -1215,6 +1217,7 @@ function giaodienthanhtoan() {
           <span class="imgProduct">Hình ảnh</span>
           <span class="nameProduct">Tên sản phẩm</span>
           <span class="colorProduct">Màu sắc</span>
+          <span class="sizeProduct">Size</span>
           <span class="countProduct">Số lượng</span>
           <span class="priceProduct">Đơn giá</span>
         </div>
@@ -1228,6 +1231,7 @@ function giaodienthanhtoan() {
             <span class="imgProduct imgsp"><img src="${arrayproducts[i].img}" alt="" /></span>
             <span class="nameProduct">${arrayproducts[i].obj.nameSP}</span>
             <span class="colorProduct">${arrayproducts[i].color}</span>
+            <span class="sizeProduct">${arrayproducts[i].size}</span>
             <span class="countProduct">${arrayproducts[i].soluong}</span>
             <span class="priceProduct">${arrayproducts[i].obj.price}</span>
           </div>`;
