@@ -1128,137 +1128,6 @@ function renderqlnd() {
             </div>`;
   checkAccount();
 }
-
-// // vinh render qldh
-// let getShopBag = JSON.parse(localStorage.getItem("shopbagispay")) || [];
-
-// // in đơn hàng
-// function listDH(ordersOfUser) {
-//   let s = "";
-//   console.log(ordersOfUser);
-//   for (let i = 0; i < ordersOfUser.shopbagispayuser.length; i++) {
-//     let Price = ordersOfUser.shopbagispayuser[i].obj.price.toLocaleString(
-//       "vi-VN",
-//       { style: "currency", currency: "VND" }
-//     );
-//     let stringStatus = "";
-//     if (ordersOfUser.shopbagispayuser[i].status === "1")
-//       stringStatus = "Chờ xác nhận";
-//     else if (ordersOfUser.shopbagispayuser[i].status === "2")
-//       stringStatus = "Đang gói hàng";
-//     else if (ordersOfUser.shopbagispayuser[i].status === "3")
-//       stringStatus = "Vận chuyển";
-//     else if (ordersOfUser.shopbagispayuser[i].status === "4")
-//       stringStatus = "Hoàn thành";
-//     s += `
-//                 <div class="list">
-//                 <span style="width: 10%" class="userID">${
-//                   ordersOfUser.IDuser
-//                 }</span>
-//                 <div style="width: 5%; display: flex; justify-content: left;">
-//                   <input type="checkbox" class="myCheckbox" onchange='setDH(${JSON.stringify(
-//                     ordersOfUser
-//                   )},${i})'/>
-//                 </div>
-//                 <span style="width: 10%" class="idProduct">${
-//                   ordersOfUser.shopbagispayuser[i].obj.idproduct
-//                 }</span>
-//                 <img style="width: 20%" src="${
-//                   ordersOfUser.shopbagispayuser[i].obj.img
-//                 }" class="imgProduct" alt="Ảnh lỗi">
-//                 <span style="width: 30%" class="nameProduct">${
-//                   ordersOfUser.shopbagispayuser[i].obj.nameSP
-//                 }</span>
-//                 <span style="width: 5%" class="countProduct">${
-//                   ordersOfUser.shopbagispayuser[i].soluong
-//                 }</span>
-//                 <span style="width: 10%" class="priceProduct">${Price}</span>
-//                 <span style="width: 10%" class="deliveryStatus">${stringStatus}</span>
-//             </div>
-//     `;
-//   }
-//   return s;
-// }
-// let mang = [];
-// // tìm kiếm đơn hàng có trạng thái vận chuyển cần tìm
-// function setDH(user, itemindex) {
-//   let itemispay = {
-//     userpay: user,
-//     itemindexi: itemindex,
-//   };
-//   mang.push(itemispay);
-// }
-
-// function doYouAccept() {
-//   let shopbagispay = JSON.parse(localStorage.getItem("shopbagispay"));
-//   let input = document.querySelectorAll(".myCheckbox");
-//   let getDeliveryStatus = document.querySelector(
-//     "#deliveryStatusSelection"
-//   ).value;
-//   for (let i = 0; i < shopbagispay.length; i++) {
-//     for (let j = 0; j < mang.length; j++) {
-//       if (shopbagispay[i].IDuser == mang[j].userpay.IDuser) {
-//         shopbagispay[i].shopbagispayuser[mang[j].itemindexi].status =
-//           getDeliveryStatus;
-//         console.log(
-//           shopbagispay[i].shopbagispayuser[mang[j].itemindexi].status
-//         );
-//       }
-//     }
-//   }
-//   mang = [];
-//   input.forEach((input) => {
-//     input.checked = false;
-//   });
-//   localStorage.setItem("shopbagispay", JSON.stringify(shopbagispay));
-//   location.reload();
-// }
-
-// function renderqldh() {
-//   document.querySelector(".page-right").innerHTML = `<div class="qldh">
-//                 <div class="title"><h1>QUẢN LÝ ĐƠN HÀNG</h1></div>
-//                 <div class="btnAdd"><div class="circle" onclick="btnAdd()"><i class="fa-solid fa-plus"></i></div></div>
-//                 <div class="groupOption">
-//                         <select name="" class="box" id="deliveryStatusSelection">
-//                             <option value="1">Chờ xác nhận</option>
-//                             <option value="2">Đang gói hàng</option>
-//                             <option value="3">Vận chuyển</option>
-//                             <option value="4">Hoàn thành</option>
-//                         </select>
-//                         <button class="box" id="acceptChangeStatus" style="width: 10%;
-//   box-shadow: 0 7px 25px rgba(0, 0, 0, 0.2);
-//   border-radius: 10px;
-//   margin-right: 200px;
-//   border: none;
-//   height: fit-content;
-//   padding: 10px;" onclick="doYouAccept()">Xác nhận</button>
-//                         <div class="box">
-//                             <div class="contentBox">
-//                                 <div class="leftBox">
-//                                     <h2 id="amountOfProduct">0</h2>
-//                                     <span>ĐƠN HÀNG</span>
-//                                 </div>
-//                                 <i class="fa-solid fa-star"></i>
-//                             </div>
-//                         </div>
-//                 </div>
-//                 <div class="titleCol">
-//                     <span style="width: 10%" class="userID">userID</span>
-//                     <span style="width: 5%" class="selectProduct">Chọn</span>
-//                     <span style="width: 10%" class="idProduct">ID</span>
-//                     <span style="width: 20% ; padding-left: 7%" class="imgProduct">Hình ảnh</span>
-//                     <span style="width: 30% ; padding-left: 5%" class="nameProduct">Tên sản phẩm</span>
-//                     <span style="width: 5%" class="countProduct">Số lượng</span>
-//                     <span style="width: 10%" class="priceProduct">Đơn giá</span>
-//                     <span style="width: 10%" class="deliveryStatus">Vận chuyển</span>
-//                 </div>
-//                 <div id="storage-body"></div>`;
-//   let s = "";
-//   for (let i = 0; i < getShopBag.length; i++) {
-//     s += listDH(getShopBag[i]);
-//   }
-//   document.querySelector("#storage-body").innerHTML = s;
-// }
 // vinh render qldh
 let getShopBag = JSON.parse(localStorage.getItem("shopbagispay")) || [];
 
@@ -1820,12 +1689,12 @@ function checkEmail(str) {
 function loadpage() {
   window.scrollTo({ top: 0, behavior: "smooth" });
   const loader = document.querySelector(".loader");
-  // Start the loader animation
+
   loader.classList.add("active");
 
   setTimeout(function () {
     loader.classList.remove("active");
-  }, 1000); // Duration should match the time for loader animation
+  }, 1000);
 }
 function signInButton(event) {
   event.preventDefault();
