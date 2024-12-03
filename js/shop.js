@@ -976,22 +976,6 @@ function clickC_1(e, color, img) {
   const srcold = e.closest(".both_").querySelector(".srcimg"); //tim phan tu cha -> con co class srcimg
   srcold.setAttribute("src", dataimg);
 }
-// function timkiemSP(arr, id) {
-//   for (let i = 0; i < arr.length; i++) {
-//     if (id == arr[i].idproduct) {
-//       return arr[i];
-//     }
-//   }
-//   return null;
-// }
-// function reloadpage() {
-//   const urlParams = new URLSearchParams(window.location.search);
-//   const productid = urlParams.get("productID");
-//   const item = timkiemSP(ProductArrBoth, productid);
-//   if (item) {
-//     loadSingleProduct(item);
-//   }
-// }
 
 //nut tro lai
 function goBack() {
@@ -1330,7 +1314,6 @@ function reduceShopBag(index) {
 function increaseShopBag(index, sizeproduct) {
   let count = document.querySelectorAll(".countProductbuy")[index];
   let quantity = parseInt(count.value);
-  // console.log(arrayshopbag[index].obj.quantity.A);
   let Quantity = arrayshopbag[index].obj.quantity; // Giới hạn số lượng tối đa
   let maxQuantity = "";
   switch (sizeproduct) {
@@ -1417,7 +1400,6 @@ function kiemtradacotronggiohang(item) {
   }
   return null;
 }
-// Utility function to check stock availability
 function kiemtraconhang(item) {
   let products = JSON.parse(localStorage.getItem("arrayproducts"));
   for (let i = 0; i < products.length; i++) {
@@ -1442,7 +1424,6 @@ function addShopingBag(item) {
     item.size = document.querySelector("#size").value;
     item.soluong = parseInt(document.querySelector("#counteInp").value);
 
-    // Check if the selected size is in stock
     if (!kiemtraconhang(item)) {
       toast({
         title: "ERROR",
@@ -1456,10 +1437,8 @@ function addShopingBag(item) {
     getarrayshopbag();
     soluongspgiohang = arrayshopbag.length;
 
-    // Check if the product already exists in the shopping bag
     let existingItem = kiemtradacotronggiohang(item);
     if (existingItem != null) {
-      // Check if adding the new quantity would exceed the available stock
       let products = JSON.parse(localStorage.getItem("arrayproducts"));
       let product = products.find((p) => p.idproduct === item.obj.idproduct);
       let availableStock = product.quantity[item.size];
@@ -1495,7 +1474,6 @@ function addShopingBag(item) {
     updatecurrentuser();
     localStorage.setItem("countarrayshopbag", JSON.stringify(soluongspgiohang));
 
-    // Update the display of the number of products in the shopping bag
     updateshopingbag();
     chitiethoadon(); // Update the shopping bag details
   } else {
@@ -1508,7 +1486,6 @@ function addShopingBag(item) {
   }
 }
 
-// Initial call to update the shopping bag display
 updateshopingbag();
 
 // Cập nhật số lượng sản phẩm trong giỏ hàng khi trang được tải
@@ -1651,94 +1628,6 @@ function thanhtoan() {
   }
 }
 
-// let isEditing = false; // Flag to track edit state
-
-// function chinhsua() {
-//   const editButton = document.querySelector("#buttonEdit"); // Get the edit button
-//   const inputEdit = document.querySelectorAll(".input"); // Get all input fields
-//   let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
-//   const phone = document.querySelector("#phone");
-//   const address = document.querySelector(".contentTab-address");
-
-//   if (editButton != null) {
-//     editButton.addEventListener("click", () => {
-//       if (isEditing) {
-//         console.log(isEditing);
-//         // Save mode
-//         inputEdit.forEach(function (e) {
-//           e.setAttribute("readonly", true);
-//           e.classList.remove("active"); // Remove active class when saving
-//         });
-//         let sonha = document.querySelector("#numberaddress");
-//         let thanhpho = document.querySelector("#city");
-//         let quan = document.querySelector("#district");
-//         let huyen = document.querySelector("#ward");
-//         if (sonha && thanhpho && quan && huyen) {
-//           sonha = sonha.value.trim();
-//           thanhpho = thanhpho.value.trim();
-//           quan = quan.value.trim();
-//           huyen = huyen.value.trim();
-
-//           if (sonha && thanhpho && quan && huyen) {
-//             let s = `${sonha}, ${huyen}, ${quan}, ${thanhpho}`;
-
-//             // Cập nhật thông tin người dùng
-//             usercurrent.phone = phone.value;
-//             usercurrent.diachi = s;
-
-//             // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
-//             setTimeout(() => {
-//               localStorage.setItem("currentUser", JSON.stringify(usercurrent));
-
-//               // Cập nhật lại giao diện
-
-//               address.innerHTML = s;
-//               // Đổi nút thành "Chỉnh sửa"
-//               buttonEdit.textContent = "Chỉnh sửa";
-//             }, 500); // Thêm thời gian trì hoãn (500ms)
-//           } else {
-//             toast({
-//               title: "ERROR",
-//               message: "Các trường địa chỉ chưa đầy đủ!",
-//               type: "error",
-//               duration: 5000,
-//             });
-//           }
-//         }
-//         updateUserDetails(usercurrent); // Update the user details in storageUsers
-//       } else {
-//         // Edit mode
-//         inputEdit.forEach(function (e) {
-//           e.removeAttribute("readonly");
-//           e.classList.add("active"); // Add active class when editing
-//         });
-//         // Thay thế phần address_user với các input/select mới
-//         address.innerHTML = `
-//           <input type="text" id="numberaddress" placeholder="Nhập số nhà & tên đường" />
-//           <label for="city">Thành phố:</label>
-//           <select id="city" onchange="populateDistricts()">
-//             <option value="">Chọn Thành phố</option>
-//           </select>
-//           <label for="district">Quận/Huyện:</label>
-//           <select id="district" onchange="populateWards()">
-//             <option value="">Chọn Quận/Huyện</option>
-//           </select>
-//           <label for="ward">Phường/Xã:</label>
-//           <select id="ward">
-//             <option value="">Chọn Phường/Xã</option>
-//           </select>`;
-
-//         // Đảm bảo dữ liệu được hiển thị trong các select
-//         populateCities();
-//         editButton.textContent = "Lưu lại";
-//       }
-//       // Toggle edit state
-//       isEditing = !isEditing;
-//     });
-//   }
-// }
-
-// Function to update user details in storageUsers
 function updateUserDetails(user) {
   let allUsers = JSON.parse(localStorage.getItem("storageUsers")) || [];
   for (let i = 0; i < allUsers.length; i++) {
@@ -1750,9 +1639,7 @@ function updateUserDetails(user) {
   localStorage.setItem("storageUsers", JSON.stringify(allUsers));
 }
 
-// Initialize the edit function
 chinhsua();
 makeFilter();
 makeSP(getCurrentPage(), sosptrongtrang, ProductArrBoth);
 makeselectpage(getCurrentPage(), ProductArrBoth);
-// saveArraytolocal();

@@ -1869,7 +1869,7 @@ function signInButton(event) {
         <div style="height: 60%" class="box-l">
           <div class="L b1">QUẢN LÝ THỐNG KÊ</div>
           <div class="L b2">QUẢN LÝ ĐƠN HÀNG</div>
-          <div class="L b3">QUẢN LÝ SẢN PHẢM</div>
+          <div class="L b3">QUẢN LÝ SẢN PHẨM</div>
           <div class="L b4">QUẢN LÝ NGƯỜI DÙNG</div>
         </div>
         <div class="L-e">
