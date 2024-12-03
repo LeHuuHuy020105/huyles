@@ -1484,18 +1484,6 @@ function addShopingBag(item) {
   }
 }
 
-// Update the display of the number of products in the shopping bag when the page is loaded
-function updateshopingbag() {
-  soluongspgiohang = JSON.parse(localStorage.getItem("countarrayshopbag")) || 0;
-  if (soluongspgiohang > 0) {
-    document.querySelector(".Shoping span").textContent = soluongspgiohang;
-    document.querySelector(".Shoping").style.color = "red";
-  } else {
-    document.querySelector(".Shoping span").textContent = "0";
-    document.querySelector(".Shoping").style.color = "black";
-  }
-}
-
 // Initial call to update the shopping bag display
 updateshopingbag();
 
