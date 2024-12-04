@@ -142,7 +142,8 @@
   }
 }
 
-.container_pay {
+.container_pay,
+.address_pay {
   position: absolute;
   scale: 0;
   height: 0;
@@ -153,6 +154,49 @@
   transition: transform 0.5s ease;
   transform: translate(-50%, -50%);
 }
+.address_pay {
+  background-color: white;
+  width: 600px;
+  padding: 30px;
+  height: 0;
+  overflow: hidden;
+  overflow: visible;
+  scale: 0;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid black;
+}
+.complete_edit {
+  width: 50%;
+  background-color: #000;
+  border: 2px solid black;
+  color: white;
+  margin: 20px auto;
+  text-align: center;
+}
+.newaddress{
+  padding: 4px;
+  background-color: #000;
+  border: 2px solid black;
+  color: white;
+  text-align: center;
+}
+.complete_edit:hover,.newaddress:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.5); /* Màu đen mờ */
+}
+.address_pay.active {
+  height: max-content;
+  scale: 1;
+  overflow: visible;
+}
+.typeaddress {
+  margin: 20px 0px;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
 .container_pay.active {
   scale: 1;
   height: max-content;

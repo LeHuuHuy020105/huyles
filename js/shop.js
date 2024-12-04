@@ -362,6 +362,7 @@ let Products = [
   },
 ];
 loadpage();
+console.log(Products[0].quantity["A"]);
 for (let i = 0; i < Products.length; i++) {
   Products[i].idproduct = Products[i].nametag + i;
 }
@@ -555,7 +556,10 @@ function makeSP(trang, sosptrongtrang, arr) {
 function makeselectpage(index, arr) {
   const max_length_arrayproduct = arr.length;
   max_page = Math.ceil(max_length_arrayproduct / sosptrongtrang);
-
+  if (max_page <= 1) {
+    document.querySelector("#body-widePagination").innerHTML = "";
+    return;
+  }
   let s = `<a href="#" class="pagination_item" id="before"><span><i class='bx bx-left-arrow-alt'></i></span></a>`;
 
   if (index > 1) {
@@ -761,7 +765,6 @@ function Sort(item) {
   makeselectpage(1, filteredProducts_copy1);
 }
 function Loc() {
-  loadpage();
   let sort = document.querySelectorAll("#sort");
   sort.forEach((select) => {
     select.selectedIndex = 1;
@@ -769,6 +772,18 @@ function Loc() {
   let search = document.querySelector("#searchName");
   let price1 = document.getElementById("nodePrice_1").value;
   let price2 = document.getElementById("nodePrice_2").value;
+  let price1_value = parseFloat(price1);
+  let price2_value = parseFloat(price2);
+  if (isNaN(price1_value) || isNaN(price2_value)) {
+    toast({
+      title: "ERROR",
+      message: "Vui lòng nhập số !",
+      type: "error",
+      duration: 5000,
+    });
+    return;
+  }
+  loadpage();
   let arr = "";
   if (search.value == "") {
     arr = arrfilterprice;
@@ -1036,259 +1051,7 @@ function updatecurrentuser() {
   localStorage.setItem("currentUser", JSON.stringify(usercurrent));
   updateAlluser(usercurrent);
 }
-// Hiển thị thông tin giỏ hàng
-function shopinginfo() {
-  let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (currentUser != null) {
-    let menurespon = document.querySelector(".header1");
-    document.querySelector(".backgroud-menu-respon").style.display = "block";
-    if (menurespon) {
-      menurespon.classList.remove("active");
-    }
-    let arrayshopbag = JSON.parse(localStorage.getItem("arrayshopbag"));
-    const cart = document.querySelector(".cart");
-    let s = `<div class="shoping-bag">
-        <div class="shoping-bag-header">
-          <h3>Giỏ hàng</h3>
-          <div class="close-shopping" onclick="closeall()">Đóng</div>
-        </div>
-        <div class="shoping-bag-info">`;
-    let tongtien1 = 0;
-    let soluong1 = 0;
-    // Hiển thị các sản phẩm trong giỏ hàng
-    for (let i = 0; i < arrayshopbag.length; i++) {
-      tongtien1 += arrayshopbag[i].soluong * arrayshopbag[i].obj.price;
-      soluong1 += arrayshopbag[i].soluong;
-      s += `<div class="shoping-bag-info-item">
-            <div class="shoping-bag-img">
-              <img src="${arrayshopbag[i].img}" alt="" />
-            </div>
-            <div class="cart-info">
-              <h4>${arrayshopbag[i].obj.nameSP}</h4>
-              <h6>${arrayshopbag[i].color}-${arrayshopbag[i].size}</h6>
-              <div class="priceAndCount">
-                <div class="count">
-                  <i class="fa-solid fa-minus sub" onclick='reduceShopBag(${i});'></i>
-                  <input type="text" readonly="readonly" class="countProductbuy" value="${arrayshopbag[i].soluong}" />
-                  <i class="fa-solid fa-plus add" onclick='increaseShopBag(${i},"${arrayshopbag[i].size}");'></i>
-                </div>
-                <div class="price">${arrayshopbag[i].obj.price}₫</div>
-              </div>
-              <div class="delete effect-for-btn" onclick="removeItem(${i})">Xoá</div>
-            </div>
-          </div>`;
-    }
-    s += `</div>
-        <div class="pay">
-          <div class="main">
-            <div class="info_bill">
-              <div class="selected">
-                <p>ĐÃ CHỌN:</p>
-                <p id="totalCount">${soluong1}</p>
-              </div>
-              <div class="discount">
-                <p>KHUYẾN MÃI:</p>
-                <p id="discountPercent"></p>
-              </div>
-              <div class="total">
-                <p>TẠM TÍNH:</p>
-                <p id="totalBill">${tongtien1}₫</p>
-              </div>
-            </div>
-            <div class="btn-pay">
-              <h3 class="effect-for-btn buttonsubmit" onclick="giaodienthanhtoan();" >Xác nhận</h3>
-            </div>
-          </div>
-        </div>
-      </div>`;
 
-    cart.innerHTML = s;
-    cart.classList.add("active");
-    chitiethoadon1(); // Cập nhật lại thông tin giỏ hàng
-  } else {
-    toast({
-      title: "ERROR",
-      message: "Vui lòng đăng nhập !",
-      type: "error",
-      duration: 5000,
-    });
-  }
-}
-let ispayedshop = false;
-
-function creditcardform() {
-  const creditcard = document.querySelector(".container_pay");
-  creditcard.classList.add("active");
-  document.querySelector(".backgroud-menu-respon").style.display = "block";
-}
-
-function pay() {
-  ispayedshop = true;
-  const creditcard = document.querySelector(".container_pay");
-  creditcard.classList.remove("active");
-  document.querySelector(".backgroud-menu-respon").style.display = "none";
-  toast({
-    title: "SUCCESS",
-    message: "Chi tiết thẻ tín dụng đã được gửi thành công.",
-    type: "success",
-    duration: 5000,
-  });
-}
-
-function giaodienthanhtoan() {
-  let arrayproducts = JSON.parse(localStorage.getItem("arrayshopbag")) || [];
-  if (arrayproducts.length == 0) {
-    toast({
-      title: "ERROR",
-      message: "Giỏ hàng rỗng",
-      type: "error",
-      duration: 5000,
-    });
-  } else {
-    let tongtien = 0;
-    getarrayshopbag();
-    let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
-    document.querySelector(".cart").classList.remove("active");
-    document.querySelector(".backgroud-menu-respon").style.display = "none";
-    let s = `
-    <div class="container_pay">
-      <form action="javascript:void(0);" onsubmit="pay()">
-        <div class="row">
-          <div class="col">
-            <h3 class="title">billing address</h3>
-            <div class="inputBox">
-              <span>full name :</span>
-              <input type="text" placeholder="john deo" required />
-            </div>
-            <div class="inputBox">
-              <span>email :</span>
-              <input type="email" placeholder="example@example.com" required />
-            </div>
-            <div class="inputBox">
-              <span>address :</span>
-              <input type="text" placeholder="room - street - locality" required />
-            </div>
-            <div class="inputBox">
-              <span>city :</span>
-              <input type="text" placeholder="mumbai" required />
-            </div>
-            <div class="flex">
-              <div class="inputBox">
-                <span>state :</span>
-                <input type="text" placeholder="india" required />
-              </div>
-              <div class="inputBox">
-                <span>zip code :</span>
-                <input type="text" placeholder="123 456" required />
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <h3 class="title">payment</h3>
-            <div class="inputBox">
-              <span>cards accepted :</span>
-              <img src="./img/card_img.png" alt="" />
-            </div>
-            <div class="inputBox">
-              <span>name on card :</span>
-              <input type="text" placeholder="mr. john deo" required />
-            </div>
-            <div class="inputBox">
-              <span>credit card number :</span>
-              <input type="number" placeholder="1111-2222-3333-4444" required />
-            </div>
-            <div class="inputBox">
-              <span>exp month :</span>
-              <input type="text" placeholder="january" required />
-            </div>
-            <div class="flex">
-              <div class="inputBox">
-                <span>exp year :</span>
-                <input type="number" placeholder="2022" required />
-              </div>
-              <div class="inputBox">
-                <span>CVV :</span>
-                <input type="text" placeholder="1234" required />
-              </div>
-            </div>
-          </div>
-        </div>
-        <input type="submit" value="proceed to checkout" class="submit-btn" />
-      </form>
-    </div>
-    <h1 class="tittleheader">THÔNG TIN GIAO HÀNG</h1>
-    <div class="infoCustomer box">
-      <div class="infoCustomer-body">
-        <div class="contentTab">
-          <span>Họ và tên: </span>
-          <input type="text" class="input" id="name" value="${usercurrent.name}" readonly />
-        </div>
-        <div class="contentTab">
-          <span>Số điện thoại: </span>
-          <input type="text" class="input" id="phone" value="${usercurrent.phone}" readonly />
-        </div>
-        <div class="contentTab">
-          <span>Địa chỉ : </span>
-         <div class="contentTab-address">${usercurrent.diachi}</div>
-        </div>
-        <div id="buttonEdit" onclick="chinhsua();">Chỉnh sửa</div>
-      </div>
-    </div>
-    <div class="payment box">
-      <div class="viewCart">
-        <div class="titleCol">
-          <span class="idProduct">ID</span>
-          <span class="imgProduct">Hình ảnh</span>
-          <span class="nameProduct">Tên sản phẩm</span>
-          <span class="colorProduct">Màu sắc</span>
-          <span class="sizeProduct">Size</span>
-          <span class="countProduct">Số lượng</span>
-          <span class="priceProduct">Đơn giá</span>
-        </div>
-        <div id="viewCart-body">`;
-    for (let i = 0; i < arrayproducts.length; i++) {
-      tongtien +=
-        parseInt(arrayproducts[i].obj.price) *
-        parseInt(arrayproducts[i].soluong);
-      s += `<div class="product">
-            <span class="idProduct">${arrayproducts[i].obj.idproduct}</span>
-            <span class="imgProduct imgsp"><img src="${arrayproducts[i].img}" alt="" /></span>
-            <span class="nameProduct">${arrayproducts[i].obj.nameSP}</span>
-            <span class="colorProduct">${arrayproducts[i].color}</span>
-            <span class="sizeProduct">${arrayproducts[i].size}</span>
-            <span class="countProduct">${arrayproducts[i].soluong}</span>
-            <span class="priceProduct">${arrayproducts[i].obj.price}</span>
-          </div>`;
-    }
-    s += `</div>
-      </div>
-      <div class="methodPayment">
-        <h4>Phương thức thanh toán</h4>
-        <div class="method">
-          <input type="radio" name="radio" id="creditcard" checked />
-          <span onclick="creditcardform()">
-            <i class="now-ui-icons shopping_credit-card"></i>Thẻ tín dụng / Thẻ ghi nợ</span>
-        </div>
-        <div class="method">
-          <input type="radio" name="radio" id="cod" />
-          <span><i class="now-ui-icons shopping_delivery-fast"></i>Thanh toán khi nhận hàng</span>
-        </div>
-        <div class="infoBill">
-          <div class="contentTab">
-            <span>Tạm tính:</span>
-            <span id="valueTemporary">${tongtien}</span>
-          </div>
-          <div class="contentTab">
-            <span>Tổng:</span>
-            <span id="valueBill">${tongtien}</span>
-          </div>
-        </div>
-      </div>
-      <div class="buttonsubmit" onclick="thanhtoan()">Thanh toán</div>
-    </div>`;
-    midcontent.innerHTML = s;
-  }
-}
 // Tính toán số lượng và tổng tiền của giỏ hàng
 function chitiethoadon() {
   let arrayshopbag = JSON.parse(localStorage.getItem("arrayshopbag"));
@@ -1374,20 +1137,6 @@ function removeItem(index) {
   updatecurrentuser();
   localStorage.setItem("countarrayshopbag", JSON.stringify(soluongspgiohang));
   shopinginfo(); // Cập nhật lại giỏ hàng hiển thị
-}
-
-// Đóng giỏ hàng
-function closeall() {
-  document.querySelector(".cart").classList.remove("active");
-  document.querySelector(".backgroud-menu-respon").style.display = "none";
-  let menurespon = document.querySelector(".header1");
-  if (menurespon) {
-    menurespon.classList.remove("active");
-  }
-  let creditcard = document.querySelector(".container_pay");
-  if (creditcard != null) {
-    creditcard.classList.remove("active");
-  }
 }
 
 // Thêm sản phẩm vào giỏ hàng
@@ -1569,87 +1318,6 @@ function kiemtratontai(IDuser) {
   return null;
 }
 
-function thanhtoan() {
-  let shopbagispay = JSON.parse(localStorage.getItem("shopbagispay")) || [];
-  let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
-  let userIndex = kiemtratontai(usercurrent.userID);
-  let creditcard = document.querySelector("#creditcard");
-  let paymentType = creditcard.checked ? 1 : 0;
-
-  // Lấy thời gian hiện tại và chuyển thành chuỗi
-  let currentTime = new Date().toLocaleString(); // Lấy thời gian dưới dạng chuỗi
-
-  if (usercurrent.phone === "" || usercurrent.diachi === "") {
-    toast({
-      title: "ERROR",
-      message: "Vui lòng nhập đầy đủ số điện thoại và địa chỉ",
-      type: "error",
-      duration: 5000,
-    });
-    chinhsua();
-  } else {
-    if (creditcard.checked && ispayedshop === false) {
-      creditcardform();
-    } else {
-      if (userIndex !== null) {
-        let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
-        let arrayshopbag =
-          JSON.parse(localStorage.getItem("arrayshopbag")) || [];
-        for (let i = 0; i < arrayshopbag.length; i++) {
-          arrayshopbag[i].diachi = usercurrent.diachi;
-          arrayshopbag[i].paymenttype = paymentType;
-          arrayshopbag[i].time = currentTime; // Thêm thời gian vào mỗi mặt hàng
-          shopbagispay[userIndex].shopbagispayuser.push(arrayshopbag[i]);
-        }
-      } else {
-        let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
-        let shopbagitem = {
-          IDuser: usercurrent.userID,
-          shopbagispayuser:
-            JSON.parse(localStorage.getItem("arrayshopbag")) || [],
-        };
-        for (let i = 0; i < shopbagitem.shopbagispayuser.length; i++) {
-          shopbagitem.shopbagispayuser[i].diachi = usercurrent.diachi;
-          shopbagitem.shopbagispayuser[i].paymenttype = paymentType;
-          shopbagitem.shopbagispayuser[i].time = currentTime; // Thêm thời gian vào mỗi mặt hàng
-        }
-        shopbagispay.push(shopbagitem);
-      }
-
-      // Cập nhật lại danh sách giỏ hàng đã thanh toán vào localStorage
-      localStorage.setItem("shopbagispay", JSON.stringify(shopbagispay));
-
-      // Đảm bảo danh sách mặt hàng được điều chỉnh trong kho
-      let itemsToAdjust =
-        JSON.parse(localStorage.getItem("arrayshopbag")) || [];
-      dieuchinhsoluongtrongkho(itemsToAdjust);
-
-      // Xóa giỏ hàng của người dùng sau khi thanh toán
-      let alluser = JSON.parse(localStorage.getItem("storageUsers")) || [];
-      for (let i = 0; i < alluser.length; i++) {
-        if (alluser[i].userID === usercurrent.userID) {
-          alluser[i].shopbag = [];
-        }
-      }
-
-      // Cập nhật lại thông tin người dùng vào localStorage
-      localStorage.setItem("storageUsers", JSON.stringify(alluser));
-      localStorage.setItem("currentUser", JSON.stringify(usercurrent));
-
-      toast({
-        title: "SUCCESS",
-        message: "Thanh toán thành công",
-        type: "success",
-        duration: 5000,
-      });
-
-      // Tùy chọn: Tải lại trang sau khi thanh toán thành công
-      setTimeout(function () {
-        location.reload();
-      }, 1000);
-    }
-  }
-}
 
 // let isEditing = false; // Flag to track edit state
 

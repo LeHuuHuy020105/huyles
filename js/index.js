@@ -1002,6 +1002,12 @@ function closeall() {
   if (creditcard != null) {
     creditcard.classList.remove("active");
   }
+  let newaddress = document.querySelector(".address_pay");
+  if (newaddress != null) {
+    let elementselect = document.querySelector(".contentTab-address");
+    elementselect.selectedIndex = "1";
+    newaddress.classList.remove("active");
+  }
 }
 updateshopingbag();
 
@@ -1038,21 +1044,47 @@ function pay() {
 }
 
 function giaodienthanhtoan() {
-  let arrayproducts = JSON.parse(localStorage.getItem("arrayshopbag")) || [];
-  if (arrayproducts.length == 0) {
+  let arrayProducts = JSON.parse(localStorage.getItem("arrayshopbag")) || [];
+  if (arrayProducts.length == 0) {
     toast({
       title: "ERROR",
-      message: "Giỏ hàng rỗng !",
+      message: "Giỏ hàng rỗng!",
       type: "error",
       duration: 5000,
     });
   } else {
-    let tongtien = 0;
+    let tongTien = 0;
     getarrayshopbag();
-    let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
+    let userCurrent = JSON.parse(localStorage.getItem("currentUser"));
     document.querySelector(".cart").classList.remove("active");
     document.querySelector(".backgroud-menu-respon").style.display = "none";
     let s = `
+    <div class="address_pay">
+      <input
+        type="text"
+        id="numberaddress"
+        placeholder="Nhập số nhà & tên đường"
+      />
+      <div class="typeaddress">
+        <label for="city">Thành phố:</label>
+        <select id="city" onchange="populateDistricts()">
+          <option value="">Chọn Thành phố</option>
+        </select>
+      </div>
+      <div class="typeaddress">
+        <label for="district">Quận/Huyện:</label>
+        <select id="district" onchange="populateWards()">
+          <option value="">Chọn Quận/Huyện</option>
+        </select>
+      </div>
+      <div class="typeaddress">
+        <label for="ward">Phường/Xã:</label>
+        <select id="ward">
+          <option value="">Chọn Phường/Xã</option>
+        </select>
+      </div>
+      <div class="complete_edit" onclick="pushaddress()">Hoàn tất</div>
+    </div>
     <div class="container_pay">
       <form action="javascript:void(0);" onsubmit="pay()">
         <div class="row">
@@ -1123,15 +1155,15 @@ function giaodienthanhtoan() {
       <div class="infoCustomer-body">
         <div class="contentTab">
           <span>Họ và tên: </span>
-          <input type="text" class="input" id="name" value="${usercurrent.name}" readonly />
+          <input type="text" class="input" id="name" value="${userCurrent.name}" readonly />
         </div>
         <div class="contentTab">
           <span>Số điện thoại: </span>
-          <input type="text" class="input" id="phone" value="${usercurrent.phone}" readonly />
+          <input type="text" class="input" id="phone" value="${userCurrent.phone}" readonly />
         </div>
         <div class="contentTab">
           <span>Địa chỉ : </span>
-          <div class="contentTab-address">${usercurrent.diachi}</div>
+          <div class="contentTab-address">${userCurrent.diachi}</div>
         </div>
         <div id="buttonEdit" onclick="chinhsua();">Chỉnh sửa</div>
       </div>
@@ -1147,17 +1179,17 @@ function giaodienthanhtoan() {
           <span class="priceProduct">Đơn giá</span>
         </div>
         <div id="viewCart-body">`;
-    for (let i = 0; i < arrayproducts.length; i++) {
-      tongtien +=
-        parseInt(arrayproducts[i].obj.price) *
-        parseInt(arrayproducts[i].soluong);
+    for (let i = 0; i < arrayProducts.length; i++) {
+      tongTien +=
+        parseInt(arrayProducts[i].obj.price) *
+        parseInt(arrayProducts[i].soluong);
       s += `<div class="product">
-            <span class="idProduct">${arrayproducts[i].obj.idproduct}</span>
-            <span class="imgProduct imgsp"><img src="${arrayproducts[i].img}" alt="" /></span>
-            <span class="nameProduct">${arrayproducts[i].obj.nameSP}</span>
-            <span class="colorProduct">${arrayproducts[i].color}</span>
-            <span class="countProduct">${arrayproducts[i].soluong}</span>
-            <span class="priceProduct">${arrayproducts[i].obj.price}</span>
+            <span class="idProduct">${arrayProducts[i].obj.idproduct}</span>
+            <span class="imgProduct imgsp"><img src="${arrayProducts[i].img}" alt="" /></span>
+            <span class="nameProduct">${arrayProducts[i].obj.nameSP}</span>
+            <span class="colorProduct">${arrayProducts[i].color}</span>
+            <span class="countProduct">${arrayProducts[i].soluong}</span>
+            <span class="priceProduct">${arrayProducts[i].obj.price}</span>
           </div>`;
     }
     s += `</div>
@@ -1176,98 +1208,91 @@ function giaodienthanhtoan() {
         <div class="infoBill">
           <div class="contentTab">
             <span>Tạm tính:</span>
-            <span id="valueTemporary">${tongtien}</span>
+            <span id="valueTemporary">${tongTien}</span>
           </div>
           <div class="contentTab">
             <span>Tổng:</span>
-            <span id="valueBill">${tongtien}</span>
+            <span id="valueBill">${tongTien}</span>
           </div>
         </div>
       </div>
       <div class="buttonsubmit" onclick="thanhtoan()">Thanh toán</div>
     </div>`;
+    populateCities();
     midcontent.innerHTML = s;
   }
 }
 
 let isEditing1 = false; // Flag to track edit state
+function isValidPhoneNumber(phoneNumber) {
+  // Kiểm tra số điện thoại có đúng định dạng hay không (ví dụ: phải là chuỗi 10-11 chữ số)
+  const phoneRegex = /^[0-9]{10,11}$/; // Điều kiện: chỉ chứa chữ số và có độ dài 10-11 ký tự
+  return phoneRegex.test(phoneNumber);
+}
 
 function chinhsua() {
   loadpage();
-  console.log(isEditing1);
   const editButton = document.querySelector("#buttonEdit"); // Get the edit button
   const inputEdit = document.querySelectorAll(".input"); // Get all input fields
-  let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
+  let userCurrent = JSON.parse(localStorage.getItem("currentUser"));
   const phone = document.querySelector("#phone");
   const address = document.querySelector(".contentTab-address");
 
   if (editButton != null) {
     if (isEditing1) {
       // Save mode
+      // Kiểm tra số điện thoại trước khi lưu
+      if (!isValidPhoneNumber(phone.value)) {
+        toast({
+          title: "ERROR",
+          message: "Số điện thoại không hợp lệ. Vui lòng nhập lại.",
+          type: "error",
+          duration: 5000,
+        });
+        return; // Dừng lại nếu số điện thoại không hợp lệ
+      }
       inputEdit.forEach(function (e) {
         e.setAttribute("readonly", true);
         e.classList.remove("active"); // Remove active class when saving
       });
-      let sonha = document.querySelector("#numberaddress");
-      let thanhpho = document.querySelector("#city");
-      let quan = document.querySelector("#district");
-      let huyen = document.querySelector("#ward");
-      if (sonha && thanhpho && quan && huyen) {
-        sonha = sonha.value.trim();
-        thanhpho = thanhpho.value.trim();
-        quan = quan.value.trim();
-        huyen = huyen.value.trim();
+      let selectAddressValue = document.querySelector(
+        ".contentTab-address-select"
+      ).value;
+      let addressUserCurrent = getCurrentUserAddresses();
+      if (addressUserCurrent != null && phone.value != "") {
+        let s = addressUserCurrent.address[selectAddressValue];
+        console.log(s);
+        userCurrent.diachi = s;
+        userCurrent.phone = phone.value;
 
-        if (sonha && thanhpho && quan && huyen) {
-          let s = `${sonha}, ${huyen}, ${quan}, ${thanhpho}`;
-
-          // Cập nhật thông tin người dùng
-          usercurrent.phone = phone.value;
-          usercurrent.diachi = s;
-
-          // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
-          setTimeout(() => {
-            localStorage.setItem("currentUser", JSON.stringify(usercurrent));
-
-            // Cập nhật lại giao diện
-            address.innerHTML = s;
-            // Đổi nút thành "Chỉnh sửa"
-            editButton.textContent = "Chỉnh sửa";
-          }, 500); // Thêm thời gian trì hoãn (500ms)
-        } else {
-          toast({
-            title: "ERROR",
-            message: "Các trường địa chỉ chưa đầy đủ!",
-            type: "error",
-            duration: 5000,
-          });
-        }
+        // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
+        setTimeout(() => {
+          localStorage.setItem("currentUser", JSON.stringify(userCurrent));
+          // Cập nhật lại giao diện
+          address.innerHTML = s;
+          // Đổi nút thành "Chỉnh sửa"
+          editButton.textContent = "Chỉnh sửa";
+        }, 500); // Thêm thời gian trì hoãn (500ms)
+      } else {
+        toast({
+          title: "ERROR",
+          message: "Vui lòng thêm địa mới!",
+          type: "error",
+          duration: 5000,
+        });
       }
-      updateUserDetails(usercurrent); // Update the user details in storageUsers
+
+      updateUserDetails(userCurrent); // Update the user details in storageUsers
     } else {
       // Edit mode
+      console.log("chinhsua");
       inputEdit.forEach(function (e) {
         e.removeAttribute("readonly");
         e.classList.add("active"); // Add active class when editing
       });
       // Thay thế phần address_user với các input/select mới
-      address.innerHTML = `
-        <input type="text" id="numberaddress" placeholder="Nhập số nhà & tên đường" />
-        <label for="city">Thành phố:</label>
-        <select id="city" onchange="populateDistricts()">
-          <option value="">Chọn Thành phố</option>
-        </select>
-        <label for="district">Quận/Huyện:</label>
-        <select id="district" onchange="populateWards()">
-          <option value="">Chọn Quận/Huyện</option>
-        </select>
-        <label for="ward">Phường/Xã:</label>
-        <select id="ward">
-          <option value="">Chọn Phường/Xã</option>
-        </select>`;
-
+      makeAddressSelect();
       // Đảm bảo dữ liệu được hiển thị trong các select
-      populateCities();
       editButton.textContent = "Lưu lại";
     }
     // Toggle edit state
@@ -1275,7 +1300,99 @@ function chinhsua() {
     console.log(isEditing1); // Log lại trạng thái để kiểm tra
   }
 }
+let addressUsers = JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
 
+function getCurrentUserAddresses() {
+  let address = JSON.parse(localStorage.getItem("addressUserCurrent"));
+  let user = JSON.parse(localStorage.getItem("currentUser"));
+  for (let i = 0; i < address.length; i++) {
+    if (address[i].IDuser == user.userID) {
+      return address[i];
+    }
+  }
+  return null;
+}
+
+localStorage.setItem("addressUserCurrent", JSON.stringify(addressUsers));
+
+function makeAddressSelect() {
+  console.log("abc");
+
+  // Lấy thông tin các địa chỉ đã lưu trong localStorage
+  let addressUsers =
+    JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
+  let user = JSON.parse(localStorage.getItem("currentUser"));
+  let addressUser = getCurrentUserAddresses(); // Hàm này trả về thông tin địa chỉ của người dùng hiện tại
+
+  // Kiểm tra nếu địa chỉ người dùng có tồn tại
+  s = `
+  <span class="newaddress" onclick="hienthiformaddress()">Thêm địa chỉ mới</span>
+  <select class="contentTab-address-select">`;
+
+  if (addressUser && addressUser.address.length > 0) {
+    // Nếu người dùng có địa chỉ, tạo các lựa chọn từ địa chỉ đã lưu
+    for (let i = 0; i < addressUser.address.length; i++) {
+      s += `<option value=${i}>${addressUser.address[i]}</option>`;
+    }
+  }
+
+  // Cập nhật nội dung phần tử .contentTab-address với các lựa chọn vừa tạo
+  document.querySelector(".contentTab-address").innerHTML = s;
+}
+function hienthiformaddress() {
+  let newAddress = document.querySelector(".address_pay");
+  newAddress.classList.add("active");
+  document.querySelector(".backgroud-menu-respon").style.display = "block";
+  populateCities();
+}
+function isValidHouseNumber(houseNumber) {
+  // Biểu thức chính quy kiểm tra số nhà.
+  // Ví dụ: cho phép số nhà là một chuỗi bắt đầu bằng số, có thể có dấu cách hoặc ký tự sau.
+  const regex = /^[0-9]+[a-zA-Z0-9\s]*$/;
+  return regex.test(houseNumber);
+}
+
+function pushaddress() {
+  let sonha = document.querySelector("#numberaddress").value;
+  let quan = document.querySelector("#district").value;
+  let phuong = document.querySelector("#ward").value;
+  let city = document.querySelector("#city").value;
+  let s = `${sonha},${phuong},${quan},${city}`;
+  let user = JSON.parse(localStorage.getItem("currentUser"));
+  let addressUsers = JSON.parse(localStorage.getItem("addressUserCurrent"));
+  if (isValidHouseNumber(sonha)) {
+    if (getCurrentUserAddresses() == null) {
+      obj = {
+        IDuser: user.userID,
+        address: [s],
+      };
+      addressUsers.push(obj);
+    } else {
+      for (let i = 0; i < addressUsers.length; i++) {
+        if (addressUsers[i].IDuser == user.userID) {
+          addressUsers[i].address.push(s);
+        }
+      }
+    }
+    localStorage.setItem("addressUserCurrent", JSON.stringify(addressUsers));
+    toast({
+      title: "SUCCESS",
+      message: "Thêm địa chỉ thành công",
+      type: "success",
+      duration: 5000,
+    });
+    closeall();
+    makeAddressSelect();
+  } else {
+    toast({
+      title: "ERROR",
+      message:
+        "Số nhà không hợp lệ.Chỉ chứa chữ số và có thể có ký tự chữ cái hoặc số phía sau",
+      type: "error",
+      duration: 5000,
+    });
+  }
+}
 function thanhtoan() {
   let shopbagispay = JSON.parse(localStorage.getItem("shopbagispay")) || [];
   let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
@@ -1285,7 +1402,7 @@ function thanhtoan() {
 
   // Lấy thời gian hiện tại và chuyển thành chuỗi
   let currentTime = new Date().toLocaleString(); // Lấy thời gian dưới dạng chuỗi
-
+  console.log(usercurrent.phone);
   if (usercurrent.phone === "" || usercurrent.diachi === "") {
     toast({
       title: "ERROR",
