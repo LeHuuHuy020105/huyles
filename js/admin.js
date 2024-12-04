@@ -640,9 +640,9 @@ function renderqltk() {
          <div class="boder">
               <div class="left-boder">
                   <h2 style="color: blue;">${Arrsell.reduce(
-                    (i, n) => i + n.soluong,
-                    0
-                  )}</h2>
+    (i, n) => i + n.soluong,
+    0
+  )}</h2>
                   <h2 style="font-weight: 200;">ĐÃ BÁN</h2> 
               </div>
               <div class="right-boder"><i style="font-size: 40px;font-weight: 200;" class='bx bx-cart-alt'></i></div>   
@@ -650,12 +650,12 @@ function renderqltk() {
          <div class="boder">
               <div class="left-boder">
                   <h2 style="color: blue;">${Arrsell.reduce(
-                    (i, n) => i + n.soluong * n.obj.price,
-                    0
-                  ).toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  })}</h2>
+    (i, n) => i + n.soluong * n.obj.price,
+    0
+  ).toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  })}</h2>
                   <h2 style="font-weight: 200;">DOANH THU</h2>
               </div>
               <div class="right-boder"><i style="font-size: 40px;font-weight: 200;" class='bx bx-money-withdraw'></i></div>   
@@ -761,11 +761,11 @@ function rankProfit(arrs) {
             <span style="width: 30%;" class="name">${i.obj.nameSP}</span>
             <span style="width: 30%;" class="sold">${i.soluong}</span>
             <span style="width: 10%;  class="profits">${(
-              i.obj.price * i.soluong
-            ).toLocaleString("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            })}</span>
+        i.obj.price * i.soluong
+      ).toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      })}</span>
            </div>`;
   });
   document.getElementById("rankProfit-body").innerHTML = s;
@@ -930,30 +930,22 @@ function listAccounts() {
 
     s += `<div class="listAcc" style="text-align: center; border-bottom: 1px solid rgba(112, 112, 112, 0.3);">
         <span class="idAccount" style="width: 5%;">${account.userID}</span>
-        <span class="nameAccount" style="width: 15%;"><input type="text" class="${classPrefix}-name" readonly="readonly" value="${
-      account.name
-    }" /></span>
-        <span class="phoneAccount" style="width: 10%;"><input type="text" class="${classPrefix}-phone" readonly="readonly" value="${
-      account.phone
-    }" /></span>
-        <span class="emailAccount" style="width: 16%;"><input type="text" class="${classPrefix}-email" readonly="readonly" value="${
-      account.email
-    }" /></span>
-        <span class="addressAccount" style="width: 17%;">${
-          account.diachi
-        }</span>
-        <span class="passwordAccount" style="width: 12%;"><input type="text" class="${classPrefix}-password" readonly="readonly" value="${
-      account.password
-    }" /></span>
-        <span class="statusAccount" style="width: 10%;">${
-          account.statususer == "1" ? "Bình thường" : "Đã khoá"
-        }</span>
-        <button class="btnAccount" style="width: 10%;" onclick="toggleLockUser('${
-          account.userID
-        }')">${account.statususer == "0" ? "Mở khóa" : "Khóa"}</button>
-        <button class="change" style="width: 5%;" onclick='changeuserinfo("${
-          account.userID
-        }")'>Sửa</button>
+        <span class="nameAccount" style="width: 15%;"><input type="text" class="${classPrefix}-name" readonly="readonly" value="${account.name
+      }" /></span>
+        <span class="phoneAccount" style="width: 10%;"><input type="text" class="${classPrefix}-phone" readonly="readonly" value="${account.phone
+      }" /></span>
+        <span class="emailAccount" style="width: 16%;"><input type="text" class="${classPrefix}-email" readonly="readonly" value="${account.email
+      }" /></span>
+        <span class="addressAccount" style="width: 17%;">${account.diachi
+      }</span>
+        <span class="passwordAccount" style="width: 12%;"><input type="text" class="${classPrefix}-password" readonly="readonly" value="${account.password
+      }" /></span>
+        <span class="statusAccount" style="width: 10%;">${account.statususer == "1" ? "Bình thường" : "Đã khoá"
+      }</span>
+        <button class="btnAccount" style="width: 10%;" onclick="toggleLockUser('${account.userID
+      }')">${account.statususer == "0" ? "Mở khóa" : "Khóa"}</button>
+        <button class="change" style="width: 5%;" onclick='changeuserinfo("${account.userID
+      }")'>Sửa</button>
       </div>`;
   });
   return s;
@@ -1295,7 +1287,6 @@ function showDetailInformation(event, element) {
       }
     }
   }
-  console.log(order);
   let imgProduct = order.shopbagispayuser[0].obj.img;
   let nameProduct = order.shopbagispayuser[0].obj.nameSP;
   let colorProduct = order.shopbagispayuser[0].color;
@@ -1376,6 +1367,10 @@ function showDetailInformation(event, element) {
               <span>Tên sản phẩm: </span>
               <input readonly style="width: 50%" type="text" value="${nameProduct}" id="nameAddProduct">
             </div>
+            <div class="contentTab">
+              <span>Loại: </span>
+              <input readonly type="text" value="${typeProduct}" id="typeAddProduct">
+            </div>
             <div class="contentTab colorInput">
               <span>Màu sắc: </span>
               <input readonly style="width: 25%" type="text" value="${colorProduct}" id="colorAddProduct">
@@ -1388,19 +1383,11 @@ function showDetailInformation(event, element) {
               <span>Đơn giá: </span>
               <input readonly style="width: 30%" type="text" id="priceAddProduct" value="${price}">
             </div>
-            <div class="contentTab">
-              <span>Size: </span>
-              <input readonly style="width: 20%" type="text" id="sizeOfProduct" value="${getSize}">
-            </div>
           </div>
           <div class="rightTab">
             <div class="contentTab">
-              <span>Name Tag: </span>
-              <input readonly style="width: 30%" type="text" value="${nametagProduct}" id="nameimgAddProduct">
-            </div>
-            <div class="contentTab">
-              <span>Loại: </span>
-              <input readonly type="text" value="${typeProduct}" id="typeAddProduct">
+              <span>Size: </span>
+              <input readonly style="width: 20%" type="text" id="sizeOfProduct" value="${getSize}">
             </div>
             <div class="contentTab">
               <span>Tên khách hàng: </span>
@@ -1575,10 +1562,32 @@ function setDH() {
     <option value="3">Hoàn thành</option>
     <option value="4">Đã hủy</option>
   `;
+  document.getElementById("startDate").value = "";
+  document.getElementById("endDate").value = "";
+  let getSortByDistrictSeletion = document.getElementById("sortByDistrict");
+  getSortByDistrictSeletion.innerHTML = `
+    <option value="" disabled selected>Sắp xếp theo quận</option>
+    <option value="0">Tăng dần</option>
+    <option value="1">Giảm dần</option>
+  `
 }
 
 function doYouAccept() {
   setDH();
+}
+
+function checkAllButton() {
+  let getAllCheckbox = document.querySelectorAll(".myCheckbox");
+  for (let i = 0; i < getAllCheckbox.length; i++) {
+    getAllCheckbox[i].checked = true;
+  }
+}
+
+function uncheckAllButton() {
+  let getAllCheckbox = document.querySelectorAll(".myCheckbox");
+  for (let i = 0; i < getAllCheckbox.length; i++) {
+    getAllCheckbox[i].checked = false;
+  }
 }
 
 function filteredByDeliveryStatus() {
@@ -1621,103 +1630,146 @@ function filteredByDeliveryStatus() {
     }
   }
   document.querySelector("#storage-body").innerHTML = s;
-  // reset filteredDeliveryStatus
-  let getDeliveryStatusSelection = document.getElementById(
-    "deliveryStatusSelection"
-  );
-  getDeliveryStatusSelection.innerHTML = `
-    <option value="" disabled selected>Chỉnh trạng thái</option>
-    <option value="0">Chờ xác nhận</option>
-    <option value="1">Đang gói hàng</option>
-    <option value="2">Vận chuyển</option>
-    <option value="3">Hoàn thành</option>
-    <option value="4">Đã hủy</option>
-  `;
+  document.getElementById("startDate").value = "";
+  document.getElementById("endDate").value = "";
+  let getSortByDistrictSeletion = document.getElementById("sortByDistrict");
+  getSortByDistrictSeletion.innerHTML = `
+    <option value="" disabled selected>Sắp xếp theo quận</option>
+    <option value="0">Tăng dần</option>
+    <option value="1">Giảm dần</option>
+  `
 }
 function getDistrict(district) {
   let tmpArray = district.split(", ");
   return tmpArray[2];
 }
 
-function createDistrictOption() {
-  let districtArray = [];
+function sortByDistrict() {
   getShopBag = JSON.parse(localStorage.getItem("shopbagispay")) || [];
+  let clonedArray = JSON.parse(JSON.stringify(getShopBag));
+  let districtsArray = [];
+  let shopbagispay = [];
   for (let i = 0; i < getShopBag.length; i++) {
     for (let j = 0; j < getShopBag[i].shopbagispayuser.length; j++) {
-      if (
-        !districtArray.includes(
-          getDistrict(getShopBag[i].shopbagispayuser[j].diachi)
-        )
-      ) {
-        districtArray.push(
-          getDistrict(getShopBag[i].shopbagispayuser[j].diachi)
-        );
+      districtsArray.push(getDistrict(getShopBag[i].shopbagispayuser[j].diachi));
+    }
+  }
+  let getSortByDistrictSeletion = document.getElementById("sortByDistrict");
+  if (getSortByDistrictSeletion.value === "0") {
+    districtsArray.sort((a, b) => a.localeCompare(b));
+  } else if (getSortByDistrictSeletion.value === "1") {
+    districtsArray.sort((a, b) => b.localeCompare(a));
+  }
+  let flagToBreak = false;
+  for (let i = 0; i < clonedArray.length; i++) {
+    if (flagToBreak) break;
+    for (let j = 0; j < clonedArray[i].shopbagispayuser.length; j++) {
+      if (getDistrict(clonedArray[i].shopbagispayuser[j].diachi) === districtsArray[0]) {
+        let obj = {
+          IDuser: clonedArray[i].IDuser,
+          shopbagispayuser: [clonedArray[i].shopbagispayuser[j]]
+        }
+        shopbagispay.push(obj);
+        districtsArray.splice(0, 1);
+        if (districtsArray.length === 0) {
+          flagToBreak = true;
+          break;
+        }
+        let currentOrder = getDistrict(clonedArray[i].shopbagispayuser[j].diachi);
+        clonedArray[i].shopbagispayuser.splice(j, 1);
+        // nếu khác quận với đứa bị xóa thì duyệt lại toàn bộ
+        if (j < clonedArray[i].shopbagispayuser.length && getDistrict(clonedArray[i].shopbagispayuser[j].diachi) !== currentOrder) {
+          // Đặt i = -1 để sau khi break, ta tăng i thêm 1 => i = 0 => duyệt lại toàn bộ
+          i = -1;
+          break;
+        } else if (j === clonedArray[i].shopbagispayuser.length) {
+          i = -1;
+          break;
+        }
+        // nếu chung quận với đứa bị xóa
+        j--;
       }
     }
   }
-  let getFilteredDistrictSelection =
-    document.querySelector("#filteredDistrict");
-  let s = `<option value="" disabled selected>Lọc theo quận</option>`;
-  console.log(districtArray);
-  for (let i = 0; i < districtArray.length; i++) {
-    s += `<option value="">${districtArray[i]}</option>`;
-  }
-  getFilteredDistrictSelection.innerHTML = s;
-  console.log(s);
-}
-
-function filteredByDistrict() {
-  getShopBag = JSON.parse(localStorage.getItem("shopbagispay")) || [];
-  let selectElement = document.getElementById("filteredDistrict");
-  let selectedText = selectElement.options[selectElement.selectedIndex].text;
   let s = "";
-  for (let i = 0; i < getShopBag.length; i++) {
-    for (let j = 0; j < getShopBag[i].shopbagispayuser.length; j++) {
-      if (
-        getDistrict(getShopBag[i].shopbagispayuser[j].diachi) === selectedText
-      ) {
-        let Price = getShopBag[i].shopbagispayuser[j].obj.price.toLocaleString(
-          "vi-VN",
-          { style: "currency", currency: "VND" }
-        );
-        let stringStatus = "";
-        if (getShopBag[i].shopbagispayuser[j].status === "1")
-          stringStatus = "Chờ xác nhận";
-        else if (getShopBag[i].shopbagispayuser[j].status === "2")
-          stringStatus = "Đang gói hàng";
-        else if (getShopBag[i].shopbagispayuser[j].status === "3")
-          stringStatus = "Vận chuyển";
-        else if (getShopBag[i].shopbagispayuser[j].status === "4")
-          stringStatus = "Hoàn thành";
-        else if (getShopBag[i].shopbagispayuser[j].status === "5")
-          stringStatus = "Đã hủy";
-        s += `
-                <div oncontextmenu="showDetailInformation(event, this)" class="list">
-                    <span style="width: 10%" class="userID">${getShopBag[i].IDuser}</span>
-                    <div style="width: 5%; display: flex; justify-content: left;">
-                      <input type="checkbox" class="myCheckbox"/>
-                    </div>
-                    <span style="width: 10%" class="idProduct">${getShopBag[i].shopbagispayuser[j].obj.idproduct}</span>
-                    <img style="width: 20%" src="${getShopBag[i].shopbagispayuser[j].obj.img}" class="imgProduct" alt="Ảnh lỗi">
-                    <span style="width: 30%" class="nameProduct">${getShopBag[i].shopbagispayuser[j].obj.nameSP}</span>
-                    <span style="width: 5%" class="countProduct">${getShopBag[i].shopbagispayuser[j].soluong}</span>
-                    <span style="width: 10%" class="priceProduct">${Price}</span>
-                    <span style="width: 10%" class="deliveryStatus">${stringStatus}</span>
-                </div>
-        `;
-      }
-    }
+  for (let i = 0; i < shopbagispay.length; i++) {
+    s += listDH(shopbagispay[i]);
   }
   document.querySelector("#storage-body").innerHTML = s;
+  // reset filteredDeliveryStatus
+  let getFilteredDeliveryStatus = document.querySelector(
+    "#filteredDeliveryStatus"
+  );
+  getFilteredDeliveryStatus.innerHTML = `
+    <option value="" disabled selected>Lọc trạng thái</option>
+    <option value="0">Chờ xác nhận</option>
+    <option value="1">Đang gói hàng</option>
+    <option value="2">Vận chuyển</option>
+    <option value="3">Hoàn thành</option>
+    <option value="4">Đã hủy</option>
+  `;
+  document.getElementById("startDate").value = "";
+  document.getElementById("endDate").value = "";
 }
+
+function filterByDateRange() {
+  let getStartDate = document.getElementById("startDate").value;
+  let getEndDate = document.getElementById("endDate").value;
+  if (getStartDate && getEndDate) {
+    let startDate = new Date(getStartDate);
+    let endDate = new Date(getEndDate);
+    if (endDate < startDate) return;
+    getShopBag = JSON.parse(localStorage.getItem("shopbagispay")) || [];
+    let filteredByTimeArray = [];
+    for (let i = 0; i < getShopBag.length; i++) {
+      let ordersArray = [];
+      for (let j = 0; j < getShopBag[i].shopbagispayuser.length; j++) {
+        let deliveryDate = new Date(getShopBag[i].shopbagispayuser[j].time);
+        if (deliveryDate >= startDate && deliveryDate <= endDate) {
+          ordersArray.push(getShopBag[i].shopbagispayuser[j]);
+        }
+      }
+      if (ordersArray.length > 0) {
+        let obj = {
+          IDuser: getShopBag[i].IDuser,
+          shopbagispayuser: ordersArray
+        }
+        filteredByTimeArray.push(obj);
+      }
+    }
+    console.log(filteredByTimeArray);
+    let s = "";
+    for (let i = 0; i < filteredByTimeArray.length; i++) {
+      s += listDH(filteredByTimeArray[i]);
+    }
+    document.querySelector("#storage-body").innerHTML = s;
+    // reset filteredDeliveryStatus
+    let getFilteredDeliveryStatus = document.querySelector(
+      "#filteredDeliveryStatus"
+    );
+    getFilteredDeliveryStatus.innerHTML = `
+    <option value="" disabled selected>Lọc trạng thái</option>
+    <option value="0">Chờ xác nhận</option>
+    <option value="1">Đang gói hàng</option>
+    <option value="2">Vận chuyển</option>
+    <option value="3">Hoàn thành</option>
+    <option value="4">Đã hủy</option>
+    `;
+    let getSortByDistrictSeletion = document.getElementById("sortByDistrict");
+    getSortByDistrictSeletion.innerHTML = `
+      <option value="" disabled selected>Sắp xếp theo quận</option>
+      <option value="0">Tăng dần</option>
+      <option value="1">Giảm dần</option>
+    `
+  }
+}
+
 function renderqldh() {
   document.querySelector(".page-right").innerHTML = `<div class="qldh">
                 <div class="title"><h1>QUẢN LÝ ĐƠN HÀNG</h1></div>
                 <div class="groupOption">
-                        <select name="" class="box" id="filteredDistrict" onchange="filteredByDistrict()" >
-                        </select>
                         <select name="" class="box" id="filteredDeliveryStatus" onchange="filteredByDeliveryStatus()">
-                            <option value="" disabled selected>Lọc trạng thái</option>
+                            <option value="" disabled selected>Lọc theo trạng thái</option>
                             <option value="0">Chờ xác nhận</option>
                             <option value="1">Đang gói hàng</option>
                             <option value="2">Vận chuyển</option>
@@ -1732,13 +1784,18 @@ function renderqldh() {
                             <option value="3">Hoàn thành</option>
                             <option value="4">Đã hủy</option>
                         </select>
-                        <button class="box" id="acceptChangeStatus" style="width: 10%;
+                        <select name="" class="box" id="sortByDistrict" onchange="sortByDistrict()">
+                            <option value="" disabled selected>Sắp xếp theo quận</option>
+                            <option value="0">Tăng dần</option>
+                            <option value="1">Giảm dần</option>
+                        </select>
+                        <button class="box" id="acceptChangeStatus" style="width: 13%;
                           box-shadow: 0 7px 25px rgba(0, 0, 0, 0.2);
                           border-radius: 10px;
-                          margin-right: 200px;
+                          margin-right: 10px;
                           border: none;
                           height: fit-content;
-                          padding: 10px;" onclick="doYouAccept()">Xác nhận</button>
+                          padding: 10px;" onclick="doYouAccept()">Xác nhận chỉnh</button>
                         <div class="box">
                             <div class="contentBox">
                                 <div class="leftBox">
@@ -1748,6 +1805,25 @@ function renderqldh() {
                                 <i class="fa-solid fa-star"></i>
                             </div>
                         </div>
+                </div>
+                <div class="secondOption" style="margin-top: 30px; padding: 10px; background-color: white;">
+                  <p style="margin-bottom: 10px; font-size: 16px; font-weight: bold; color: #333;">Lọc theo khoảng thời gian</p>
+                  <input type="date" class="box" id="startDate" onchange="filterByDateRange()">
+                  <input type="date" class="box" id="endDate" onchange="filterByDateRange()">
+                  <button class="box" id="checkAllButton" style="width: 13%;
+                    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.2);
+                    border-radius: 10px;
+                    margin-right: 10px;
+                    border: none;
+                    height: fit-content;
+                    padding: 10px;" onclick="checkAllButton()">Chọn hết</button>
+                  <button class="box" id="uncheckAllButton" style="width: 13%;
+                    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.2);
+                    border-radius: 10px;
+                    margin-right: 100px;
+                    border: none;
+                    height: fit-content;
+                    padding: 10px;" onclick="uncheckAllButton()">Bỏ hết</button>
                 </div>
                 <div class="titleCol">
                     <span style="width: 10%" class="userID">userID</span>
@@ -1760,7 +1836,6 @@ function renderqldh() {
                     <span style="width: 10%" class="deliveryStatus">Vận chuyển</span>
                 </div>
                 <div id="storage-body"></div>`;
-  createDistrictOption();
   let s = "";
   for (let i = 0; i < getShopBag.length; i++) {
     s += listDH(getShopBag[i]);
@@ -1807,36 +1882,27 @@ function pushFirstAdminAccount() {
 
 pushFirstAdminAccount();
 
-function checkEmail(str) {
-  let idx = str.indexOf("@");
-  let idxWhiteSpace = str.indexOf(" ");
-  if (idx === -1 || idxWhiteSpace !== -1) {
-    return false;
-  } else if (str.substring(idx) !== "@gmail.com") {
-    return false;
-  }
-  return true;
+const isValidEmail = (email) => {
+  const pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+  return !!email.match(pattern);
 }
+
 function loadpage() {
   window.scrollTo({ top: 0, behavior: "smooth" });
   const loader = document.querySelector(".loader");
-  // Start the loader animation
+
   loader.classList.add("active");
 
   setTimeout(function () {
     loader.classList.remove("active");
-  }, 1000); // Duration should match the time for loader animation
+  }, 1000);
 }
 function signInButton(event) {
   event.preventDefault();
   getSignInButton = document.querySelector("#sign-in-button");
   getEmailSignIn = document.querySelector("#Email");
   getPasswordSignIn = document.querySelector("#Password");
-  if (
-    getEmailSignIn.value.trim() === "" ||
-    !getEmailSignIn.value.includes("@") ||
-    !checkEmail(getEmailSignIn.value)
-  ) {
+  if (!isValidEmail(getEmailSignIn.value)) {
     toast({
       title: "ERROR",
       message: "Vui lòng nhập đúng Email !",
@@ -1855,11 +1921,6 @@ function signInButton(event) {
     getPasswordSignIn.focus();
     return;
   }
-  console.log(getEmailSignIn.value);
-  console.log(getPasswordSignIn.value);
-  console.log(
-    checkSignInAdminAccount(getEmailSignIn.value, getPasswordSignIn.value)
-  );
   if (checkSignInAdminAccount(getEmailSignIn.value, getPasswordSignIn.value)) {
     loadpage();
     let getPage = document.querySelector(".page");
@@ -1869,7 +1930,7 @@ function signInButton(event) {
         <div style="height: 60%" class="box-l">
           <div class="L b1">QUẢN LÝ THỐNG KÊ</div>
           <div class="L b2">QUẢN LÝ ĐƠN HÀNG</div>
-          <div class="L b3">QUẢN LÝ SẢN PHẢM</div>
+          <div class="L b3">QUẢN LÝ SẢN PHẨM</div>
           <div class="L b4">QUẢN LÝ NGƯỜI DÙNG</div>
         </div>
         <div class="L-e">

@@ -641,15 +641,9 @@ let getRegisterPasswordRetype = "";
 let getAgreeTermsConditions = "";
 let getContainer = document.querySelector(".box-login");
 
-function checkEmail(str) {
-  let idx = str.indexOf("@");
-  let idxWhiteSpace = str.indexOf(" ");
-  if (idx === -1 || idxWhiteSpace !== -1) {
-    return false;
-  } else if (str.substring(idx) !== "@gmail.com") {
-    return false;
-  }
-  return true;
+const isValidEmail = (email) => {
+  const pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+  return !!email.match(pattern);
 }
 
 function getNextID() {
@@ -708,11 +702,7 @@ function registerButton(event) {
     });
     getRegisterName.focus();
     return;
-  } else if (
-    getRegisterEmail.value.trim() === "" ||
-    !getRegisterEmail.value.includes("@") ||
-    !checkEmail(getRegisterEmail.value)
-  ) {
+  } else if (!isValidEmail(getRegisterEmail.value)) {
     toast({
       title: "ERROR",
       message: "Vui lòng nhập đúng email !",
@@ -831,11 +821,7 @@ function signInButton(event) {
   getSignInButton = document.querySelector("#sign-in-button");
   getEmailSignIn = document.querySelector("#Email");
   getPasswordSignIn = document.querySelector("#Password");
-  if (
-    getEmailSignIn.value.trim() === "" ||
-    !getEmailSignIn.value.includes("@") ||
-    !checkEmail(getEmailSignIn.value)
-  ) {
+  if (!isValidEmail(getEmailSignIn.value)) {
     toast({
       title: "ERROR",
       message: "Vui lòng nhập đúng email!",
