@@ -1804,7 +1804,7 @@ function hienthiformadduser() {
       <div class="form-group">
         <label for="passowrd">Password</label>
         <input
-          type="text"
+          type="password"
           id="password"
           name="password"
           placeholder="Nhập password"
@@ -1836,7 +1836,7 @@ function addUser() {
     password: "",
     typeuser: "1",
   };
-  if(isValidPhoneNumber(phone) == false){
+  if (isValidPhoneNumber(phone) == false) {
     toast({
       title: "ERROR",
       message: "Vui lòng kiểm tra định dạng số điện thoại",
@@ -1845,7 +1845,7 @@ function addUser() {
     });
     return;
   }
-  if(isValidEmail(email) == false){
+  if (isValidEmail(email) == false) {
     toast({
       title: "ERROR",
       message: "Vui lòng kiểm tra định dạng email",
@@ -1860,13 +1860,14 @@ function addUser() {
   user.email = email;
   user.password = password;
   arrUser.push(user);
-  localStorage.setItem("NextID", JSON.stringify(idUser+1));
+  localStorage.setItem("NextID", JSON.stringify(idUser + 1));
   localStorage.setItem("storageUsers", JSON.stringify(arrUser));
   renderqlnd();
 }
 
 function renderqlnd() {
   document.querySelector(".page-right").innerHTML = `
+              <div class="backgroud-menu-respon" onclick="closeall()"></div>
               <div class="tool-address"></div>
               <div class="block-container"></div>
               <div class="qlnd">
