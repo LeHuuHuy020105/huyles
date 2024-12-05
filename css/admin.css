@@ -35,9 +35,7 @@
 .list .colorProduct {
   width: 10%;
 }
-.page-left .F-L {
-  /* justify-content: flex-start; */
-}
+
 .page-left .L-e {
   display: flex;
   height: 20%;
@@ -891,9 +889,7 @@
 .list .colorProduct {
   width: 10%;
 }
-.page-left .F-L {
-  /* justify-content: flex-start; */
-}
+
 .page-left .L-e {
   display: flex;
   height: 20%;
