@@ -6,16 +6,8 @@ localStorage.setItem("arrayshopbag", JSON.stringify(null));
 localStorage.setItem("countarrayshopbag", JSON.stringify(null));
 let Arrsell = [];
 
-function Arrsells() {
-  Arrsell = [];
-  let sell = JSON.parse(localStorage.getItem("shopbagispay")) || [];
-  let Arrll = sell.flatMap((i) => i.shopbagispayuser);
-  for (let i = 0; i < Arrll.length; i++) {
-    if (Arrll[i].status === "4") {
-      Arrsell.push(Arrll[i]);
-    }
-  }
-}
+
+
 
 let typeproducts = [
   { typeid: "aothun#", typename: "Áo thun" },
@@ -25,6 +17,8 @@ let typeproducts = [
   { typeid: "sweater#", typename: "Sweater" },
   { typeid: "aokhoac#", typename: "Áo khoác" },
 ];
+localStorage.setItem('typeproduct',JSON.stringify(typeproducts));
+
 function toast({ title = "", message = "", type = "", duration = 5000 }) {
   const main = document.getElementById("toast");
   if (main) {
@@ -57,17 +51,17 @@ function toast({ title = "", message = "", type = "", duration = 5000 }) {
     main.appendChild(toast);
   }
 }
-// Hàm tạo id SP
-function makeIDproduct() {
-  for (let i = 0; i < ArrProduct.length; i++) {
-    ArrProduct[i].idproduct = ArrProduct[i].nametag + i;
-  }
-}
 
+function makeIDproduct() {
+  let ArrProducts = JSON.parse(localStorage.getItem('arrayproducts')) || []  
+  for (let i = 0; i < ArrProduct.length; i++) {
+    ArrProducts[i].idproduct = ArrProducts[i].nametag + i;
+  }
+  localStorage.setItem('arrayproducts', JSON.stringify(ArrProducts));
+}
 //----------------sp-------------------------
-// Hàm xác định trạng thái sản phẩm
-function productSatus() {
-  ArrProduct.forEach((i) => {
+function productSatus(ArrProducts) {
+  ArrProducts.forEach((i) => {
     let count = i.quantity.A + i.quantity.B + i.quantity.C + i.quantity.D;
     let status = "C.XÁC ĐỊNH";
     let colorStatus = "#000";
@@ -84,50 +78,40 @@ function productSatus() {
     i.status = status;
     i.colorStatus = colorStatus;
   });
+  localStorage.setItem('arrayproducts',JSON.stringify(ArrProducts));
 }
 
-// Hàm tạo danh sách sản phẩm
 function listSP(arr) {
   let s = "";
-  makeIDproduct();
-  productSatus();
   arr.forEach((product) => {
-    let count =
-      product.quantity.A +
-      product.quantity.B +
-      product.quantity.C +
-      product.quantity.D;
-    const Price = product.price.toLocaleString("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    });
+    let count = product.quantity.A + product.quantity.B + product.quantity.C + product.quantity.D;
+    const Price = product.price.toLocaleString("vi-VN", {style: "currency", currency: "VND",});
     s += `
-            <div oncontextmenu="showContextMenu(event, this)" class="list">
+           <div oncontextmenu="showContextMenu(event, this)" class="list">
                 <span style="width: 10%" nametag ="${product.nametag}" class="idProduct">${product.idproduct}</span>
                 <img style="width: 20%" src="${product.img}" class="imgProduct" alt="Ảnh">
                 <span style="width: 30%" class="nameProduct">${product.nameSP}</span>
                 <span style="width: 10%" data="${product.colorr1}" class="colorProduct">${product.colorr1}</span>
                 <span style="width: 10%" dataA="${product.quantity.A}" dataB="${product.quantity.B}" dataC="${product.quantity.C}" dataD="${product.quantity.D}" class="countProduct">${count}</span>
                 <span style="width: 10%" dataPrice="${product.price}" class="priceProduct">${Price}</span>
-                <span style="width: 10%; color: ${product.colorStatus}" class="statusProduct" style="color:${product.colorStatus}">${product.status}</span>
+                <span style="width: 10% ; color :${product.colorStatus}"; class="statusProduct">${product.status}</span>
             </div>
     `;
   });
   return s;
 }
-// Hàm đếm số lượng sản phẩm
+
 function countProduct(arr) {
   return arr.length;
 }
-// Hàm tìm kiếm sản phẩm
+
 function searchSP() {
+  let filteredProducts = JSON.parse(localStorage.getItem('arrayproducts'));
+  productSatus(filteredProducts);
   const comboType = document.getElementById("comboType").value;
   const comboStatus = document.getElementById("comboStatus").value;
-  let filteredProducts = ArrProduct;
   if (comboType !== "0") {
-    filteredProducts = filteredProducts.filter(
-      (product) => product.nametag === comboType
-    );
+    filteredProducts = filteredProducts.filter((product) => product.nametag === comboType);
   }
   if (comboStatus !== "0") {
     filteredProducts = filteredProducts.filter((product) => {
@@ -137,10 +121,9 @@ function searchSP() {
     });
   }
   document.querySelector("#storage-body").innerHTML = listSP(filteredProducts);
-  document.querySelector("#amountOfProduct").innerText =
-    countProduct(filteredProducts);
+  document.querySelector("#amountOfProduct").innerText = countProduct(filteredProducts);
 }
-// Hàm render quản lý san pham
+
 function renderqlsp() {
   document.querySelector(".page-right").innerHTML = `<div class="qlsp">
                 <div class="title"><h1>QUẢN LÝ SẢN PHẨM</h1></div>
@@ -186,29 +169,28 @@ function renderqlsp() {
 
 // quan - chuot phai ------
 
-// Hàm hiển thị menu tùy chỉnh
 function showContextMenu(event, element) {
   event.preventDefault();
   // Lấy vị trí chuột
   const posX = event.pageX;
   const posY = event.pageY;
-  // Hiển thị menu ở vị trí chuột
+  const contextMenu =document.getElementById('contextMenu');
   contextMenu.style.display = "block";
   contextMenu.style.left = `${posX}px`;
   contextMenu.style.top = `${posY}px`;
 
+  let ArrProduct = JSON.parse(localStorage.getItem('arrayproducts'))
+
   const idProduct = element.querySelector(".idProduct").textContent;
   const img = element.querySelector(".imgProduct").src;
   const nameProduct = element.querySelector(".nameProduct").textContent;
-  const colorProduct = element.querySelector(".colorProduct").textContent;
+  // const colorProduct = element.querySelector(".colorProduct").textContent;
   const codecolor = element.querySelector(".colorProduct").getAttribute("data");
   const countA = element.querySelector(".countProduct").getAttribute("dataA");
   const countB = element.querySelector(".countProduct").getAttribute("dataB");
   const countC = element.querySelector(".countProduct").getAttribute("dataC");
   const countD = element.querySelector(".countProduct").getAttribute("dataD");
-  const price = element
-    .querySelector(".priceProduct")
-    .getAttribute("dataPrice");
+  const price = element.querySelector(".priceProduct").getAttribute("dataPrice");
   const nametag = element.querySelector(".idProduct").getAttribute("nametag");
   let typeProduct = "";
   switch (true) {
@@ -226,6 +208,9 @@ function showContextMenu(event, element) {
       break;
     case nametag.startsWith("aothun#"):
       typeProduct = "Áo thun";
+      break;
+      case nametag.startsWith("aokhoac#"):
+      typeProduct = "Áo khoác";
       break;
     default:
       typeProduct = "Không xác định";
@@ -246,16 +231,12 @@ function showContextMenu(event, element) {
       renderqlsp();
       toggleConfirmationDialog(false);
       closeTabb();
-      document
-        .querySelector(".outbackround")
-        .classList.remove("actoutbackground");
+      document.querySelector(".outbackround").classList.remove("actoutbackground");
     };
     document.getElementById("no").onclick = () => {
       toggleConfirmationDialog(false);
       closeTabb();
-      document
-        .querySelector(".outbackround")
-        .classList.remove("actoutbackground");
+      document.querySelector(".outbackround").classList.remove("actoutbackground");
     };
   });
 
@@ -286,43 +267,43 @@ function showContextMenu(event, element) {
                 </div>
                     <div class="contentTab"> 
                         <span>Tên sản phẩm: </span>
-                        <input style="width: 50%" type="text" placeholder="Tên sản phẩm" value="${nameProduct}" id="nameAddProduct">
+                        <input style="width: 50%" type="text" placeholder="Tên sản phẩm" value="${nameProduct}" id="nameProduct_">
                     </div>
                     <div class="contentTab colorInput">
                         <span>Màu sắc: </span>
-                        <input style="width: 25%" type="text" placeholder="[ĐEN, TRẮNG, ....]" value="${colorProduct}" id="colorAddProduct">
-                        <input style="width: 25%" type="text" placeholder="Mã màu [#000,#fff]" value="${codecolor}" id="codecolorAddProduct">
+                        <select id="colorAddProduct_">
+                                  
+                        </select>
                     </div>
                     <div class="contentTab">
                         <span>Số lượngA: </span>
-                        <input style="width: 20%" type="text" id="countAddProductA" placeholder="Số lượng" value="${countA}">
+                        <input style="width: 20%" type="text" id="countProductA_" placeholder="Số lượng" value="${countA}">
                     </div>
             </div>
             <div class="rightTab">
                          <div class="contentTab">
                             <span>Số lượngB: </span>
-                            <input style="width: 20%" type="text" id="countAddProductB" placeholder="Số lượng" value="${countB}">
+                            <input style="width: 20%" type="text" id="countProductB_" placeholder="Số lượng" value="${countB}">
                         </div>
                          <div class="contentTab">
                             <span>Số lượngC: </span>
-                            <input style="width: 20%" type="text" id="countAddProductC" placeholder="Số lượng" value="${countC}">
+                            <input style="width: 20%" type="text" id="countProductC_" placeholder="Số lượng" value="${countC}">
                         </div>
                          <div class="contentTab">
                             <span>Số lượngD: </span>
-                            <input style="width: 20%" type="text" id="countAddProductD" placeholder="Số lượng" value="${countD}">
+                            <input style="width: 20%" type="text" id="countProductD_" placeholder="Số lượng" value="${countD}">
                         </div>
                         <div class="contentTab">
                             <span>Đơn giá: </span>
-                            <input style="width: 30%" type="text" id="priceAddProduct" placeholder="Đơn giá" value="${price}">
+                            <input style="width: 30%" type="text" id="priceProduct_" placeholder="Đơn giá" value="${price}">
                         </div>
                         <div class="contentTab">
-                            <span>Name Tag </span>
-                            <input style="width: 30%" type="text" placeholder="Name Tag" value="${nametag}" id="nameimgAddProduct">
+                            <span>Loai : </span>
+                            <select id="typeproduct">
+                            
+                            </select>
                         </div>
-                        <div class="contentTab">
-                            <span>Loại </span>
-                            <input readonly type="text" value="${typeProduct}" id="typeAddProduct">
-                        </div>
+
             </div>
         </div>
         <div onclick="chinhsua()" class="btnAccept">
@@ -332,10 +313,36 @@ function showContextMenu(event, element) {
         </div>
       </form>
   </div>`;
+  tao_option_type(typeProduct,nametag);
+  tao_mausac_(codecolor);
   });
 }
 
+function tao_mausac_(c){
+  let codecolor_=['red','blue','green','yellow','orange','pink','purple']
+  let s=`<option value="${c}">${c}</option>`
+  codecolor_.forEach(i =>{
+    if(i !== c){
+      s+=`<option value="${i}">${i}</option>`
+    }
+  })
+  document.getElementById('colorAddProduct_').innerHTML = s;
+}
+
+function tao_option_type(p,v){
+  let s=`<option value="${v}">${p}</option>`
+  let typeproduct = JSON.parse(localStorage.getItem('typeproduct'))
+  typeproduct.forEach( i =>{
+    if(v !== i.typeid){
+       s +=` <option value="${i.typeid}">${i.typename}</option>`
+    }
+  })
+  document.querySelector('#typeproduct').innerHTML = s;
+}
+
 function chinhsua() {
+  // Lấy lại dữ liệu từ localStorage
+  let ArrProduct = JSON.parse(localStorage.getItem('arrayproducts')) || [];
   let background = document.querySelector(".outbackround");
   let l = document.querySelector(".btnAddproduct");
   l.classList.remove("actz");
@@ -343,38 +350,32 @@ function chinhsua() {
   background.classList.remove("actoutbackground");
 
   const id = document.querySelector(".ID").innerText;
+  const nameProduct = document.getElementById("nameProduct_").value.trim();
+  // const colorProduct = document.getElementById("colorAddProduct").value.trim();
+  const codecolorProduct = document.getElementById("colorAddProduct_").value.trim();
+  const countProductA = parseInt(document.getElementById("countProductA_").value);
+  const countProductB = parseInt(document.getElementById("countProductB_").value);
+  const countProductC = parseInt(document.getElementById("countProductC_").value);
+  const countProductD = parseInt(document.getElementById("countProductD_").value);
+  const priceProduct = parseFloat(document.getElementById("priceProduct_").value);
+  const nametagProduct = document.getElementById("typeproduct").value.trim();
+  
+ 
+  if(isNaN(countProductA)||isNaN(countProductB)||isNaN(countProductC)||isNaN(countProductD)||isNaN(priceProduct)){
+    alert("VUI LONG NHAP DUNG DU LIEU");
+    console.log(countProductA +' ' + countProductB +' ' + countProductC + ' ' + countProductD +' '+ priceProduct)
+    return;
+  }
 
-  const nameProduct = document.getElementById("nameAddProduct").value.trim();
-  const colorProduct = document.getElementById("colorAddProduct").value.trim();
-  const codecolorProduct = document
-    .getElementById("codecolorAddProduct")
-    .value.trim();
-  const countProductA = parseInt(
-    document.getElementById("countAddProductA").value.trim()
-  );
-  const countProductB = parseInt(
-    document.getElementById("countAddProductB").value.trim()
-  );
-  const countProductC = parseInt(
-    document.getElementById("countAddProductC").value.trim()
-  );
-  const countProductD = parseInt(
-    document.getElementById("countAddProductD").value.trim()
-  );
-  const priceProduct = parseFloat(
-    document.getElementById("priceAddProduct").value.trim()
-  );
-  const nametagProduct = document
-    .getElementById("nameimgAddProduct")
-    .value.trim();
   const imgElement = document.querySelector(".imgPreview");
-  const img = imgElement ? imgElement.src : ""; // Null check for imgPreview
+  let img = imgElement ? imgElement.src : ""; // Null check for imgPreview
   if (img.startsWith(".")) {
     img = img.substring(1);
   }
-  for (let i = 0; i < countProduct(ArrProduct); i++) {
+
+  // Tìm sản phẩm trong danh sách và cập nhật
+  for (let i = 0; i < ArrProduct.length; i++) {
     if (ArrProduct[i].idproduct === id) {
-      ArrProduct[i].colorr1 = colorProduct;
       ArrProduct[i].colorr1 = codecolorProduct;
       ArrProduct[i].quantity.A = countProductA;
       ArrProduct[i].quantity.B = countProductB;
@@ -384,10 +385,15 @@ function chinhsua() {
       ArrProduct[i].nameSP = nameProduct;
       ArrProduct[i].img = img;
       ArrProduct[i].nametag = nametagProduct;
+      break; 
     }
   }
-  closeTabz();
+  // Lưu lại vào localStorage
   localStorage.setItem("arrayproducts", JSON.stringify(ArrProduct));
+
+  // Cập nhật giao diện
+  closeTabz();
+  makeIDproduct();
   renderqlsp();
 }
 // Hàm ẩn menu
@@ -404,6 +410,7 @@ window.addEventListener("click", hideContextMenu);
 // thong ke
 
 const namee = ["Sweater", "Sơ mi", "Hoodie", "Áo khoác", "Áo thun", "Polo"];
+
 
 // Hàm tạo biểu đồ
 function createChart() {
@@ -474,53 +481,30 @@ function closeTabb() {
   s.classList.add("nonez");
   backround.classList.remove("actoutbackground");
 }
+
 //chap nhan
 function btnAccept() {
+  let ArrProduct = JSON.parse(localStorage.getItem('arrayproducts'));
   const nameAddProduct = document.getElementById("nameAddProduct").value.trim();
-  const colorAddProduct = document
-    .getElementById("colorAddProduct")
-    .value.trim();
-  const codecolorAddProduct = document
-    .getElementById("codecolorAddProduct")
-    .value.trim();
-  const countAddProductA = parseInt(
-    document.getElementById("countAddProductA").value.trim()
-  );
-  const countAddProductB = parseInt(
-    document.getElementById("countAddProductB").value.trim()
-  );
-  const countAddProductC = parseInt(
-    document.getElementById("countAddProductC").value.trim()
-  );
-  const countAddProductD = parseInt(
-    document.getElementById("countAddProductD").value.trim()
-  );
-  const priceAddProduct = parseFloat(
-    document.getElementById("priceAddProduct").value.trim()
-  );
-  const nametagProduct = document.getElementById("nametagProduct").value.trim();
+  const colorAddProduct = document.getElementById("colorAddProduct").value.trim();
+  // const codecolorAddProduct = document.getElementById("colorAddProduct").value.trim();
+  const countAddProductA = parseInt(document.getElementById("countAddProductA").value.trim());
+  const countAddProductB = parseInt(document.getElementById("countAddProductB").value.trim());
+  const countAddProductC = parseInt( document.getElementById("countAddProductC").value.trim());
+  const countAddProductD = parseInt(document.getElementById("countAddProductD").value.trim());
+  const priceAddProduct = parseFloat(document.getElementById("priceAddProduct").value.trim());
+  const nametagProduct = document.getElementById("typeproduct_").value.trim();
 
   // Validation dữ liệu
-  if (
-    !validateInputs(
-      nameAddProduct,
-      colorAddProduct,
-      priceAddProduct,
-      countAddProductA,
-      countAddProductB,
-      countAddProductC,
-      countAddProductD
-    )
-  ) {
+  if (!validateInputs(nameAddProduct,colorAddProduct,priceAddProduct,countAddProductA,countAddProductB,countAddProductC,countAddProductD)){
     alert("Vui lòng nhập đầy đủ và đúng dữ liệu.");
     return;
   }
   // Tạo sản phẩm mới
-  const id = `${nametagProduct}#${countProduct(ArrProduct) + 1}`;
+  const id = `${nametagProduct}${countProduct(ArrProduct) + 1}`;
   const imgElement = document.querySelector(".imgPreview");
-  const img = imgElement ? imgElement.src : ""; // Null check cho imgPreview
-  const nametag = `${nametagProduct}#`;
-
+  const img = imgElement ? imgElement.src : ""; // Null check cho imgPreview  
+ 
   // Hiển thị xác nhận
   toggleConfirmationDialog(true);
 
@@ -537,9 +521,9 @@ function btnAccept() {
         C: countAddProductC,
         D: countAddProductD,
       },
-      nametag: nametag,
+      nametag: nametagProduct,
       nameColor1: colorAddProduct,
-      colorr1: codecolorAddProduct,
+      colorr1: colorAddProduct,
     });
 
     // Cập nhật danh sách sản phẩm
@@ -558,13 +542,13 @@ function btnAccept() {
 }
 
 function validateInputs(name, color, price, ...counts) {
-  if (!name || !color || isNaN(price) || counts.some((count) => isNaN(count))) {
+  if (!name ||!color || isNaN(price) || counts.some((count) => count === '' || isNaN(count)) 
+  ) {
     return false;
   }
   return true;
 }
 
-// Hàm hiển thị/ẩn hộp thoại xác nhận
 function toggleConfirmationDialog(show) {
   const confirmationDialog = document.querySelector(".sb");
   if (show) {
@@ -604,19 +588,20 @@ function onloandimg(input) {
 
   if (file) {
     const reader = new FileReader();
-    // Khi đọc xong file, hiển thị ảnh
+   
     reader.onload = function (e) {
       const img = document.createElement("img");
-      img.src = e.target.result; // Gán URL ảnh vào thẻ <img>
+      img.src = e.target.result; 
       img.classList.add("imgPreview");
-      imageContainer.innerHTML = ""; // Xóa nội dung cũ
-      imageContainer.appendChild(img); // Thêm ảnh mới
+      imageContainer.innerHTML = ""; 
+      imageContainer.appendChild(img); 
     };
-    reader.readAsDataURL(file); // Đọc file dưới dạng Data URL
+     // Đọc file dưới dạng Data URL
+     reader.readAsDataURL(file);
   }
+   
 }
 
-//ham loc san tk
 function listSearch_tk() {
   let arr = [...Arrsell];
   let typeProduct = document.getElementById("typeProduct").value;
@@ -625,37 +610,29 @@ function listSearch_tk() {
   }
   rankProfit(arr);
 }
-
-// Hàm render quản lý thống kê
 function renderqltk() {
-  Arrsells();
+  const selectedTime = document.getElementById('op-time')?.value || []; // Mặc định chọn ngày hôm nay nếu chưa chọn
   document.querySelector(".page-right").innerHTML = `<div class = qltk>
   <h1>SỐ LIỆU THỐNG KÊ</h1>
   <div class="overview">
       <div class="chart ff"><canvas style="display: block; box-sizing: border-box;" id="grapbox" width="541px" height="541px"></canvas></div>
       <div class="ll">
          <div class="boder first">
-          <h1>Thống kê</h1>    
+          <h1>Thống kê</h1>
+          <div class="select-time">
+           <input onchange="chon_time_sp()" type="date" id="op-time" value="${selectedTime}"></input>
+          </div>
          </div> 
          <div class="boder">
               <div class="left-boder">
-                  <h2 style="color: blue;">${Arrsell.reduce(
-                    (i, n) => i + n.soluong,
-                    0
-                  )}</h2>
+                  <h2 style="color: blue;">${Arrsell.reduce((i, n) => i + n.soluong,0)}</h2>
                   <h2 style="font-weight: 200;">ĐÃ BÁN</h2> 
               </div>
               <div class="right-boder"><i style="font-size: 40px;font-weight: 200;" class='bx bx-cart-alt'></i></div>   
          </div> 
          <div class="boder">
               <div class="left-boder">
-                  <h2 style="color: blue;">${Arrsell.reduce(
-                    (i, n) => i + n.soluong * n.obj.price,
-                    0
-                  ).toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  })}</h2>
+                  <h2 style="color: blue;">${Arrsell.reduce((i, n) => i + n.soluong * n.obj.price,0).toLocaleString("vi-VN", {style: "currency",currency: "VND",})}</h2>
                   <h2 style="font-weight: 200;">DOANH THU</h2>
               </div>
               <div class="right-boder"><i style="font-size: 40px;font-weight: 200;" class='bx bx-money-withdraw'></i></div>   
@@ -691,11 +668,49 @@ function renderqltk() {
                     <option value="aokhoac#">Áo khoác</option>
               </select>
     </div>
-</div>`;
-  createChart(); // Tạo biểu đồ khi nhấp vào "QUẢN LÝ THỐNG KÊ"
+</div>`;              
+  createChart(); 
   rankProfit(Arrsell);
-  renderlistKH();
+ 
 }
+
+// tinh ngay 
+function getDaysDifference(dateString) {
+  // Chuyển chuỗi ngày "yyyy-mm-dd" thành đối tượng Date
+  const inputDate = new Date(dateString);
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+  const diffMilliseconds = currentDate - inputDate;
+  return Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24)); // Làm tròn xuống
+}
+
+
+function chon_time_sp() {
+  Arrsells(); 
+  let time = document.getElementById('op-time').value;
+  Arrsell = Arrsell.filter(i => getDaysDifference(i.time) === getDaysDifference(time));
+  let sell = JSON.parse(localStorage.getItem("shopbagispay")) || [];
+  sell = sell.filter(i => 
+    i.shopbagispayuser?.[0]?.status === "4" && 
+    getDaysDifference(i.shopbagispayuser[0]?.time) === getDaysDifference(time)
+  );
+  localStorage.setItem("filteredSell", JSON.stringify(sell)); // day len de listKH lay duoc
+  renderqltk();//cap nhat
+  renderlistKH();
+  
+}
+
+function Arrsells() {
+  Arrsell = [];
+  let sell = JSON.parse(localStorage.getItem("shopbagispay")) || [];
+  let Arrll = sell.flatMap((i) => i.shopbagispayuser);
+  for (let i = 0; i < Arrll.length; i++) {
+    if (Arrll[i].status === "4") {
+      Arrsell.push(Arrll[i]);
+    }
+  }
+}
+
 function nameuser(id) {
   let namez = JSON.parse(localStorage.getItem("storageUsers"));
   let nameID = "";
@@ -707,14 +722,12 @@ function nameuser(id) {
   return nameID;
 }
 
+
 function renderlistKH() {
-  let sell = JSON.parse(localStorage.getItem("shopbagispay")) || []; // Hàm này cần được định nghĩa rõ ràng, đảm bảo nó cập nhật `sell`.
+  let sell = JSON.parse(localStorage.getItem("filteredSell")) || []; // Lấy danh sách đã lọc
   let s = "";
-  // Sắp xếp `sell` dựa trên giá trị `soluong * price`.
-  const sortsell = sell
-    .filter((i) => i.shopbagispayuser?.[0]?.status === "4")
-    .sort((a, b) => {
-      const aQuantity = a.shopbagispayuser[0]?.soluong || 0; // Truy cập phần tử đầu tiên
+  const sortsell = sell.filter((i) => i.shopbagispayuser?.[0]?.status === "4").sort((a, b) => {
+      const aQuantity = a.shopbagispayuser[0]?.soluong || 0;
       const aPrice = a.shopbagispayuser[0]?.obj?.price || 0;
       const bQuantity = b.shopbagispayuser[0]?.soluong || 0;
       const bPrice = b.shopbagispayuser[0]?.obj?.price || 0;
@@ -723,11 +736,15 @@ function renderlistKH() {
   sortsell.forEach((i) => {
     const quantity = i.shopbagispayuser[0]?.soluong || 0;
     const price = i.shopbagispayuser[0]?.obj?.price || 0;
+    const priceVnd = (quantity * price).toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
     s += `
       <div class="list__KH">
         <span style="width: 10%" class="ID_KH">${i.IDuser}</span>
         <span style="width: 50%" class="name_KH">${nameuser(i.IDuser)}</span>
-        <span style="width: 40%" class="price_KH">${price * quantity}</span>
+        <span style="width: 40%" class="price_KH">${priceVnd}</span>
       </div>
     `;
   });
@@ -749,6 +766,7 @@ function processProductList(Arrsell) {
   let resultArr = Array.from(map.values());
   return resultArr;
 }
+
 //ham tao doanh thu
 function rankProfit(arrs) {
   let arr = processProductList(arrs);
@@ -772,8 +790,7 @@ function rankProfit(arrs) {
 }
 
 function renderBtnadd() {
-  let s = "";
-  s += `<div id="tabAddProduct">
+  document.querySelector(".btnAddproduct").innerHTML= `<div id="tabAddProduct">
                 <div class="headTab">
                     <span class="title">THÊM SẢN PHẨM</span>
                     <span onclick ="closeTabb()" class="closeTab">ĐÓNG</span>
@@ -796,8 +813,16 @@ function renderBtnadd() {
                               </div>
                               <div class="contentTab colorInput">
                                   <span>Màu sắc: </span>
-                                  <input style="width: 25%" type="text" placeholder="[ĐEN, TRẮNG, ....]" value="" id="colorAddProduct">
-                                  <input style="width: 25%" type="text" placeholder="Mã màu [#000,#fff]" value="" id="codecolorAddProduct">
+                                <select id="colorAddProduct">
+                                  <option value="white">white</option>
+                                  <option value="red">red</option>
+                                  <option value="blue">blue</option>
+                                  <option value="green">green</option>
+                                  <option value="yellow">yellow</option>
+                                  <option value="orange">orange</option>
+                                  <option value="pink">pink</option>
+                                  <option value="purple">purple</option>
+                                </select>
                               </div>
                               <div class="contentTab">
                                   <span>Số lượng A: </span>
@@ -822,8 +847,10 @@ function renderBtnadd() {
                                       <input style="width: 30%" type="text" id="priceAddProduct" placeholder="Đơn giá" value="">
                                   </div>
                                   <div class="contentTab">
-                                      <span>Name Tag </span>
-                                      <input style="width: 30%" type="text" placeholder="Name Tag" value="" id="nametagProduct">
+                                    <span>Loai : </span>
+                                    <select id="typeproduct_">
+                            
+                                    </select>
                                   </div>
                                   
                       </div>
@@ -835,7 +862,17 @@ function renderBtnadd() {
                   </div>
                 </form>
             </div>`;
-  document.querySelector(".btnAddproduct").innerHTML = s;
+  tao_option_type_add();
+}
+
+function tao_option_type_add(){
+  let typeproduct = JSON.parse(localStorage.getItem('typeproduct'))
+  let s ='';
+  typeproduct.forEach(i => {
+    s+=`<option value=${i.typeid}>${i.typename}</option>`
+  })
+  document.querySelector('#typeproduct_').innerHTML = s;
+
 }
 
 //dong tap cua view
@@ -854,6 +891,7 @@ function onload() {
   const QLDH = document.querySelector(".b2");
   const QLSP = document.querySelector(".b3");
   const QLND = document.querySelector(".b4");
+  const user = document.querySelector('.page-left .L-u ._icon_user');
 
   const s = parseInt(localStorage.getItem("currentadmin")) || 1;
 
@@ -862,6 +900,7 @@ function onload() {
     QLDH.classList.remove("act");
     QLSP.classList.remove("act");
     QLND.classList.remove("act");
+    user.style.color='white';
     savepage(1);
     renderqltk();
   });
@@ -871,6 +910,7 @@ function onload() {
     QLDH.classList.add("act");
     QLSP.classList.remove("act");
     QLND.classList.remove("act");
+    user.style.color='white';
     savepage(2);
     renderqldh();
   });
@@ -880,6 +920,7 @@ function onload() {
     QLDH.classList.remove("act");
     QLSP.classList.add("act");
     QLND.classList.remove("act");
+    user.style.color='white';
     let getButton1ContextMenu = document.getElementById(
       "button1-contextMenu"
     ).nextSibling;
@@ -894,9 +935,18 @@ function onload() {
     QLDH.classList.remove("act");
     QLSP.classList.remove("act");
     QLND.classList.add("act");
+    user.style.color='white';
     savepage(4);
     renderqlnd();
   });
+
+  user.addEventListener('click',()=>{
+    QLTK.classList.remove("act");
+    QLDH.classList.remove("act");
+    QLSP.classList.remove("act");
+    QLND.classList.remove("act");
+    user.style.color='blue';
+  })
 
   // Thiết lập trạng thái ban đầu
   switch (s) {
@@ -920,6 +970,15 @@ function onload() {
 }
 // -----------------------------------------------
 
+// user admin 
+function user_click(){
+  console.log("user admin");
+  document.querySelector('.page-right').innerHTML = `heki`
+
+}
+
+
+// -----------------------------------------
 //thuy
 // tao danh sach nguoi dung
 function closeall() {
@@ -1220,6 +1279,7 @@ function renderqlnd() {
                 <div class="title">
                     <h1>QUẢN LÝ NGƯỜI DÙNG</h1>
                 </div>
+                 <div class="btnAdd_"><div class="circle_"><i class="fa-solid fa-plus"></i></div></div>
                 <div class="manageCustomer">
                     <div class="areNumberAboutAccounts">
                         <div class="box">
@@ -1971,6 +2031,9 @@ function signInButton(event) {
           <a href="./index.html">
             <i class="fa-solid fa-house"></i>TRỞ VỀ TRANG CHỦ</a
           >
+        </div>
+        <div onclick ="user_click()" class="L-u">
+          <div class="_icon_user"><i class="fa-solid fa-user"></i></div>
         </div>
       </div>
       <div class="page-right"></div>

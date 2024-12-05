@@ -98,7 +98,7 @@
   justify-content: space-between;
   padding: 20px;
 }
-.circle {
+.circle,.circle_ {
   display: inline-block;
   padding: 12px 14px;
   background-color: black;
@@ -216,7 +216,7 @@
   border: none;
   color: #747474;
 }
-.btnAdd {
+.btnAdd,.btnAdd_ {
   margin: 10px 0px;
 }
 /* quan */
@@ -1862,4 +1862,46 @@ span {
 /* Hover effect cho nút No */
 .action-button.no:hover {
   background-color: #31b0d5;
+}
+
+/* tk */
+.__m {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 300px;
+  justify-content: flex-start;
+}
+.m {
+  display: flex;
+  margin: 20px 0px;
+}
+.m span {
+  text-align: center;
+}
+.boder_KH {
+  display: flex;
+  flex-direction: column;
+}
+.list__KH {
+  display: flex;
+  align-items: center;
+  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 10px 0px;
+  margin: 5px 0;
+  color: #747474;
+}
+.list__KH span {
+  text-align: center;
+}
+/* time option */
+.select-time{
+  padding: 28px;
+
+
+}
+/* user admin */
+.page-left .L-u ._icon_user{
+  color: white;
 }
