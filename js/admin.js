@@ -1592,7 +1592,7 @@ function hienthiformaddaddress(account) {
       <div style="text-align:center">Thêm địa chỉ mới</div>
       <div class="form-group-userID">
         <label for="userID">UserID: </label>
-        <span>abc</span>
+        <span>${account.name}</span>
       </div>
       <div class="form-group">
         <label for="email">Nhập số nhà & tên đường</label>
@@ -1765,7 +1765,99 @@ function checkAccount() {
     accounts.length - locked;
   document.getElementById("manageCustomer-body").innerHTML = listAccounts();
 }
-
+function hienthiformaddaddress_newuser() {
+  document.querySelector(
+    ".block-container"
+  ).innerHTML = `<div style="text-align:center">Thêm địa chỉ mới</div>
+      <div class="form-group">
+        <label for="email">Nhập số nhà & tên đường</label>
+        <input
+          type="text"
+          id="numberaddress"
+          placeholder="Nhập số nhà & tên đường"
+        />
+      </div>
+      <div class="form-group">
+        <label for="city">Thành phố:</label>
+        <select id="city" onchange="populateDistricts()">
+          <option value="">Chọn Thành phố</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="district">Quận/Huyện:</label>
+        <select id="district" onchange="populateWards()">
+          <option value="">Chọn Quận/Huyện</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="ward">Phường/Xã:</label>
+        <select id="ward">
+          <option value="">Chọn Phường/Xã</option></select
+        >
+      </div>
+      <div class="form-actions">
+          <div class="confirm-button">Xác nhận</div>
+      </div>
+      <div class="back" onclick='hienthiformadduser()'>Trở lại</div>`;
+}
+function hienthiformadduser() {
+  console.log("abc");
+  document.querySelector(
+    ".block-container"
+  ).innerHTML = `<div class="form-group">
+        <label for="sdt">Số điện thoại</label>
+        <input
+          type="text"
+          id="sdt"
+          name="sdt"
+          placeholder="Nhập số điện thoại"
+          value=""
+        />
+      </div>
+      <!-- Tên -->
+      <div class="form-group">
+        <label for="name">Tên</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Nhập tên"
+          value=""
+        />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="text"
+          id="name"
+          name="email"
+          placeholder="Nhập Email"
+          value=""
+        />
+      </div>
+      <div class="form-group">
+        <label for="passowrd">Password</label>
+        <input
+          type="text"
+          id="password"
+          name="email"
+          placeholder="Nhập password"
+          value=""
+        />
+      </div>
+      <div class="form-group">
+        <div style="display: flex; align-items: center">
+          <label for="name">Địa chỉ</label>
+          <span class="spanaddress add_address" onclick="hienthiformaddaddress_newuser()">Thêm</span>
+        </div>
+        <select id="diachi" name="diachi"></select>
+      </div>
+      <div class="form-actions">
+          <div class="confirm-button">Xác nhận</div>
+      </div>`;
+  document.querySelector(".block-container").classList.add("active");
+  document.querySelector(".backgroud-menu-respon").style.display = "block";
+}
 function renderqlnd() {
   document.querySelector(".page-right").innerHTML = `
               <div class="tool-address"></div>
@@ -1774,7 +1866,7 @@ function renderqlnd() {
                 <div class="title">
                     <h1>QUẢN LÝ NGƯỜI DÙNG</h1>
                 </div>
-                 <div class="btnAdd"><div class="circle"><i class="fa-solid fa-plus"></i></div></div>
+                 <div class="btnAdd" onclick="hienthiformadduser()"><div class="circle"><i class="fa-solid fa-plus"></i></div></div>
                 <div class="manageCustomer">
                     <div class="areNumberAboutAccounts">
                         <div class="box">

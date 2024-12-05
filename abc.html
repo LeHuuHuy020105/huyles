@@ -9,37 +9,6 @@
   <body>
     <div class="block-container">
       <!-- UserID -->
-      <div class="form-group-userID">
-        <label for="userID">UserID: </label>
-        <span>abc</span>
-      </div>
-      <!-- Email -->
-      <div class="form-group">
-        <label for="email">Nhập số nhà & tên đường</label>
-        <input
-          type="text"
-          id="numberaddress"
-          placeholder="Nhập số nhà & tên đường"
-        />
-      </div>
-      <div class="form-group">
-        <label for="city">Thành phố:</label>
-        <select id="city" onchange="populateDistricts()">
-          <option value="">Chọn Thành phố</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="district">Quận/Huyện:</label>
-        <select id="district" onchange="populateWards()">
-          <option value="">Chọn Quận/Huyện</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="ward">Phường/Xã:</label>
-        <select id="ward">
-          <option value="">Chọn Phường/Xã</option>
-        </select>
-      </div>
       <!-- Số điện thoại -->
       <div class="form-group">
         <label for="sdt">Số điện thoại</label>
@@ -53,12 +22,7 @@
       </div>
       <!-- Tên -->
       <div class="form-group">
-        <div>
-          <label for="name">Tên</label>
-          <span>Thêm</span>
-          <span>Thêm</span>
-          <span>Thêm</span>
-        </div>
+        <label for="name">Tên</label>
         <input
           type="text"
           id="name"
@@ -67,14 +31,23 @@
           value=""
         />
       </div>
-      <!-- Địa chỉ -->
       <div class="form-group">
-        <label for="diachi">Địa chỉ</label>
-        <select id="diachi" name="diachi">
-          <option value="1">ABC 1</option>
-          <option value="2">ABC 2</option>
-          <option value="3">TPHCM</option>
-        </select>
+        <label for="email">Email</label>
+        <input
+          type="text"
+          id="name"
+          name="email"
+          placeholder="Nhập Email"
+          value=""
+        />
+      </div>
+      <div class="form-group">
+        <div style="display: flex; align-items: center">
+          <label for="name">Địa chỉ</label>
+          <span class="spanaddress add_address">Thêm</span>
+          <span class="spanaddress remove_address">Xoá</span>
+        </div>
+        <select id="diachi" name="diachi"></select>
       </div>
     </div>
   </body>
