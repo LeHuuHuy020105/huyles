@@ -564,18 +564,26 @@ function toast({ title = "", message = "", type = "", duration = 5000 }) {
 
     toast.classList.add("toast", `toast--${type}`);
     toast.innerHTML = `
-        <div class="toast__icon">
-          <i class="${icon}"></i>
-        </div>
-        <div class="toast__body">
-          <h3 class="toast__title">${title}</h3>
-          <p class="toast__msg">${message}</p>
-        </div>
-        <div class="toast__close">
-          <i class="fa-solid fa-xmark"></i>
-        </div>
+      <div class="toast__icon">
+        <i class="${icon}"></i>
+      </div>
+      <div class="toast__body">
+        <h3 class="toast__title">${title}</h3>
+        <p class="toast__msg">${message}</p>
+      </div>
+      <div class="toast__close">
+        <i class="fa-solid fa-xmark"></i>
+      </div>
     `;
     main.appendChild(toast);
+
+    // Sau khi hết thời gian, ẩn toast và tắt sự kiện tương tác
+    setTimeout(() => {
+      toast.classList.add("hide");
+      setTimeout(() => {
+        main.removeChild(toast);
+      }, 500); // Sau 500ms, toast sẽ bị xóa khỏi DOM
+    }, duration);
   }
 }
 
@@ -644,7 +652,7 @@ let getContainer = document.querySelector(".box-login");
 const isValidEmail = (email) => {
   const pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
   return !!email.match(pattern);
-}
+};
 
 function getNextID() {
   let nextID = parseInt(localStorage.getItem("NextID"));
@@ -1302,7 +1310,6 @@ function getCurrentUserAddresses() {
 localStorage.setItem("addressUserCurrent", JSON.stringify(addressUsers));
 
 function makeAddressSelect() {
-
   // Lấy thông tin các địa chỉ đã lưu trong localStorage
   let addressUsers =
     JSON.parse(localStorage.getItem("addressUserCurrent")) || [];

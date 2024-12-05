@@ -570,7 +570,8 @@ body {
   box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08);
   min-width: 300px;
   max-width: 350px;
-  animation: slideInLeft 0.5s ease, fadeOut linear 1s 5s forwards;
+  animation: slideInLeft 0.5s ease, fadeOut 1s ease 5s forwards;
+  transition: opacity 1s ease-out;
 }
 
 .toast + .toast {

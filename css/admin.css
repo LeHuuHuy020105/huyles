@@ -1803,3 +1803,67 @@ span {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.5); /* Màu đen mờ */
 }
+.back:hover {
+  color: red;
+  cursor: pointer;
+}
+/* Container chứa phần xác nhận xóa */
+.remove {
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Phần văn bản xác nhận */
+.remove div {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Định dạng phần text cho câu hỏi xác nhận */
+.confirmation-text {
+  margin: 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Container chứa các nút Yes và No */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Định dạng cho các nút Yes và No */
+.action-button {
+  padding: 10px 20px;
+  background-color: #d9534f;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect cho nút Yes */
+.action-button.yes:hover {
+  background-color: #c9302c;
+}
+
+/* Định dạng cho nút No */
+.action-button.no {
+  background-color: #5bc0de;
+}
+
+/* Hover effect cho nút No */
+.action-button.no:hover {
+  background-color: #31b0d5;
+}

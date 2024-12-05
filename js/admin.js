@@ -965,7 +965,9 @@ function innertooladdress(account) {
       </div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Nhập email" value="${account.email}"/>
+        <input type="email" id="email" name="email" placeholder="Nhập email" value="${
+          account.email
+        }"/>
       </div>
       <div class="form-group">
         <label for="sdt">Số điện thoại</label>
@@ -979,14 +981,19 @@ function innertooladdress(account) {
       </div>
       <div class="form-group">
         <label for="name">Tên</label>
-        <input type="text" id="name" name="name" placeholder="Nhập tên" value="${account.name}" />
+        <input type="text" id="name" name="name" placeholder="Nhập tên" value="${
+          account.name
+        }" />
       </div>
       <div class="form-group">
         <div style="display:flex;align-items:center">
           <label for="name">Địa chỉ</label>
-          <span class="spanaddress add_address" onclick="hienthiformaddress(${account.userID})">Thêm</span>
-          <span class="spanaddress change_address" onclick="changeaddress(${account.userID})">Sửa</span>
-          <span class="spanaddress remove_address" onclick="removeaddress(${account.userID})">Xoá</span>
+          <span class="spanaddress add_address" onclick='hienthiformaddaddress(${JSON.stringify(
+            account
+          )})'>Thêm</span>
+          <span class="spanaddress remove_address" onclick='hienthiformremoveaddress(${JSON.stringify(
+            account
+          )})'>Xoá</span>
         </div>
         <select id="diachi" name="diachi">
         </select>
@@ -1009,8 +1016,140 @@ function makeAddressSelect(account) {
   }
   document.querySelector("#diachi").innerHTML = s;
 }
-function hienthiformaddress() {
-  document.querySelector(".block-container").innerHTML = ``;
+function hienthiformremoveaddress(account) {
+  let addressUsers =
+    JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
+  let index = kiemtratontaiuser(account.userID);
+  let choice = document.querySelector("#diachi").value;
+
+  // Truyền đối tượng với hai tham số: account và choice
+  if (addressUsers[index].address.length == 0) {
+    toast({
+      title: "ERROR",
+      message: "Không có địa chỉ nào để xoá!",
+      type: "error",
+      duration: 5000,
+    });
+  } else {
+    document.querySelector(".block-container").innerHTML = `
+   <div class="remove">
+    <div>${addressUsers[index].address[choice]}</div>
+    <h3 class="confirmation-text">Bạn thật sự muốn xoá địa chỉ này?</h3>
+    <div class="action-buttons">
+      <div class="action-button yes" onclick='removeaddress(${JSON.stringify({
+        account: account,
+        choice: choice,
+      })})'>Yes</div>
+      <div class="action-button no" onclick='innertooladdress(${JSON.stringify(
+        account
+      )})'>No</div>
+    </div>
+  </div>
+  <div class="back" onclick='innertooladdress(${JSON.stringify(
+    account
+  )})'>Trở lại</div>`;
+  }
+}
+
+function removeaddress(data) {
+  let account = data.account; // Lấy account
+  let choice = data.choice; // Lấy choice
+  let addressUsers =
+    JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
+  let index = kiemtratontaiuser(account.userID);
+  addressUsers[index].address.splice(choice, 1);
+  localStorage.setItem("addressUserCurrent", JSON.stringify(addressUsers));
+  toast({
+    title: "SUCCESS",
+    message: "Xoá địa chỉ thành công !",
+    type: "success",
+    duration: 5000,
+  });
+  innertooladdress(account);
+}
+function hienthiformaddaddress(account) {
+  let addressUsers =
+    JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
+  let index = kiemtratontaiuser(account.userID);
+  let choice = document.querySelector("#diachi").value;
+  document.querySelector(".block-container").innerHTML = `
+      <div style="text-align:center">Thêm địa chỉ mới</div>
+      <div class="form-group-userID">
+        <label for="userID">UserID: </label>
+        <span>abc</span>
+      </div>
+      <div class="form-group">
+        <label for="email">Nhập số nhà & tên đường</label>
+        <input
+          type="text"
+          id="numberaddress"
+          placeholder="Nhập số nhà & tên đường"
+        />
+      </div>
+      <div class="form-group">
+        <label for="city">Thành phố:</label>
+        <select id="city" onchange="populateDistricts()">
+          <option value="">Chọn Thành phố</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="district">Quận/Huyện:</label>
+        <select id="district" onchange="populateWards()">
+          <option value="">Chọn Quận/Huyện</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="ward">Phường/Xã:</label>
+        <select id="ward">
+          <option value="">Chọn Phường/Xã</option></select
+        >
+      </div>
+      <div class="form-actions">
+          <div class="confirm-button" onclick='addaddress(${JSON.stringify(
+            account
+          )})'>Xác nhận</div>
+      </div>
+      <div class="back" onclick='innertooladdress(${JSON.stringify(
+        account
+      )})'>Trở lại</div>`;
+  populateCities();
+}
+function isValidHouseNumber(houseNumber) {
+  // Biểu thức chính quy kiểm tra số nhà.
+  // Ví dụ: cho phép số nhà là một chuỗi bắt đầu bằng số, có thể có dấu cách hoặc ký tự sau.
+  const regex = /^[0-9]+[a-zA-Z0-9\s]*$/;
+  return regex.test(houseNumber);
+}
+function addaddress(account) {
+  let addressUsers =
+    JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
+  let index = kiemtratontaiuser(account.userID);
+  let sonha = document.querySelector("#numberaddress").value;
+  let quan = document.querySelector("#district").value;
+  let phuong = document.querySelector("#ward").value;
+  let city = document.querySelector("#city").value;
+  let s = `${sonha},${phuong},${quan},${city}`;
+  console.log(s);
+  console.log(addressUsers[index].address);
+  if (isValidHouseNumber(sonha)) {
+    addressUsers[index].address.push(s);
+    localStorage.setItem("addressUserCurrent", JSON.stringify(addressUsers));
+    toast({
+      title: "SUCCESS",
+      message: "Thêm địa chỉ thành công",
+      type: "success",
+      duration: 5000,
+    });
+  } else {
+    toast({
+      title: "ERROR",
+      message:
+        "Số nhà không hợp lệ.Chỉ chứa chữ số và có thể có ký tự chữ cái hoặc số phía sau",
+      type: "error",
+      duration: 5000,
+    });
+  }
+  innertooladdress(account);
 }
 function changeuserinfo(account) {
   innertooladdress(account);

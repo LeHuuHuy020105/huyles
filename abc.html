@@ -15,14 +15,30 @@
       </div>
       <!-- Email -->
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="email">Nhập số nhà & tên đường</label>
         <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Nhập email"
-          value=""
+          type="text"
+          id="numberaddress"
+          placeholder="Nhập số nhà & tên đường"
         />
+      </div>
+      <div class="form-group">
+        <label for="city">Thành phố:</label>
+        <select id="city" onchange="populateDistricts()">
+          <option value="">Chọn Thành phố</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="district">Quận/Huyện:</label>
+        <select id="district" onchange="populateWards()">
+          <option value="">Chọn Quận/Huyện</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="ward">Phường/Xã:</label>
+        <select id="ward">
+          <option value="">Chọn Phường/Xã</option>
+        </select>
       </div>
       <!-- Số điện thoại -->
       <div class="form-group">
