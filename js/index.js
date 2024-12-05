@@ -666,6 +666,7 @@ function getNextID() {
 }
 
 // lưu user vào localStorage khi ấn sign-up button
+let addressUsers = JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
 let storageUsers = [];
 function saveUser(user) {
   user.userID = getNextID();
@@ -677,6 +678,12 @@ function saveUser(user) {
   getStorageUsers = JSON.parse(getStorageUsers);
   getStorageUsers.push(user);
   localStorage.setItem("storageUsers", JSON.stringify(getStorageUsers));
+  let obj = {
+    IDuser: user.userID,
+    address: [],
+  };
+  addressUsers.push(obj);
+  localStorage.setItem("addressUserCurrent", JSON.stringify(addressUsers));
 }
 
 function doesEmailExistInLocalStorage(target) {
@@ -690,7 +697,6 @@ function doesEmailExistInLocalStorage(target) {
   }
   return false;
 }
-
 function registerButton(event) {
   event.preventDefault();
   getRegisterButton = document.querySelector("#register-btn");
@@ -1294,7 +1300,6 @@ function chinhsua() {
     console.log(isEditing1); // Log lại trạng thái để kiểm tra
   }
 }
-let addressUsers = JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
 
 function getCurrentUserAddresses() {
   let address = JSON.parse(localStorage.getItem("addressUserCurrent"));
@@ -1567,7 +1572,6 @@ function updateUserDetails(user) {
   for (let i = 0; i < allUsers.length; i++) {
     if (allUsers[i].userID == user.userID) {
       allUsers[i] = user;
-      break;
     }
   }
   localStorage.setItem("storageUsers", JSON.stringify(allUsers));
