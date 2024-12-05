@@ -640,9 +640,9 @@ function renderqltk() {
          <div class="boder">
               <div class="left-boder">
                   <h2 style="color: blue;">${Arrsell.reduce(
-    (i, n) => i + n.soluong,
-    0
-  )}</h2>
+                    (i, n) => i + n.soluong,
+                    0
+                  )}</h2>
                   <h2 style="font-weight: 200;">ĐÃ BÁN</h2> 
               </div>
               <div class="right-boder"><i style="font-size: 40px;font-weight: 200;" class='bx bx-cart-alt'></i></div>   
@@ -650,12 +650,12 @@ function renderqltk() {
          <div class="boder">
               <div class="left-boder">
                   <h2 style="color: blue;">${Arrsell.reduce(
-    (i, n) => i + n.soluong * n.obj.price,
-    0
-  ).toLocaleString("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  })}</h2>
+                    (i, n) => i + n.soluong * n.obj.price,
+                    0
+                  ).toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  })}</h2>
                   <h2 style="font-weight: 200;">DOANH THU</h2>
               </div>
               <div class="right-boder"><i style="font-size: 40px;font-weight: 200;" class='bx bx-money-withdraw'></i></div>   
@@ -761,11 +761,11 @@ function rankProfit(arrs) {
             <span style="width: 30%;" class="name">${i.obj.nameSP}</span>
             <span style="width: 30%;" class="sold">${i.soluong}</span>
             <span style="width: 10%;  class="profits">${(
-        i.obj.price * i.soluong
-      ).toLocaleString("vi-VN", {
-        style: "currency",
-        currency: "VND",
-      })}</span>
+              i.obj.price * i.soluong
+            ).toLocaleString("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            })}</span>
            </div>`;
   });
   document.getElementById("rankProfit-body").innerHTML = s;
@@ -922,6 +922,10 @@ function onload() {
 
 //thuy
 // tao danh sach nguoi dung
+function closeall() {
+  document.querySelector(".block-container").classList.remove("active");
+  document.querySelector(".backgroud-menu-respon").style.display = "none";
+}
 function listAccounts() {
   let accounts = JSON.parse(localStorage.getItem("storageUsers")) || [];
   let s = "";
@@ -932,25 +936,105 @@ function listAccounts() {
         <span class="nameAccount" style="width: 15%;">${account.name}</span>
         <span class="phoneAccount" style="width: 10%;">${account.phone}</span>
         <span class="emailAccount" style="width: 16%;">${account.email}</span>
-        <span class="addressAccount" style="width: 17%;">${account.diachi
-      }</span>
-        <span class="passwordAccount" style="width: 12%;">${account.password}</span>
-        <span class="statusAccount" style="width: 10%;">${account.statususer == "1" ? "Bình thường" : "Đã khoá"
-      }</span>
-        <button class="btnAccount" style="width: 10%;" onclick="toggleLockUser('${account.userID
-      }')">${account.statususer == "0" ? "Mở khóa" : "Khóa"}</button>
-        <button class="change" style="width: 5%;" onclick='changeuserinfo("${account.userID
-      }")'>Sửa</button>
+        <span class="addressAccount" style="width: 17%;">${
+          account.diachi
+        }</span>
+        <span class="passwordAccount" style="width: 12%;">${
+          account.password
+        }</span>
+        <span class="statusAccount" style="width: 10%;">${
+          account.statususer == "1" ? "Bình thường" : "Đã khoá"
+        }</span>
+        <button class="btnAccount" style="width: 10%;" onclick="toggleLockUser('${
+          account.userID
+        }')">${account.statususer == "0" ? "Mở khóa" : "Khóa"}</button>
+        <button class="change" style="width: 5%;" onclick='changeuserinfo(${JSON.stringify(
+          account
+        )})'>Sửa</button>
       </div>`;
   });
   return s;
 }
 
 let isEditingaccountuser = false;
-
-function changeuserinfo(userID) {
+function innertooladdress(account) {
+  document.querySelector(".block-container").innerHTML = `
+      <div class="form-group-userID">
+        <label for="userID">UserID: </label>
+        <span>${account.userID}</span>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Nhập email" value="${account.email}"/>
+      </div>
+      <div class="form-group">
+        <label for="sdt">Số điện thoại</label>
+        <input
+          type="text"
+          id="sdt"
+          name="sdt"
+          placeholder="Nhập số điện thoại"
+          value="${account.phone}"
+        />
+      </div>
+      <div class="form-group">
+        <label for="name">Tên</label>
+        <input type="text" id="name" name="name" placeholder="Nhập tên" value="${account.name}" />
+      </div>
+      <div class="form-group">
+        <div style="display:flex;align-items:center">
+          <label for="name">Địa chỉ</label>
+          <span class="spanaddress add_address" onclick="hienthiformaddress(${account.userID})">Thêm</span>
+          <span class="spanaddress change_address" onclick="changeaddress(${account.userID})">Sửa</span>
+          <span class="spanaddress remove_address" onclick="removeaddress(${account.userID})">Xoá</span>
+        </div>
+        <select id="diachi" name="diachi">
+        </select>
+      </div>
+      <div class="form-actions">
+            <div class="confirm-button">Xác nhận</div>
+        </div>`;
+  makeAddressSelect(account);
 }
-
+function makeAddressSelect(account) {
+  let addressUsers =
+    JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
+  let user = JSON.parse(localStorage.getItem("currentUser"));
+  let index = kiemtratontaiuser(account.userID);
+  let s = "";
+  if (index != null) {
+    for (let i = 0; i < addressUsers[index].address.length; i++) {
+      s += `<option value="${i}">${addressUsers[index].address[i]}</option>`;
+    }
+  }
+  document.querySelector("#diachi").innerHTML = s;
+}
+function hienthiformaddress() {
+  document.querySelector(".block-container").innerHTML = ``;
+}
+function changeuserinfo(account) {
+  innertooladdress(account);
+  document.querySelector(".block-container").classList.add("active");
+  document.querySelector(".backgroud-menu-respon").style.display = "block";
+}
+function kiemtratontaiuser(userid) {
+  let addressUserCurrent = JSON.parse(
+    localStorage.getItem("addressUserCurrent")
+  );
+  for (let i = 0; i < addressUserCurrent.length; i++) {
+    if (addressUserCurrent[i].IDuser == userid) {
+      return i;
+    }
+  }
+  return null;
+}
+function changeaddress(userid) {
+  let choice = document.querySelector("#diachi").value;
+  let addressUserCurrent = JSON.parse(
+    localStorage.getItem("addressUserCurrent")
+  );
+  addressUserCurrent[kiemtratontaiuser(userid)].address[choice];
+}
 function timkiemTheoID(id) {
   let accounts = JSON.parse(localStorage.getItem("storageUsers")) || [];
   for (let i = 0; i < accounts.length; i++) {
@@ -990,7 +1074,10 @@ function checkAccount() {
 }
 
 function renderqlnd() {
-  document.querySelector(".page-right").innerHTML = `<div class="qlnd">
+  document.querySelector(".page-right").innerHTML = `
+              <div class="tool-address"></div>
+              <div class="block-container"></div>
+              <div class="qlnd">
                 <div class="title">
                     <h1>QUẢN LÝ NGƯỜI DÙNG</h1>
                 </div>
@@ -1366,7 +1453,7 @@ function setDH() {
     <option value="" disabled selected>Sắp xếp theo quận</option>
     <option value="0">Tăng dần</option>
     <option value="1">Giảm dần</option>
-  `
+  `;
 }
 
 function doYouAccept() {
@@ -1434,7 +1521,7 @@ function filteredByDeliveryStatus() {
     <option value="" disabled selected>Sắp xếp theo quận</option>
     <option value="0">Tăng dần</option>
     <option value="1">Giảm dần</option>
-  `
+  `;
 }
 function getDistrict(district) {
   let tmpArray = district.split(", ");
@@ -1448,7 +1535,9 @@ function sortByDistrict() {
   let shopbagispay = [];
   for (let i = 0; i < getShopBag.length; i++) {
     for (let j = 0; j < getShopBag[i].shopbagispayuser.length; j++) {
-      districtsArray.push(getDistrict(getShopBag[i].shopbagispayuser[j].diachi));
+      districtsArray.push(
+        getDistrict(getShopBag[i].shopbagispayuser[j].diachi)
+      );
     }
   }
   let getSortByDistrictSeletion = document.getElementById("sortByDistrict");
@@ -1461,21 +1550,30 @@ function sortByDistrict() {
   for (let i = 0; i < clonedArray.length; i++) {
     if (flagToBreak) break;
     for (let j = 0; j < clonedArray[i].shopbagispayuser.length; j++) {
-      if (getDistrict(clonedArray[i].shopbagispayuser[j].diachi) === districtsArray[0]) {
+      if (
+        getDistrict(clonedArray[i].shopbagispayuser[j].diachi) ===
+        districtsArray[0]
+      ) {
         let obj = {
           IDuser: clonedArray[i].IDuser,
-          shopbagispayuser: [clonedArray[i].shopbagispayuser[j]]
-        }
+          shopbagispayuser: [clonedArray[i].shopbagispayuser[j]],
+        };
         shopbagispay.push(obj);
         districtsArray.splice(0, 1);
         if (districtsArray.length === 0) {
           flagToBreak = true;
           break;
         }
-        let currentOrder = getDistrict(clonedArray[i].shopbagispayuser[j].diachi);
+        let currentOrder = getDistrict(
+          clonedArray[i].shopbagispayuser[j].diachi
+        );
         clonedArray[i].shopbagispayuser.splice(j, 1);
         // nếu khác quận với đứa bị xóa thì duyệt lại toàn bộ
-        if (j < clonedArray[i].shopbagispayuser.length && getDistrict(clonedArray[i].shopbagispayuser[j].diachi) !== currentOrder) {
+        if (
+          j < clonedArray[i].shopbagispayuser.length &&
+          getDistrict(clonedArray[i].shopbagispayuser[j].diachi) !==
+            currentOrder
+        ) {
           // Đặt i = -1 để sau khi break, ta tăng i thêm 1 => i = 0 => duyệt lại toàn bộ
           i = -1;
           break;
@@ -1529,8 +1627,8 @@ function filterByDateRange() {
       if (ordersArray.length > 0) {
         let obj = {
           IDuser: getShopBag[i].IDuser,
-          shopbagispayuser: ordersArray
-        }
+          shopbagispayuser: ordersArray,
+        };
         filteredByTimeArray.push(obj);
       }
     }
@@ -1557,7 +1655,7 @@ function filterByDateRange() {
       <option value="" disabled selected>Sắp xếp theo quận</option>
       <option value="0">Tăng dần</option>
       <option value="1">Giảm dần</option>
-    `
+    `;
   }
 }
 
@@ -1682,7 +1780,7 @@ pushFirstAdminAccount();
 const isValidEmail = (email) => {
   const pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
   return !!email.match(pattern);
-}
+};
 
 function loadpage() {
   window.scrollTo({ top: 0, behavior: "smooth" });
