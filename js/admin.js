@@ -1774,7 +1774,7 @@ function renderqlnd() {
                 <div class="title">
                     <h1>QUẢN LÝ NGƯỜI DÙNG</h1>
                 </div>
-                 <div class="btnAdd_"><div class="circle_"><i class="fa-solid fa-plus"></i></div></div>
+                 <div class="btnAdd"><div class="circle"><i class="fa-solid fa-plus"></i></div></div>
                 <div class="manageCustomer">
                     <div class="areNumberAboutAccounts">
                         <div class="box">
