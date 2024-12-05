@@ -927,19 +927,14 @@ function listAccounts() {
   let s = "";
   accounts.forEach((account) => {
     const classPrefix = `user-${account.userID}`; // Tạo tiền tố lớp hợp lệ
-
     s += `<div class="listAcc" style="text-align: center; border-bottom: 1px solid rgba(112, 112, 112, 0.3);">
         <span class="idAccount" style="width: 5%;">${account.userID}</span>
-        <span class="nameAccount" style="width: 15%;"><input type="text" class="${classPrefix}-name" readonly="readonly" value="${account.name
-      }" /></span>
-        <span class="phoneAccount" style="width: 10%;"><input type="text" class="${classPrefix}-phone" readonly="readonly" value="${account.phone
-      }" /></span>
-        <span class="emailAccount" style="width: 16%;"><input type="text" class="${classPrefix}-email" readonly="readonly" value="${account.email
-      }" /></span>
+        <span class="nameAccount" style="width: 15%;">${account.name}</span>
+        <span class="phoneAccount" style="width: 10%;">${account.phone}</span>
+        <span class="emailAccount" style="width: 16%;">${account.email}</span>
         <span class="addressAccount" style="width: 17%;">${account.diachi
       }</span>
-        <span class="passwordAccount" style="width: 12%;"><input type="text" class="${classPrefix}-password" readonly="readonly" value="${account.password
-      }" /></span>
+        <span class="passwordAccount" style="width: 12%;">${account.password}</span>
         <span class="statusAccount" style="width: 10%;">${account.statususer == "1" ? "Bình thường" : "Đã khoá"
       }</span>
         <button class="btnAccount" style="width: 10%;" onclick="toggleLockUser('${account.userID
@@ -954,73 +949,6 @@ function listAccounts() {
 let isEditingaccountuser = false;
 
 function changeuserinfo(userID) {
-  console.log(userID);
-  const nameInput = document.querySelector(`.user-${userID}-name`);
-  const phoneInput = document.querySelector(`.user-${userID}-phone`);
-  const passwordInput = document.querySelector(`.user-${userID}-password`);
-  const emailInput = document.querySelector(`.user-${userID}-email`);
-  const editButton = document.querySelector(
-    `button.change[onclick*='${userID}']`
-  );
-
-  // Lấy danh sách tài khoản từ localStorage
-  let accounts = JSON.parse(localStorage.getItem("storageUsers")) || [];
-
-  // Kiểm tra xem email mới có trùng với bất kỳ tài khoản nào không
-  let isEmailDuplicate = false; // Biến để kiểm tra nếu email trùng
-
-  // Duyệt qua tất cả tài khoản trong localStorage
-  for (let i = 0; i < accounts.length; i++) {
-    const account = accounts[i];
-
-    // Kiểm tra nếu email của tài khoản khác trùng với email người dùng nhập vào
-    // Và kiểm tra tài khoản đó không phải là tài khoản hiện tại đang chỉnh sửa
-    if (account.userID != userID && account.email === emailInput.value) {
-      isEmailDuplicate = true; // Nếu trùng thì đặt biến thành true
-      break; // Không cần kiểm tra tiếp, dừng vòng lặp
-    }
-  }
-
-  if (isEditingaccountuser) {
-    // Nếu có email trùng, hiển thị cảnh báo và không lưu
-    if (isEmailDuplicate) {
-      toast({
-        title: "ERROR",
-        message: "Email đã tồn tại",
-        type: "error",
-        duration: 5000,
-      });
-      return; // Dừng lại nếu email bị trùng
-    }
-
-    // Nếu không có email trùng, tiếp tục lưu thay đổi
-    [nameInput, phoneInput, passwordInput, emailInput].forEach((input) => {
-      input.setAttribute("readonly", true);
-      input.classList.remove("active");
-    });
-    editButton.textContent = "Sửa";
-
-    // Cập nhật thông tin người dùng vào localStorage
-    let account = accounts.find((acc) => acc.userID == userID);
-    if (account) {
-      console.log("tim thay");
-      account.name = nameInput.value;
-      account.phone = phoneInput.value;
-      account.password = passwordInput.value;
-      account.email = emailInput.value;
-      localStorage.setItem("storageUsers", JSON.stringify(accounts));
-    }
-  } else {
-    // Chế độ chỉnh sửa
-    [nameInput, phoneInput, passwordInput, emailInput].forEach((input) => {
-      input.removeAttribute("readonly");
-      input.classList.add("active");
-    });
-    editButton.textContent = "Lưu lại";
-  }
-
-  // Toggle trạng thái chỉnh sửa
-  isEditingaccountuser = !isEditingaccountuser;
 }
 
 function timkiemTheoID(id) {
@@ -1120,137 +1048,6 @@ function renderqlnd() {
             </div>`;
   checkAccount();
 }
-
-// // vinh render qldh
-// let getShopBag = JSON.parse(localStorage.getItem("shopbagispay")) || [];
-
-// // in đơn hàng
-// function listDH(ordersOfUser) {
-//   let s = "";
-//   console.log(ordersOfUser);
-//   for (let i = 0; i < ordersOfUser.shopbagispayuser.length; i++) {
-//     let Price = ordersOfUser.shopbagispayuser[i].obj.price.toLocaleString(
-//       "vi-VN",
-//       { style: "currency", currency: "VND" }
-//     );
-//     let stringStatus = "";
-//     if (ordersOfUser.shopbagispayuser[i].status === "1")
-//       stringStatus = "Chờ xác nhận";
-//     else if (ordersOfUser.shopbagispayuser[i].status === "2")
-//       stringStatus = "Đang gói hàng";
-//     else if (ordersOfUser.shopbagispayuser[i].status === "3")
-//       stringStatus = "Vận chuyển";
-//     else if (ordersOfUser.shopbagispayuser[i].status === "4")
-//       stringStatus = "Hoàn thành";
-//     s += `
-//                 <div class="list">
-//                 <span style="width: 10%" class="userID">${
-//                   ordersOfUser.IDuser
-//                 }</span>
-//                 <div style="width: 5%; display: flex; justify-content: left;">
-//                   <input type="checkbox" class="myCheckbox" onchange='setDH(${JSON.stringify(
-//                     ordersOfUser
-//                   )},${i})'/>
-//                 </div>
-//                 <span style="width: 10%" class="idProduct">${
-//                   ordersOfUser.shopbagispayuser[i].obj.idproduct
-//                 }</span>
-//                 <img style="width: 20%" src="${
-//                   ordersOfUser.shopbagispayuser[i].obj.img
-//                 }" class="imgProduct" alt="Ảnh lỗi">
-//                 <span style="width: 30%" class="nameProduct">${
-//                   ordersOfUser.shopbagispayuser[i].obj.nameSP
-//                 }</span>
-//                 <span style="width: 5%" class="countProduct">${
-//                   ordersOfUser.shopbagispayuser[i].soluong
-//                 }</span>
-//                 <span style="width: 10%" class="priceProduct">${Price}</span>
-//                 <span style="width: 10%" class="deliveryStatus">${stringStatus}</span>
-//             </div>
-//     `;
-//   }
-//   return s;
-// }
-// let mang = [];
-// // tìm kiếm đơn hàng có trạng thái vận chuyển cần tìm
-// function setDH(user, itemindex) {
-//   let itemispay = {
-//     userpay: user,
-//     itemindexi: itemindex,
-//   };
-//   mang.push(itemispay);
-// }
-
-// function doYouAccept() {
-//   let shopbagispay = JSON.parse(localStorage.getItem("shopbagispay"));
-//   let input = document.querySelectorAll(".myCheckbox");
-//   let getDeliveryStatus = document.querySelector(
-//     "#deliveryStatusSelection"
-//   ).value;
-//   for (let i = 0; i < shopbagispay.length; i++) {
-//     for (let j = 0; j < mang.length; j++) {
-//       if (shopbagispay[i].IDuser == mang[j].userpay.IDuser) {
-//         shopbagispay[i].shopbagispayuser[mang[j].itemindexi].status =
-//           getDeliveryStatus;
-//         console.log(
-//           shopbagispay[i].shopbagispayuser[mang[j].itemindexi].status
-//         );
-//       }
-//     }
-//   }
-//   mang = [];
-//   input.forEach((input) => {
-//     input.checked = false;
-//   });
-//   localStorage.setItem("shopbagispay", JSON.stringify(shopbagispay));
-//   location.reload();
-// }
-
-// function renderqldh() {
-//   document.querySelector(".page-right").innerHTML = `<div class="qldh">
-//                 <div class="title"><h1>QUẢN LÝ ĐƠN HÀNG</h1></div>
-//                 <div class="btnAdd"><div class="circle" onclick="btnAdd()"><i class="fa-solid fa-plus"></i></div></div>
-//                 <div class="groupOption">
-//                         <select name="" class="box" id="deliveryStatusSelection">
-//                             <option value="1">Chờ xác nhận</option>
-//                             <option value="2">Đang gói hàng</option>
-//                             <option value="3">Vận chuyển</option>
-//                             <option value="4">Hoàn thành</option>
-//                         </select>
-//                         <button class="box" id="acceptChangeStatus" style="width: 10%;
-//   box-shadow: 0 7px 25px rgba(0, 0, 0, 0.2);
-//   border-radius: 10px;
-//   margin-right: 200px;
-//   border: none;
-//   height: fit-content;
-//   padding: 10px;" onclick="doYouAccept()">Xác nhận</button>
-//                         <div class="box">
-//                             <div class="contentBox">
-//                                 <div class="leftBox">
-//                                     <h2 id="amountOfProduct">0</h2>
-//                                     <span>ĐƠN HÀNG</span>
-//                                 </div>
-//                                 <i class="fa-solid fa-star"></i>
-//                             </div>
-//                         </div>
-//                 </div>
-//                 <div class="titleCol">
-//                     <span style="width: 10%" class="userID">userID</span>
-//                     <span style="width: 5%" class="selectProduct">Chọn</span>
-//                     <span style="width: 10%" class="idProduct">ID</span>
-//                     <span style="width: 20% ; padding-left: 7%" class="imgProduct">Hình ảnh</span>
-//                     <span style="width: 30% ; padding-left: 5%" class="nameProduct">Tên sản phẩm</span>
-//                     <span style="width: 5%" class="countProduct">Số lượng</span>
-//                     <span style="width: 10%" class="priceProduct">Đơn giá</span>
-//                     <span style="width: 10%" class="deliveryStatus">Vận chuyển</span>
-//                 </div>
-//                 <div id="storage-body"></div>`;
-//   let s = "";
-//   for (let i = 0; i < getShopBag.length; i++) {
-//     s += listDH(getShopBag[i]);
-//   }
-//   document.querySelector("#storage-body").innerHTML = s;
-// }
 // vinh render qldh
 let getShopBag = JSON.parse(localStorage.getItem("shopbagispay")) || [];
 
