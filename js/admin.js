@@ -1765,41 +1765,7 @@ function checkAccount() {
     accounts.length - locked;
   document.getElementById("manageCustomer-body").innerHTML = listAccounts();
 }
-function hienthiformaddaddress_newuser() {
-  document.querySelector(
-    ".block-container"
-  ).innerHTML = `<div style="text-align:center">Thêm địa chỉ mới</div>
-      <div class="form-group">
-        <label for="email">Nhập số nhà & tên đường</label>
-        <input
-          type="text"
-          id="numberaddress"
-          placeholder="Nhập số nhà & tên đường"
-        />
-      </div>
-      <div class="form-group">
-        <label for="city">Thành phố:</label>
-        <select id="city" onchange="populateDistricts()">
-          <option value="">Chọn Thành phố</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="district">Quận/Huyện:</label>
-        <select id="district" onchange="populateWards()">
-          <option value="">Chọn Quận/Huyện</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="ward">Phường/Xã:</label>
-        <select id="ward">
-          <option value="">Chọn Phường/Xã</option></select
-        >
-      </div>
-      <div class="form-actions">
-          <div class="confirm-button">Xác nhận</div>
-      </div>
-      <div class="back" onclick='hienthiformadduser()'>Trở lại</div>`;
-}
+
 function hienthiformadduser() {
   console.log("abc");
   document.querySelector(
@@ -1829,7 +1795,7 @@ function hienthiformadduser() {
         <label for="email">Email</label>
         <input
           type="text"
-          id="name"
+          id="email"
           name="email"
           placeholder="Nhập Email"
           value=""
@@ -1840,24 +1806,65 @@ function hienthiformadduser() {
         <input
           type="text"
           id="password"
-          name="email"
+          name="password"
           placeholder="Nhập password"
           value=""
         />
       </div>
-      <div class="form-group">
-        <div style="display: flex; align-items: center">
-          <label for="name">Địa chỉ</label>
-          <span class="spanaddress add_address" onclick="hienthiformaddaddress_newuser()">Thêm</span>
-        </div>
-        <select id="diachi" name="diachi"></select>
-      </div>
       <div class="form-actions">
-          <div class="confirm-button">Xác nhận</div>
+          <div class="confirm-button" onclick="addUser()">Xác nhận</div>
       </div>`;
   document.querySelector(".block-container").classList.add("active");
   document.querySelector(".backgroud-menu-respon").style.display = "block";
 }
+
+function addUser() {
+  let arrUser = JSON.parse(localStorage.getItem("storageUsers")) || [];
+  let idUser = JSON.parse(localStorage.getItem("NextID")) || 0;
+  let name = document.querySelector("#name").value;
+  let phone = document.querySelector("#sdt").value;
+  let email = document.querySelector("#email").value;
+  let password = document.querySelector("#password").value;
+  let user = {
+    userID: "",
+    name: "",
+    email: "",
+    phone: "",
+    diachi: "",
+    shopbag: "",
+    statususer: "1",
+    password: "",
+    typeuser: "1",
+  };
+  if(isValidPhoneNumber(phone) == false){
+    toast({
+      title: "ERROR",
+      message: "Vui lòng kiểm tra định dạng số điện thoại",
+      type: "error",
+      duration: 5000,
+    });
+    return;
+  }
+  if(isValidEmail(email) == false){
+    toast({
+      title: "ERROR",
+      message: "Vui lòng kiểm tra định dạng email",
+      type: "error",
+      duration: 5000,
+    });
+    return;
+  }
+  user.userID = idUser + 1;
+  user.name = name;
+  user.phone = phone;
+  user.email = email;
+  user.password = password;
+  arrUser.push(user);
+  localStorage.setItem("NextID", JSON.stringify(idUser+1));
+  localStorage.setItem("storageUsers", JSON.stringify(arrUser));
+  renderqlnd();
+}
+
 function renderqlnd() {
   document.querySelector(".page-right").innerHTML = `
               <div class="tool-address"></div>
