@@ -68,14 +68,33 @@ function profile() {
         </div>
         <div class="contentTab">
           <span>Address</span>
-          <div class="address_user">${user.diachi}</div>
+          <div class="address_user"></div>
         </div>
     </div>
-    <div id="buttonEdit" onclick="chinhsuainfo()">Chỉnh sửa</div>
   </div>`;
+    showaddress();
     document.querySelector(".profilebtn").classList.add("active");
     document.querySelector(".statusbtn").classList.remove("active");
   }
+}
+function showaddress() {
+  let diachi = document.querySelector(".address_user");
+  // Lấy thông tin các địa chỉ đã lưu trong localStorage
+  let addressUsers =
+    JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
+  let user = JSON.parse(localStorage.getItem("currentUser"));
+  let addressUser = getCurrentUserAddresses(); // Hàm này trả về thông tin địa chỉ của người dùng hiện tại
+
+  // Kiểm tra nếu địa chỉ người dùng có tồn tại
+  s = `
+  <select class="address_user_arr">`;
+
+  if (addressUser && addressUser.address.length > 0) {
+    for (let i = 0; i < addressUser.address.length; i++) {
+      s += `<option value=${i}>${addressUser.address[i]}</option>`;
+    }
+  }
+  document.querySelector(".address_user").innerHTML = s;
 }
 function donhangcuauser() {
   let donhang = [];
@@ -312,95 +331,6 @@ function statusProduct(arr) {
 
   s += `</div>`;
   rightcontent.innerHTML = s;
-}
-
-let isEdit = false;
-function chinhsuainfo() {
-  const buttonEdit = document.querySelector("#buttonEdit");
-  let usercurrent = JSON.parse(localStorage.getItem("currentUser"));
-  const input = document.querySelectorAll("input");
-  const name = document.querySelector("#name");
-  const phone = document.querySelector("#phone");
-  const address_user = document.querySelector(".address_user");
-
-  if (buttonEdit != null) {
-    if (isEdit) {
-      input.forEach(function (e) {
-        e.setAttribute("readonly", true);
-        e.classList.remove("active");
-      });
-
-      let sonha = document.querySelector("#numberaddress");
-      let thanhpho = document.querySelector("#city");
-      let quan = document.querySelector("#district");
-      let huyen = document.querySelector("#ward");
-
-      if (sonha && thanhpho && quan && huyen) {
-        sonha = sonha.value.trim();
-        thanhpho = thanhpho.value.trim();
-        quan = quan.value.trim();
-        huyen = huyen.value.trim();
-
-        if (sonha && thanhpho && quan && huyen) {
-          let s = `${sonha}, ${huyen}, ${quan}, ${thanhpho}`;
-
-          // Cập nhật thông tin người dùng
-          usercurrent.name = name.value;
-          usercurrent.phone = phone.value;
-          usercurrent.diachi = s;
-
-          // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
-          setTimeout(() => {
-            localStorage.setItem("currentUser", JSON.stringify(usercurrent));
-            updateUserDetails(usercurrent);
-            // Cập nhật lại giao diện
-            profile();
-
-            // Đổi nút thành "Chỉnh sửa"
-            buttonEdit.textContent = "Chỉnh sửa";
-          }, 500); // Thêm thời gian trì hoãn (500ms)
-        } else {
-          toast({
-            title: "ERROR",
-            message: "Các trường địa chỉ chưa đầy đủ!",
-            type: "error",
-            duration: 5000,
-          });
-        }
-      }
-    } else {
-      // Nếu là chế độ chỉnh sửa, mở các trường input
-      input.forEach(function (e) {
-        e.removeAttribute("readonly");
-        e.classList.add("active");
-      });
-
-      // Thay thế phần address_user với các input/select mới
-      address_user.innerHTML = `
-          <input type="text" id="numberaddress" placeholder="Nhập số nhà & tên đường" />
-          <label for="city">Thành phố:</label>
-          <select id="city" onchange="populateDistricts()">
-            <option value="">Chọn Thành phố</option>
-          </select>
-          <label for="district">Quận/Huyện:</label>
-          <select id="district" onchange="populateWards()">
-            <option value="">Chọn Quận/Huyện</option>
-          </select>
-          <label for="ward">Phường/Xã:</label>
-          <select id="ward">
-            <option value="">Chọn Phường/Xã</option>
-          </select>`;
-
-      // Đảm bảo dữ liệu được hiển thị trong các select
-      populateCities();
-
-      // Đổi nút thành "Lưu lại"
-      buttonEdit.textContent = "Lưu lại";
-    }
-
-    // Toggle trạng thái chỉnh sửa
-    isEdit = !isEdit;
-  }
 }
 function mangtheofilter(statusid, arr) {
   let mang = [];

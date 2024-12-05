@@ -1302,7 +1302,6 @@ function getCurrentUserAddresses() {
 localStorage.setItem("addressUserCurrent", JSON.stringify(addressUsers));
 
 function makeAddressSelect() {
-  console.log("abc");
 
   // Lấy thông tin các địa chỉ đã lưu trong localStorage
   let addressUsers =
