@@ -1863,3 +1863,34 @@ span {
 .action-button.no:hover {
   background-color: #31b0d5;
 }
+
+.search-container {
+  text-align: center;
+  margin: 40px;
+}
+.search-container input {
+  width: 400px;
+}
+._icon_user:hover {
+  cursor: pointer;
+  color: #31b0d5;
+}
+.user {
+  box-shadow: 1rem 1rem 3rem rgba(0, 0, 0, 0.16);
+  background-color: white;
+  padding: 20px;
+}
+.contentTab {
+  display: flex;
+  justify-content: space-between;
+}
+.newtype {
+  border: 2px solid black;
+  padding: 4px;
+  color: white;
+  background-color: #1a1a1a;
+}
+.newtype:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.5); /* Màu đen mờ */
+}

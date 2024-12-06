@@ -361,8 +361,13 @@ let Productindex = [
     img3: "./img/products/p19-2.jpg",
   },
 ];
+for (let i = 0; i < Productindex.length; i++) {
+  Productindex[i].idproduct = Productindex[i].nametag + i;
+}
 if (JSON.parse(localStorage.getItem("arrayproducts")) == null) {
   localStorage.setItem("arrayproducts", JSON.stringify(Productindex));
+} else {
+  Productindex = JSON.parse(localStorage.getItem("arrayproducts"));
 }
 let ArrProduct = JSON.parse(localStorage.getItem("arrayproducts"));
 let sell = JSON.parse(localStorage.getItem("shopbagispay")) || [];
@@ -380,7 +385,11 @@ let typeproducts = [
   { typeid: "sweater#", typename: "Sweater" },
   { typeid: "aokhoac#", typename: "Áo khoác" },
 ];
-localStorage.setItem("typeproduct", JSON.stringify(typeproducts));
+if (JSON.parse(localStorage.getItem("typeproduct")) == null) {
+  localStorage.setItem("typeproduct", JSON.stringify(typeproducts));
+} else {
+  typeproducts = JSON.parse(localStorage.getItem("typeproduct"));
+}
 
 function toast({ title = "", message = "", type = "", duration = 5000 }) {
   const main = document.getElementById("toast");
@@ -1300,6 +1309,10 @@ function renderBtnadd() {
                             
                                     </select>
                                   </div>
+                                  <div class="contentTab">
+                                    <span class="newtype" onclick="addnewtype()">Thêm loại mới</span>
+                                    <input class="newtype-input" type="text" readonly value="">
+                                  </div>
                                   
                       </div>
                   </div>  
@@ -1311,6 +1324,79 @@ function renderBtnadd() {
                 </form>
             </div>`;
   tao_option_type_add();
+}
+function makeidnewtype(str) {
+  str = str.toLowerCase();
+
+  // Loại bỏ dấu tiếng Việt
+  str = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  // Loại bỏ tất cả khoảng trắng
+  str = str.replace(/\s+/g, "");
+  str = str + "#";
+  return str;
+}
+function kiemtradatontailoaisp(id) {
+  let typeproduct = JSON.parse(localStorage.getItem("typeproduct"));
+  for (let i = 0; i < typeproduct.length; i++) {
+    if (typeproduct[i].typeid == id) {
+      return true;
+    }
+  }
+  return false;
+}
+let isedit_product = false;
+function addnewtype() {
+  let typeproduct = JSON.parse(localStorage.getItem("typeproduct"));
+  let btnadd = document.querySelector(".newtype");
+  let inputadd = document.querySelector(".newtype-input");
+
+  // Nếu sản phẩm đang ở chế độ sửa
+  if (isedit_product) {
+    let name = inputadd.value;
+    let id = makeidnewtype(name);
+    if (inputadd.value == "") {
+      toast({
+        title: "ERROR",
+        message: "Vui lòng nhập loại!",
+        type: "error",
+        duration: 5000,
+      });
+      return;
+    }
+    // Kiểm tra loại sản phẩm có tồn tại chưa
+    if (kiemtradatontailoaisp(id)) {
+      toast({
+        title: "ERROR",
+        message: "Đã có loại sản phẩm này!",
+        type: "error",
+        duration: 5000,
+      });
+    } else {
+      let obj = {
+        typeid: id,
+        typename: name,
+      };
+
+      // Thêm vào localStorage
+      typeproduct.push(obj);
+      localStorage.setItem("typeproduct", JSON.stringify(typeproduct));
+      toast({
+        title: "SUCCESS",
+        message: "Thêm loại sản phẩm thành công!",
+        type: "success",
+        duration: 5000,
+      });
+
+      // Cập nhật lại form
+      renderBtnadd();
+    }
+  } else {
+    // Khi nút thêm mới chưa nhấn
+    btnadd.textContent = "Lưu lại"; // Đổi tên nút
+    inputadd.removeAttribute("readonly"); // Cho phép sửa
+  }
+  isedit_product = !isedit_product;
 }
 
 function tao_option_type_add() {
@@ -1430,19 +1516,17 @@ function closeall() {
   document.querySelector(".block-container").classList.remove("active");
   document.querySelector(".backgroud-menu-respon").style.display = "none";
 }
-function listAccounts() {
-  let accounts = JSON.parse(localStorage.getItem("storageUsers")) || [];
+function listAccounts(accounts) {
+  console.log(accounts);
   let s = "";
   accounts.forEach((account) => {
     const classPrefix = `user-${account.userID}`; // Tạo tiền tố lớp hợp lệ
-    s += `<div class="listAcc" style="text-align: center; border-bottom: 1px solid rgba(112, 112, 112, 0.3);">
+    s += `<div class="listAcc ${classPrefix}" style="text-align: center; border-bottom: 1px solid rgba(112, 112, 112, 0.3);">
         <span class="idAccount" style="width: 5%;">${account.userID}</span>
         <span class="nameAccount" style="width: 15%;">${account.name}</span>
         <span class="phoneAccount" style="width: 10%;">${account.phone}</span>
         <span class="emailAccount" style="width: 16%;">${account.email}</span>
-        <span class="addressAccount" style="width: 17%;">${
-          account.diachi
-        }</span>
+        <select class="addressAccount" style="width: 17%;"></select>
         <span class="passwordAccount" style="width: 12%;">${
           account.password
         }</span>
@@ -1460,6 +1544,25 @@ function listAccounts() {
   return s;
 }
 
+function makeAddressSelect_thisUser(account) {
+  let index = kiemtratontaiuser(account.userID);
+  let addressUsers =
+    JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
+  let s = "";
+  if (index != null) {
+    for (let i = 0; i < addressUsers[index].address.length; i++) {
+      s += `<option value="${i}">${addressUsers[index].address[i]}</option>`;
+    }
+  }
+  setTimeout(() => {
+    const selectElement = document.querySelector(
+      `.user-${account.userID} .addressAccount`
+    );
+    if (selectElement) {
+      selectElement.innerHTML = s;
+    }
+  }, 0);
+}
 let isEditingaccountuser = false;
 function innertooladdress(account) {
   document.querySelector(".block-container").innerHTML = `
@@ -1660,8 +1763,6 @@ function addaddress(account) {
   let phuong = document.querySelector("#ward").value;
   let city = document.querySelector("#city").value;
   let s = `${sonha},${phuong},${quan},${city}`;
-  console.log(s);
-  console.log(addressUsers[index].address);
   if (isValidHouseNumber(sonha)) {
     addressUsers[index].address.push(s);
     localStorage.setItem("addressUserCurrent", JSON.stringify(addressUsers));
@@ -1750,6 +1851,7 @@ function toggleLockUser(idAccount) {
     checkAccount();
   }
 }
+
 // kiem tra tai khoan
 function checkAccount() {
   let accounts = JSON.parse(localStorage.getItem("storageUsers")) || [];
@@ -1763,11 +1865,22 @@ function checkAccount() {
   document.getElementById("amountLockedAccount").innerHTML = locked;
   document.getElementById("amountUnlockedAccount").innerHTML =
     accounts.length - locked;
-  document.getElementById("manageCustomer-body").innerHTML = listAccounts();
+
+  const accountListHtml = listAccounts(accounts); // Hiển thị danh sách tất cả các tài khoản
+  const manageCustomerBody = document.getElementById("manageCustomer-body");
+  manageCustomerBody.innerHTML = accountListHtml;
+
+  accounts.forEach((account) => {
+    makeAddressSelect_thisUser(account);
+  });
 }
 
+let newUser = {
+  userID: "",
+  address: [],
+};
+
 function hienthiformadduser() {
-  console.log("abc");
   document.querySelector(
     ".block-container"
   ).innerHTML = `<div class="form-group">
@@ -1811,58 +1924,248 @@ function hienthiformadduser() {
           value=""
         />
       </div>
+      <div class="form-group">
+        <label for="re-passowrd">Password</label>
+        <input
+          type="password"
+          id="re-password"
+          name="re-password"
+          placeholder="Nhập lại password"
+          value=""
+        />
+      </div>
+      <div class="form-group">
+        <div style="display:flex;align-items:center">
+          <label for="name">Địa chỉ</label>
+          <span class="spanaddress add_address" onclick='hienthiformaddaddress_newuser()'>Thêm</span>
+          <span class="spanaddress remove_address" onclick='hienthiformremoveaddress_newuser()'>Xoá</span>
+        </div>
+        <select id="diachi" name="diachi">
+        </select>
+      </div>
       <div class="form-actions">
           <div class="confirm-button" onclick="addUser()">Xác nhận</div>
       </div>`;
   document.querySelector(".block-container").classList.add("active");
   document.querySelector(".backgroud-menu-respon").style.display = "block";
+  makeAddressSelect_newUser();
 }
 
-function addUser() {
-  let arrUser = JSON.parse(localStorage.getItem("storageUsers")) || [];
-  let idUser = JSON.parse(localStorage.getItem("NextID")) || 0;
-  let name = document.querySelector("#name").value;
-  let phone = document.querySelector("#sdt").value;
+function kiemtrataikhoan() {
+  let passowrd = document.querySelector("#password").value;
+  let re_passowrd = document.querySelector("#re-password").value;
   let email = document.querySelector("#email").value;
-  let password = document.querySelector("#password").value;
-  let user = {
-    userID: "",
-    name: "",
-    email: "",
-    phone: "",
-    diachi: "",
-    shopbag: "",
-    statususer: "1",
-    password: "",
-    typeuser: "1",
-  };
-  if (isValidPhoneNumber(phone) == false) {
+  let phone = document.querySelector("#sdt").value;
+  let storageUsers = JSON.parse(localStorage.getItem("storageUsers")) || [];
+  if (passowrd != re_passowrd) {
     toast({
       title: "ERROR",
-      message: "Vui lòng kiểm tra định dạng số điện thoại",
+      message: "Mật khẩu không trùng khớp !",
+      type: "error",
+      duration: 5000,
+    });
+    return false;
+  }
+  if (storageUsers.length != 0) {
+    for (let i = 0; i < storageUsers.length; i++) {
+      if (storageUsers[i].email == email) {
+        toast({
+          title: "ERROR",
+          message: "Email đăng nhập đã tồn tại !",
+          type: "error",
+          duration: 5000,
+        });
+        return false;
+      }
+      if (storageUsers[i].phone == phone) {
+        toast({
+          title: "ERROR",
+          message: "Số điện thoại đã tồn tại !",
+          type: "error",
+          duration: 5000,
+        });
+        return false;
+      }
+    }
+  }
+  return true;
+}
+function makeAddressSelect_newUser() {
+  let s = "";
+  for (let i = 0; i < newUser.address.length; i++) {
+    s += `<option value="${i}">${newUser.address[i]}</option>`;
+  }
+  document.querySelector("#diachi").innerHTML = s;
+}
+function hienthiformremoveaddress_newuser() {
+  let choice = document.querySelector("#diachi").value;
+  if (newUser.address.length == 0) {
+    toast({
+      title: "ERROR",
+      message: "Không có địa chỉ nào để xoá!",
       type: "error",
       duration: 5000,
     });
     return;
+  } else {
+    document.querySelector(".block-container").innerHTML = `<div class="remove">
+    <div>${newUser.address[choice]}</div>
+    <h3 class="confirmation-text">Bạn thật sự muốn xoá địa chỉ này?</h3>
+    <div class="action-buttons">
+      <div class="action-button yes" onclick='removeaddress_newuser(${choice})'>Yes</div>
+      <div class="action-button no" onclick='hienthiformadduser()'>No</div>
+    </div>
+  </div>
+  <div class="back" onclick='hienthiformadduser()'>Trở lại</div>`;
   }
-  if (isValidEmail(email) == false) {
-    toast({
-      title: "ERROR",
-      message: "Vui lòng kiểm tra định dạng email",
-      type: "error",
-      duration: 5000,
-    });
-    return;
+}
+function hienthiformaddaddress_newuser() {
+  document.querySelector(
+    ".block-container"
+  ).innerHTML = `<div style="text-align:center">Thêm địa chỉ mới</div>
+      <div class="form-group">
+        <label for="email">Nhập số nhà & tên đường</label>
+        <input
+          type="text"
+          id="numberaddress"
+          placeholder="Nhập số nhà & tên đường"
+        />
+      </div>
+      <div class="form-group">
+        <label for="city">Thành phố:</label>
+        <select id="city" onchange="populateDistricts()">
+          <option value="">Chọn Thành phố</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="district">Quận/Huyện:</label>
+        <select id="district" onchange="populateWards()">
+          <option value="">Chọn Quận/Huyện</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="ward">Phường/Xã:</label>
+        <select id="ward">
+          <option value="">Chọn Phường/Xã</option></select
+        >
+      </div>
+      <div class="form-actions">
+          <div class="confirm-button" onclick='addaddress_newaddress()'>Xác nhận</div>
+      </div>
+      <div class="back" onclick='hienthiformadduser()'>Trở lại</div>`;
+  populateCities();
+}
+function addaddress_newaddress() {
+  let sonha = document.querySelector("#numberaddress").value;
+  let quan = document.querySelector("#district").value;
+  let phuong = document.querySelector("#ward").value;
+  let city = document.querySelector("#city").value;
+  let idUser = JSON.parse(localStorage.getItem("NextID")) || 0;
+  let s = `${sonha},${phuong},${quan},${city}`;
+  newUser.userID = idUser + 1;
+  newUser.address.push(s);
+  hienthiformadduser();
+}
+function removeaddress_newuser(choice) {
+  newUser.address.splice(choice, 1);
+  toast({
+    title: "SUCCESS",
+    message: "Xoá địa chỉ thành công !",
+    type: "success",
+    duration: 5000,
+  });
+  hienthiformadduser();
+}
+function addUser() {
+  if (kiemtrataikhoan() == true) {
+    let arrUser = JSON.parse(localStorage.getItem("storageUsers")) || [];
+    let idUser = JSON.parse(localStorage.getItem("NextID")) || 0;
+    let name = document.querySelector("#name").value;
+    let phone = document.querySelector("#sdt").value;
+    let email = document.querySelector("#email").value;
+    let password = document.querySelector("#password").value;
+    let addressUserCurrent =
+      JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
+    let user = {
+      userID: "",
+      name: "",
+      email: "",
+      phone: "",
+      diachi: "",
+      shopbag: "",
+      statususer: "1",
+      password: "",
+      typeuser: "1",
+    };
+    if (isValidPhoneNumber(phone) == false) {
+      toast({
+        title: "ERROR",
+        message: "Vui lòng kiểm tra định dạng số điện thoại",
+        type: "error",
+        duration: 5000,
+      });
+      return;
+    }
+    if (isValidEmail(email) == false) {
+      toast({
+        title: "ERROR",
+        message: "Vui lòng kiểm tra định dạng email",
+        type: "error",
+        duration: 5000,
+      });
+      return;
+    }
+    user.userID = idUser + 1;
+    user.name = name;
+    user.phone = phone;
+    user.email = email;
+    user.password = password;
+    arrUser.push(user);
+    addressUserCurrent.push(newUser);
+    localStorage.setItem(
+      "addressUserCurrent",
+      JSON.stringify(addressUserCurrent)
+    );
+    localStorage.setItem("NextID", JSON.stringify(idUser + 1));
+    localStorage.setItem("storageUsers", JSON.stringify(arrUser));
+    newUser.userID = "";
+    newUser.address = [];
+    renderqlnd();
   }
-  user.userID = idUser + 1;
-  user.name = name;
-  user.phone = phone;
-  user.email = email;
-  user.password = password;
-  arrUser.push(user);
-  localStorage.setItem("NextID", JSON.stringify(idUser + 1));
-  localStorage.setItem("storageUsers", JSON.stringify(arrUser));
-  renderqlnd();
+}
+function searchAccounts() {
+  const searchInput = document
+    .getElementById("searchInput")
+    .value.toLowerCase();
+  const searchType = document.getElementById("searchType").value;
+  let accounts = JSON.parse(localStorage.getItem("storageUsers")) || [];
+  let filteredAccounts = accounts.filter((account) => {
+    if (searchType === "email") {
+      return account.email.toLowerCase().includes(searchInput);
+    } else if (searchType === "phone") {
+      return account.phone.toLowerCase().includes(searchInput);
+    } else if (searchType === "name") {
+      return account.name.toLowerCase().includes(searchInput);
+    }
+    return false;
+  });
+  let locked = 0;
+  for (let acc of filteredAccounts) {
+    if (acc.statususer == "0") {
+      locked++;
+    }
+  }
+  document.getElementById("amountOfAccount").innerHTML =
+    filteredAccounts.length;
+  document.getElementById("amountLockedAccount").innerHTML = locked;
+  document.getElementById("amountUnlockedAccount").innerHTML =
+    filteredAccounts.length - locked;
+  arrfilter = filteredAccounts;
+  const manageCustomerBody = document.getElementById("manageCustomer-body");
+  manageCustomerBody.innerHTML = listAccounts(filteredAccounts); // Truyền mảng đã lọc vào listAccounts
+  filteredAccounts.forEach((account) => {
+    makeAddressSelect_thisUser(account);
+  });
 }
 
 function renderqlnd() {
@@ -1874,7 +2177,16 @@ function renderqlnd() {
                 <div class="title">
                     <h1>QUẢN LÝ NGƯỜI DÙNG</h1>
                 </div>
-                 <div class="btnAdd" onclick="hienthiformadduser()"><div class="circle"><i class="fa-solid fa-plus"></i></div></div>
+                <div class="search-container">
+                  <input type="text" id="searchInput" placeholder="Nhập từ khóa" value="">
+                  <select id="searchType">
+                    <option value="email">Email</option>
+                    <option value="phone">Số điện thoại</option>
+                    <option value="name">Tên</option>
+                  </select>
+                  <button onclick="searchAccounts()">Tìm kiếm</button>
+                 </div>
+                <div class="btnAdd" onclick="hienthiformadduser()"><div class="circle"><i class="fa-solid fa-plus"></i></div></div>
                 <div class="manageCustomer">
                     <div class="areNumberAboutAccounts">
                         <div class="box">
@@ -2667,4 +2979,29 @@ function signInButton(event) {
     });
     return;
   }
+}
+function user_click() {
+  document.querySelector(".page-right").innerHTML = `
+  <div class="user">
+      <h1>THÔNG TIN CÁ NHÂN</h1>
+      <div id="profile">
+        <div class="profile-body">
+          <div class="contentTab">
+            <span>Email</span>
+            <span>admin@gmail.com</span>
+          </div>
+          <div class="contentTab">
+            <span>Name</span>
+            <span>New Clothes</span>
+          </div>
+          <div class="contentTab">
+            <span>Phone</span>
+            <span>1900 633 028</span>
+          </div>
+          <div class="contentTab">
+            <span>Address</span>
+            <span class="address_user">139E Nguyễn Trãi, Phường Bến Thành, Quận 1, HCM</span>
+          </div>
+      </div>
+    </div>  `;
 }

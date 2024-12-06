@@ -5,7 +5,7 @@ let Productindex = [
     img: "./img/products/p1-1.png",
     price: 370000,
     nametag: "aothun#",
-    idproduct: "abc",
+    idproduct: "",
     colorr1: "green",
     colorr2: "red",
     colorr3: "unset",
@@ -362,6 +362,27 @@ let Productindex = [
     img3: "./img/products/p19-2.jpg",
   },
 ];
+let typeproducts = [
+  { typeid: "aothun#", typename: "Áo thun" },
+  { typeid: "polo#", typename: "Polo" },
+  { typeid: "somi#", typename: "Sơ mi" },
+  { typeid: "hoodie#", typename: "Hoodie" },
+  { typeid: "sweater#", typename: "Sweater" },
+  { typeid: "aokhoac#", typename: "Áo khoác" },
+];
+for (let i = 0; i < Productindex.length; i++) {
+  Productindex[i].idproduct = Productindex[i].nametag + i;
+}
+if (JSON.parse(localStorage.getItem("arrayproducts")) == null) {
+  localStorage.setItem("arrayproducts", JSON.stringify(Productindex));
+} else {
+  Productindex = JSON.parse(localStorage.getItem("arrayproducts"));
+}
+if (JSON.parse(localStorage.getItem("typeproduct")) == null) {
+  localStorage.setItem("typeproduct", JSON.stringify(typeproducts));
+} else {
+  typeproducts = JSON.parse(localStorage.getItem("typeproduct"));
+}
 loadpage();
 for (let i = 0; i < Productindex.length; i++) {
   Productindex[i].idproduct = Productindex[i].nametag + i;
@@ -1230,76 +1251,76 @@ function isValidPhoneNumber(phoneNumber) {
   return phoneRegex.test(phoneNumber);
 }
 
-function chinhsua() {
-  loadpage();
-  const editButton = document.querySelector("#buttonEdit"); // Get the edit button
-  const inputEdit = document.querySelectorAll(".input"); // Get all input fields
-  let userCurrent = JSON.parse(localStorage.getItem("currentUser"));
-  const phone = document.querySelector("#phone");
-  const address = document.querySelector(".contentTab-address");
+// function chinhsua() {
+//   loadpage();
+//   const editButton = document.querySelector("#buttonEdit"); // Get the edit button
+//   const inputEdit = document.querySelectorAll(".input"); // Get all input fields
+//   let userCurrent = JSON.parse(localStorage.getItem("currentUser"));
+//   const phone = document.querySelector("#phone");
+//   const address = document.querySelector(".contentTab-address");
 
-  if (editButton != null) {
-    if (isEditing1) {
-      // Save mode
-      // Kiểm tra số điện thoại trước khi lưu
-      if (!isValidPhoneNumber(phone.value)) {
-        toast({
-          title: "ERROR",
-          message: "Số điện thoại không hợp lệ. Vui lòng nhập lại.",
-          type: "error",
-          duration: 5000,
-        });
-        return; // Dừng lại nếu số điện thoại không hợp lệ
-      }
-      inputEdit.forEach(function (e) {
-        e.setAttribute("readonly", true);
-        e.classList.remove("active"); // Remove active class when saving
-      });
-      let selectAddressValue = document.querySelector(
-        ".contentTab-address-select"
-      ).value;
-      let addressUserCurrent = getCurrentUserAddresses();
-      if (addressUserCurrent != null && phone.value != "") {
-        let s = addressUserCurrent.address[selectAddressValue];
-        console.log(s);
-        userCurrent.diachi = s;
-        userCurrent.phone = phone.value;
+//   if (editButton != null) {
+//     if (isEditing1) {
+//       // Save mode
+//       // Kiểm tra số điện thoại trước khi lưu
+//       if (!isValidPhoneNumber(phone.value)) {
+//         toast({
+//           title: "ERROR",
+//           message: "Số điện thoại không hợp lệ. Vui lòng nhập lại.",
+//           type: "error",
+//           duration: 5000,
+//         });
+//         return; // Dừng lại nếu số điện thoại không hợp lệ
+//       }
+//       inputEdit.forEach(function (e) {
+//         e.setAttribute("readonly", true);
+//         e.classList.remove("active"); // Remove active class when saving
+//       });
+//       let selectAddressValue = document.querySelector(
+//         ".contentTab-address-select"
+//       ).value;
+//       let addressUserCurrent = getCurrentUserAddresses();
+//       if (addressUserCurrent != null && phone.value != "") {
+//         let s = addressUserCurrent.address[selectAddressValue];
+//         console.log(s);
+//         userCurrent.diachi = s;
+//         userCurrent.phone = phone.value;
 
-        // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
-        setTimeout(() => {
-          localStorage.setItem("currentUser", JSON.stringify(userCurrent));
-          // Cập nhật lại giao diện
-          address.innerHTML = s;
-          // Đổi nút thành "Chỉnh sửa"
-          editButton.textContent = "Chỉnh sửa";
-        }, 500); // Thêm thời gian trì hoãn (500ms)
-      } else {
-        toast({
-          title: "ERROR",
-          message: "Vui lòng thêm địa mới!",
-          type: "error",
-          duration: 5000,
-        });
-      }
+//         // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
+//         setTimeout(() => {
+//           localStorage.setItem("currentUser", JSON.stringify(userCurrent));
+//           // Cập nhật lại giao diện
+//           address.innerHTML = s;
+//           // Đổi nút thành "Chỉnh sửa"
+//           editButton.textContent = "Chỉnh sửa";
+//         }, 500); // Thêm thời gian trì hoãn (500ms)
+//       } else {
+//         toast({
+//           title: "ERROR",
+//           message: "Vui lòng thêm địa mới!",
+//           type: "error",
+//           duration: 5000,
+//         });
+//       }
 
-      updateUserDetails(userCurrent); // Update the user details in storageUsers
-    } else {
-      // Edit mode
-      console.log("chinhsua");
-      inputEdit.forEach(function (e) {
-        e.removeAttribute("readonly");
-        e.classList.add("active"); // Add active class when editing
-      });
-      // Thay thế phần address_user với các input/select mới
-      makeAddressSelect();
-      // Đảm bảo dữ liệu được hiển thị trong các select
-      editButton.textContent = "Lưu lại";
-    }
-    // Toggle edit state
-    isEditing1 = !isEditing1;
-    console.log(isEditing1); // Log lại trạng thái để kiểm tra
-  }
-}
+//       updateUserDetails(userCurrent); // Update the user details in storageUsers
+//     } else {
+//       // Edit mode
+//       console.log("chinhsua");
+//       inputEdit.forEach(function (e) {
+//         e.removeAttribute("readonly");
+//         e.classList.add("active"); // Add active class when editing
+//       });
+//       // Thay thế phần address_user với các input/select mới
+//       makeAddressSelect();
+//       // Đảm bảo dữ liệu được hiển thị trong các select
+//       editButton.textContent = "Lưu lại";
+//     }
+//     // Toggle edit state
+//     isEditing1 = !isEditing1;
+//     console.log(isEditing1); // Log lại trạng thái để kiểm tra
+//   }
+// }
 
 function getCurrentUserAddresses() {
   let address = JSON.parse(localStorage.getItem("addressUserCurrent"));
@@ -1409,7 +1430,7 @@ function thanhtoan() {
     });
     chinhsua();
   } else {
-    if (creditcard.checked && ispayedshop === false) {
+    if (creditcard.checked && ispayed === false) {
       creditcardform();
     } else {
       if (userIndex !== null) {
