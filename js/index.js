@@ -1176,15 +1176,21 @@ function giaodienthanhtoan() {
       <div class="infoCustomer-body">
         <div class="contentTab">
           <span>Họ và tên: </span>
-          <input type="text" class="input" id="name" value="${userCurrent.name}" readonly />
+          <input type="text" class="input" id="name" value="${
+            userCurrent.name
+          }" readonly />
         </div>
         <div class="contentTab">
           <span>Số điện thoại: </span>
-          <input type="text" class="input" id="phone" value="${userCurrent.phone}" readonly />
+          <input type="text" class="input" id="phone" value="${
+            userCurrent.phone
+          }" readonly />
         </div>
         <div class="contentTab">
           <span>Địa chỉ : </span>
-          <div class="contentTab-address">${userCurrent.diachi}</div>
+          <div class="contentTab-address">${
+            userCurrent.diachi == null ? "" : userCurrent.diachi
+          }</div>
         </div>
         <div id="buttonEdit" onclick="chinhsua();">Chỉnh sửa</div>
       </div>
@@ -1250,77 +1256,96 @@ function isValidPhoneNumber(phoneNumber) {
   const phoneRegex = /^[0-9]{10,11}$/; // Điều kiện: chỉ chứa chữ số và có độ dài 10-11 ký tự
   return phoneRegex.test(phoneNumber);
 }
+function kiemtratontaisdt(phone, idUser) {
+  let storageUsers = JSON.parse(localStorage.getItem("storageUsers")) || [];
+  for (let i = 0; i < storageUsers.length; i++) {
+    if (storageUsers[i].phone == phone && storageUsers[i].userID != idUser) {
+      return true;
+    }
+  }
+  return false;
+}
+function chinhsua() {
+  const editButton = document.querySelector("#buttonEdit"); // Get the edit button
+  const inputEdit = document.querySelectorAll(".input"); // Get all input fields
+  let userCurrent = JSON.parse(localStorage.getItem("currentUser"));
+  const phone = document.querySelector("#phone");
+  const address = document.querySelector(".contentTab-address");
 
-// function chinhsua() {
-//   loadpage();
-//   const editButton = document.querySelector("#buttonEdit"); // Get the edit button
-//   const inputEdit = document.querySelectorAll(".input"); // Get all input fields
-//   let userCurrent = JSON.parse(localStorage.getItem("currentUser"));
-//   const phone = document.querySelector("#phone");
-//   const address = document.querySelector(".contentTab-address");
+  if (editButton != null) {
+    if (isEditing1) {
+      // Save mode
+      // Kiểm tra số điện thoại trước khi lưu
+      if (!isValidPhoneNumber(phone.value)) {
+        toast({
+          title: "ERROR",
+          message: "Số điện thoại không hợp lệ. Vui lòng nhập lại.",
+          type: "error",
+          duration: 5000,
+        });
+        return; // Dừng lại nếu số điện thoại không hợp lệ
+      }
+      if (kiemtratontaisdt(phone.value, userCurrent.userID) == true) {
+        toast({
+          title: "ERROR",
+          message: "Số điện thoại đã tồn tại",
+          type: "error",
+          duration: 5000,
+        });
+        return;
+      }
+      inputEdit.forEach(function (e) {
+        e.setAttribute("readonly", true);
+        e.classList.remove("active"); // Remove active class when saving
+      });
+      let selectAddressValue = document.querySelector(
+        ".contentTab-address-select"
+      ).value;
+      let addressUserCurrent = getCurrentUserAddresses();
+      if (addressUserCurrent != null && phone.value != "") {
+        let s = addressUserCurrent.address[selectAddressValue];
+        console.log(s);
+        userCurrent.diachi = s;
+        userCurrent.phone = phone.value;
 
-//   if (editButton != null) {
-//     if (isEditing1) {
-//       // Save mode
-//       // Kiểm tra số điện thoại trước khi lưu
-//       if (!isValidPhoneNumber(phone.value)) {
-//         toast({
-//           title: "ERROR",
-//           message: "Số điện thoại không hợp lệ. Vui lòng nhập lại.",
-//           type: "error",
-//           duration: 5000,
-//         });
-//         return; // Dừng lại nếu số điện thoại không hợp lệ
-//       }
-//       inputEdit.forEach(function (e) {
-//         e.setAttribute("readonly", true);
-//         e.classList.remove("active"); // Remove active class when saving
-//       });
-//       let selectAddressValue = document.querySelector(
-//         ".contentTab-address-select"
-//       ).value;
-//       let addressUserCurrent = getCurrentUserAddresses();
-//       if (addressUserCurrent != null && phone.value != "") {
-//         let s = addressUserCurrent.address[selectAddressValue];
-//         console.log(s);
-//         userCurrent.diachi = s;
-//         userCurrent.phone = phone.value;
+        // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
+        setTimeout(() => {
+          localStorage.setItem("currentUser", JSON.stringify(userCurrent));
+          // Cập nhật lại giao diện
+          if (s == null) {
+            s = "";
+          }
+          address.innerHTML = s;
+          // Đổi nút thành "Chỉnh sửa"
+          editButton.textContent = "Chỉnh sửa";
+        }, 500); // Thêm thời gian trì hoãn (500ms)
+      } else {
+        toast({
+          title: "ERROR",
+          message: "Vui lòng thêm địa mới!",
+          type: "error",
+          duration: 5000,
+        });
+      }
 
-//         // Cập nhật localStorage và sử dụng setTimeout để trì hoãn việc thay đổi giao diện
-//         setTimeout(() => {
-//           localStorage.setItem("currentUser", JSON.stringify(userCurrent));
-//           // Cập nhật lại giao diện
-//           address.innerHTML = s;
-//           // Đổi nút thành "Chỉnh sửa"
-//           editButton.textContent = "Chỉnh sửa";
-//         }, 500); // Thêm thời gian trì hoãn (500ms)
-//       } else {
-//         toast({
-//           title: "ERROR",
-//           message: "Vui lòng thêm địa mới!",
-//           type: "error",
-//           duration: 5000,
-//         });
-//       }
-
-//       updateUserDetails(userCurrent); // Update the user details in storageUsers
-//     } else {
-//       // Edit mode
-//       console.log("chinhsua");
-//       inputEdit.forEach(function (e) {
-//         e.removeAttribute("readonly");
-//         e.classList.add("active"); // Add active class when editing
-//       });
-//       // Thay thế phần address_user với các input/select mới
-//       makeAddressSelect();
-//       // Đảm bảo dữ liệu được hiển thị trong các select
-//       editButton.textContent = "Lưu lại";
-//     }
-//     // Toggle edit state
-//     isEditing1 = !isEditing1;
-//     console.log(isEditing1); // Log lại trạng thái để kiểm tra
-//   }
-// }
+      updateUserDetails(userCurrent); // Update the user details in storageUsers
+    } else {
+      // Edit mode
+      console.log("chinhsua");
+      inputEdit.forEach(function (e) {
+        e.removeAttribute("readonly");
+        e.classList.add("active"); // Add active class when editing
+      });
+      // Thay thế phần address_user với các input/select mới
+      makeAddressSelect();
+      // Đảm bảo dữ liệu được hiển thị trong các select
+      editButton.textContent = "Lưu lại";
+    }
+    // Toggle edit state
+    isEditing1 = !isEditing1;
+    console.log(isEditing1); // Log lại trạng thái để kiểm tra
+  }
+}
 
 function getCurrentUserAddresses() {
   let address = JSON.parse(localStorage.getItem("addressUserCurrent"));

@@ -907,6 +907,7 @@ function updateUserDetails(user) {
 
 // Initialize the edit function
 makeFilter();
+chinhsua();
 makeSP(getCurrentPage(), sosptrongtrang, ProductArrBoth);
 makeselectpage(getCurrentPage(), ProductArrBoth);
 // saveArraytolocal();

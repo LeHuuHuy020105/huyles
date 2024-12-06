@@ -1804,6 +1804,7 @@ function agreechangeuser(account) {
   let email = document.querySelector("#email").value;
   let phone = document.querySelector("#sdt").value;
   let password = document.querySelector("#password").value;
+  let storageUsers = JSON.parse(localStorage.getItem("storageUsers"));
   if (isValidEmail(email) == false) {
     toast({
       title: "ERROR",
@@ -1822,12 +1823,40 @@ function agreechangeuser(account) {
     });
     return;
   }
+  for (let i = 0; i < storageUsers.length; i++) {
+    if (
+      storageUsers[i].phone == phone &&
+      storageUsers[i].userID != account.userID
+    ) {
+      console.log("aa");
+      toast({
+        title: "ERROR",
+        message: "Số điện thoại này đã tồn tại",
+        type: "error",
+        duration: 5000,
+      });
+      return;
+    }
+    if (
+      storageUsers[i].email == email &&
+      storageUsers[i].userID != account.userID
+    ) {
+      console.log("aaa");
+      toast({
+        title: "ERROR",
+        message: "Email này đã tồn tại",
+        type: "error",
+        duration: 5000,
+      });
+      return;
+    }
+  }
   account.name = name;
   account.password = password;
   account.phone = phone;
   account.email = email;
   updateUserDetails(account);
-  closeall();
+  renderqlnd();
 }
 function timkiemTheoID(id) {
   let accounts = JSON.parse(localStorage.getItem("storageUsers")) || [];
@@ -1953,18 +1982,20 @@ function hienthiformadduser() {
 
 function kiemtrataikhoan() {
   let passowrd = document.querySelector("#password").value;
-  let re_passowrd = document.querySelector("#re-password").value;
+  let re_passowrd = document.querySelector("#re-password");
   let email = document.querySelector("#email").value;
   let phone = document.querySelector("#sdt").value;
   let storageUsers = JSON.parse(localStorage.getItem("storageUsers")) || [];
-  if (passowrd != re_passowrd) {
-    toast({
-      title: "ERROR",
-      message: "Mật khẩu không trùng khớp !",
-      type: "error",
-      duration: 5000,
-    });
-    return false;
+  if (re_passowrd != null) {
+    if (passowrd != re_passowrd.value) {
+      toast({
+        title: "ERROR",
+        message: "Mật khẩu không trùng khớp !",
+        type: "error",
+        duration: 5000,
+      });
+      return false;
+    }
   }
   if (storageUsers.length != 0) {
     for (let i = 0; i < storageUsers.length; i++) {
