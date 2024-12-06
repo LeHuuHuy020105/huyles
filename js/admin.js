@@ -1828,7 +1828,6 @@ function agreechangeuser(account) {
       storageUsers[i].phone == phone &&
       storageUsers[i].userID != account.userID
     ) {
-      console.log("aa");
       toast({
         title: "ERROR",
         message: "Số điện thoại này đã tồn tại",
@@ -1841,7 +1840,6 @@ function agreechangeuser(account) {
       storageUsers[i].email == email &&
       storageUsers[i].userID != account.userID
     ) {
-      console.log("aaa");
       toast({
         title: "ERROR",
         message: "Email này đã tồn tại",
