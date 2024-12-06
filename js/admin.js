@@ -547,8 +547,18 @@ function renderqlsp() {
                 </div>
                 <div id="storage-body"></div>`;
   searchSP();
+  tao_op_timkiem();
 }
 
+function tao_op_timkiem(){
+  let s =` <option value="0">Tất cả</option>`
+  let type = JSON.parse(localStorage.getItem('typeproduct'))
+  type.forEach(i =>{
+    s+=`<option value="${i.typeid}">${i.typename}</option>`
+  })
+  document.getElementById('comboType').innerHTML = s;
+  console.log('asd')
+}
 // quan - chuot phai ------
 
 function showContextMenu(event, element) {
@@ -748,45 +758,21 @@ function chinhsua() {
   const id = document.querySelector(".ID").innerText;
   const nameProduct = document.getElementById("nameProduct_").value.trim();
   // const colorProduct = document.getElementById("colorAddProduct").value.trim();
-  const codecolorProduct = document
-    .getElementById("colorAddProduct_")
-    .value.trim();
-  const countProductA = parseInt(
-    document.getElementById("countProductA_").value
-  );
-  const countProductB = parseInt(
-    document.getElementById("countProductB_").value
-  );
-  const countProductC = parseInt(
-    document.getElementById("countProductC_").value
-  );
-  const countProductD = parseInt(
-    document.getElementById("countProductD_").value
-  );
-  const priceProduct = parseFloat(
-    document.getElementById("priceProduct_").value
-  );
+  const codecolorProduct = document.getElementById("colorAddProduct_").value.trim();
+  const countProductA = parseInt(document.getElementById("countProductA_").value);
+  const countProductB = parseInt(document.getElementById("countProductB_").value);
+  const countProductC = parseInt(document.getElementById("countProductC_").value);
+  const countProductD = parseInt(document.getElementById("countProductD_").value);
+  const priceProduct = parseFloat(document.getElementById("priceProduct_").value);
   const nametagProduct = document.getElementById("typeproduct").value.trim();
 
-  if (
-    isNaN(countProductA) ||
-    isNaN(countProductB) ||
-    isNaN(countProductC) ||
-    isNaN(countProductD) ||
-    isNaN(priceProduct)
-  ) {
-    alert("VUI LONG NHAP DUNG DU LIEU");
-    console.log(
-      countProductA +
-        " " +
-        countProductB +
-        " " +
-        countProductC +
-        " " +
-        countProductD +
-        " " +
-        priceProduct
-    );
+  if ( isNaN(countProductA) || isNaN(countProductB) || isNaN(countProductC) || isNaN(countProductD) || isNaN(priceProduct)|| nameProduct==="" ) {
+    toast({
+      title: "ERROR",
+      message: "Vui Lòng Nhập Đúng Dữ Liệu !!!",
+      type: "error",
+      duration: 2000,
+    });
     return;
   }
 
@@ -912,36 +898,21 @@ function btnAccept() {
     .getElementById("colorAddProduct")
     .value.trim();
   // const codecolorAddProduct = document.getElementById("colorAddProduct").value.trim();
-  const countAddProductA = parseInt(
-    document.getElementById("countAddProductA").value.trim()
-  );
-  const countAddProductB = parseInt(
-    document.getElementById("countAddProductB").value.trim()
-  );
-  const countAddProductC = parseInt(
-    document.getElementById("countAddProductC").value.trim()
-  );
-  const countAddProductD = parseInt(
-    document.getElementById("countAddProductD").value.trim()
-  );
-  const priceAddProduct = parseFloat(
-    document.getElementById("priceAddProduct").value.trim()
-  );
+  const countAddProductA = parseInt(document.getElementById("countAddProductA").value.trim());
+  const countAddProductB = parseInt(document.getElementById("countAddProductB").value.trim());
+  const countAddProductC = parseInt(document.getElementById("countAddProductC").value.trim());
+  const countAddProductD = parseInt(document.getElementById("countAddProductD").value.trim());
+  const priceAddProduct = parseFloat(document.getElementById("priceAddProduct").value.trim());
   const nametagProduct = document.getElementById("typeproduct_").value.trim();
 
   // Validation dữ liệu
-  if (
-    !validateInputs(
-      nameAddProduct,
-      colorAddProduct,
-      priceAddProduct,
-      countAddProductA,
-      countAddProductB,
-      countAddProductC,
-      countAddProductD
-    )
-  ) {
-    alert("Vui lòng nhập đầy đủ và đúng dữ liệu.");
+  if (!validateInputs(nameAddProduct,colorAddProduct,priceAddProduct,countAddProductA,countAddProductB,countAddProductC, countAddProductD)) {
+    toast({
+      title: "ERROR",
+      message: "Vui Lòng Nhập Đúng Dữ Liệu !!!",
+      type: "error",
+      duration: 2000,
+    });
     return;
   }
   // Tạo sản phẩm mới
@@ -1517,7 +1488,7 @@ function closeall() {
   document.querySelector(".backgroud-menu-respon").style.display = "none";
 }
 function listAccounts(accounts) {
-  console.log(accounts);
+  // console.log(accounts);
   let s = "";
   accounts.forEach((account) => {
     const classPrefix = `user-${account.userID}`; // Tạo tiền tố lớp hợp lệ
