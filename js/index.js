@@ -1219,32 +1219,38 @@ function giaodienthanhtoan() {
             <span class="priceProduct">${arrayProducts[i].obj.price}</span>
           </div>`;
     }
-    s += `</div>
-      </div>
-      <div class="methodPayment">
-        <h4>Phương thức thanh toán</h4>
-        <div class="method">
+    s += ` </div>
+</div>
+<div class="methodPayment">
+  <h4>Phương thức thanh toán</h4>
+  <div class="methodPayment__container">
+    <div class="method-container">
+      <div class="method">
+        <span onclick="creditcardform()" style="display: inline-block; min-width: 60%;">
+          <i class="now-ui-icons shopping_credit-card"></i>Thẻ tín dụng / Thẻ ghi nợ</span>
           <input type="radio" name="radio" id="creditcard" checked />
-          <span onclick="creditcardform()">
-            <i class="now-ui-icons shopping_credit-card"></i>Thẻ tín dụng / Thẻ ghi nợ</span>
-        </div>
-        <div class="method">
-          <input type="radio" name="radio" id="cod" />
-          <span><i class="now-ui-icons shopping_delivery-fast"></i>Thanh toán khi nhận hàng</span>
-        </div>
-        <div class="infoBill">
-          <div class="contentTab">
-            <span>Tạm tính:</span>
-            <span id="valueTemporary">${tongTien}</span>
-          </div>
-          <div class="contentTab">
-            <span>Tổng:</span>
-            <span id="valueBill">${tongTien}</span>
-          </div>
-        </div>
       </div>
-      <div class="buttonsubmit" onclick="thanhtoan()">Thanh toán</div>
-    </div>`;
+      <div class="method">
+        <span  style="display: inline-block; min-width: 60%;"><i class="now-ui-icons shopping_delivery-fast"></i>Thanh toán khi nhận hàng</span>
+        <input type="radio" name="radio" id="cod" />
+      </div>
+    </div>
+
+    <div class="infoBill">
+      <div class="contenttab">
+        <span>Tạm tính:</span>
+        <span id="valueTemporary">${tongTien.toLocaleString("vi-VN",{style : 'currency', currency : 'VND'})}</span>
+      </div>
+      <div class="contenttab">
+        <span>Tổng:</span>
+        <span id="valueBill">${tongTien.toLocaleString("vi-VN",{style : 'currency', currency : 'VND'})}</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="buttonsubmit" onclick="thanhtoan()">Thanh toán</div>
+</div>
+        `;
     populateCities();
     midcontent.innerHTML = s;
   }
