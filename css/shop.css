@@ -140,11 +140,11 @@
   height: fit-content;
   width: calc(25% - 20px);
   white-space: nowrap;
-  transition: all 0.3s ease;
+  /* transition: all 0.3s ease; */
   padding: 10px;
-  border: 2px solid #ccc;
-  margin: 5px 10px;
-  border-radius: 5px;
+  margin: 15px 10px;
+  border-radius: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 .img-item img {
@@ -201,7 +201,9 @@
   border-radius: 99px;
 }
 .item_1:hover {
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  transform: scale(1.05); /* Kéo to ảnh */
+  transition: transform 0.4s ease-out;
+  border: 2px solid #ccc;
   cursor: pointer;
   border-radius: 20px;
 }
