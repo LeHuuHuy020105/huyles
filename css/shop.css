@@ -138,10 +138,13 @@
 }
 .item_1 {
   height: fit-content;
-  width: 25%;
+  width: calc(25% - 20px);
   white-space: nowrap;
   transition: all 0.3s ease;
   padding: 10px;
+  border: 2px solid #ccc;
+  margin: 5px 10px;
+  border-radius: 5px;
 }
 
 .img-item img {
@@ -523,7 +526,7 @@
   }
   /* shop */
   .item_1 {
-    width: 50%;
+    width: 47%;
   }
   .both {
     display: block;
@@ -552,7 +555,7 @@
   }
   /* shop */
   .item_1 {
-    width: 50%;
+    width: calc(50% - 20px);
   }
   .left {
     width: 20%;
@@ -566,7 +569,7 @@
 /* shop */
 @media (min-width: 1200px) and (max-width: 1404px) {
   .item_1 {
-    width: 33.3%;
+    width: calc(33.3% - 20px);
   }
   .left {
     width: 20%;
