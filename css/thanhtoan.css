@@ -78,23 +78,31 @@
 .product {
   border-bottom: 1px solid rgba(112, 112, 112, 0.3);
 }
-.methodPayment,
-.infoBill {
+
+.methodPayment {
   margin: 20px 0px;
 }
 .methodPayment h4,
-.method {
+.method, .contenttab {
   padding: 10px;
-  font-size: 18px;
+  font-size: 25px;
 }
-.method {
+
+.methodPayment__container {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
-.contentTab {
-  padding: 10px;
+.infoBill,
+.method-container {
+  width: 50%;
 }
+
+.method span {
+  display: inline-block; 
+  min-width: 50%;
+}
+
 .thanhtien,
 .intomoney {
   color: rgb(226, 65, 65);

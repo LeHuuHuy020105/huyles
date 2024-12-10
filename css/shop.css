@@ -138,10 +138,13 @@
 }
 .item_1 {
   height: fit-content;
-  width: 25%;
+  width: calc(25% - 20px);
   white-space: nowrap;
-  transition: all 0.3s ease;
+  /* transition: all 0.3s ease; */
   padding: 10px;
+  margin: 15px 10px;
+  border-radius: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 .img-item img {
@@ -198,7 +201,9 @@
   border-radius: 99px;
 }
 .item_1:hover {
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  transform: scale(1.05); /* Kéo to ảnh */
+  transition: transform 0.4s ease-out;
+  border: 2px solid #ccc;
   cursor: pointer;
   border-radius: 20px;
 }
@@ -523,7 +528,7 @@
   }
   /* shop */
   .item_1 {
-    width: 50%;
+    width: 47%;
   }
   .both {
     display: block;
@@ -552,7 +557,7 @@
   }
   /* shop */
   .item_1 {
-    width: 50%;
+    width: calc(50% - 20px);
   }
   .left {
     width: 20%;
@@ -566,7 +571,7 @@
 /* shop */
 @media (min-width: 1200px) and (max-width: 1404px) {
   .item_1 {
-    width: 33.3%;
+    width: calc(33.3% - 20px);
   }
   .left {
     width: 20%;
