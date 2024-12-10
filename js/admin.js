@@ -1526,7 +1526,26 @@ function listAccounts(accounts) {
         <span class="nameAccount" style="width: 15%;">${account.name}</span>
         <span class="phoneAccount" style="width: 10%;">${account.phone}</span>
         <span class="emailAccount" style="width: 16%;">${account.email}</span>
-        <select class="addressAccount" style="width: 17%;"></select>
+        <select class="addressAccount" style="width: 17%;">`;
+
+    // Lấy địa chỉ của tài khoản và tạo các option cho select
+    let addressOptions = "";
+    const addressUserCurrent =
+      JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
+    console.log(addressUserCurrent);
+    let userAddress = null;
+    for (let i = 0; i < addressUserCurrent.length; i++) {
+      console.log(addressUserCurrent[i].IDuser);
+      if (account.userID === addressUserCurrent[i].IDuser) {
+        userAddress = addressUserCurrent[i];
+      }
+    }
+    console.log(userAddress);
+    for(let i=0;i<userAddress.address.length;i++){
+      addressOptions+=`<option value="${i}">${userAddress.address[i]}</option>`;
+    }
+    s += addressOptions;
+    s += `</select>
         <span class="passwordAccount" style="width: 12%;">${
           account.password
         }</span>
@@ -1544,25 +1563,6 @@ function listAccounts(accounts) {
   return s;
 }
 
-function makeAddressSelect_thisUser(account) {
-  let index = kiemtratontaiuser(account.userID);
-  let addressUsers =
-    JSON.parse(localStorage.getItem("addressUserCurrent")) || [];
-  let s = "";
-  if (index != null) {
-    for (let i = 0; i < addressUsers[index].address.length; i++) {
-      s += `<option value="${i}">${addressUsers[index].address[i]}</option>`;
-    }
-  }
-  setTimeout(() => {
-    const selectElement = document.querySelector(
-      `.user-${account.userID} .addressAccount`
-    );
-    if (selectElement) {
-      selectElement.innerHTML = s;
-    }
-  }, 0);
-}
 let isEditingaccountuser = false;
 function innertooladdress(account) {
   document.querySelector(".block-container").innerHTML = `
@@ -1897,13 +1897,13 @@ function checkAccount() {
   const manageCustomerBody = document.getElementById("manageCustomer-body");
   manageCustomerBody.innerHTML = accountListHtml;
 
-  accounts.forEach((account) => {
-    makeAddressSelect_thisUser(account);
-  });
+  // accounts.forEach((account) => {
+  //   makeAddressSelect_thisUser(account);
+  // });
 }
 
 let newUser = {
-  userID: "",
+  IDuser: "",
   address: [],
 };
 
@@ -2091,7 +2091,7 @@ function addaddress_newaddress() {
   let city = document.querySelector("#city").value;
   let idUser = JSON.parse(localStorage.getItem("NextID")) || 0;
   let s = `${sonha},${phuong},${quan},${city}`;
-  newUser.userID = idUser + 1;
+  newUser.IDuser = idUser + 1;
   newUser.address.push(s);
   hienthiformadduser();
 }
@@ -2157,7 +2157,7 @@ function addUser() {
     );
     localStorage.setItem("NextID", JSON.stringify(idUser + 1));
     localStorage.setItem("storageUsers", JSON.stringify(arrUser));
-    newUser.userID = "";
+    newUser.IDuser = "";
     newUser.address = [];
     renderqlnd();
   }
@@ -2192,9 +2192,9 @@ function searchAccounts() {
   arrfilter = filteredAccounts;
   const manageCustomerBody = document.getElementById("manageCustomer-body");
   manageCustomerBody.innerHTML = listAccounts(filteredAccounts); // Truyền mảng đã lọc vào listAccounts
-  filteredAccounts.forEach((account) => {
-    makeAddressSelect_thisUser(account);
-  });
+  // filteredAccounts.forEach((account) => {
+  //   makeAddressSelect_thisUser(account);
+  // });
 }
 
 function renderqlnd() {

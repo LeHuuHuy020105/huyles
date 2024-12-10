@@ -1176,21 +1176,15 @@ function giaodienthanhtoan() {
       <div class="infoCustomer-body">
         <div class="contentTab">
           <span>Họ và tên: </span>
-          <input type="text" class="input" id="name" value="${
-            userCurrent.name
-          }" readonly />
+          <input type="text" class="input" id="name" value="${userCurrent.name}" readonly />
         </div>
         <div class="contentTab">
           <span>Số điện thoại: </span>
-          <input type="text" class="input" id="phone" value="${
-            userCurrent.phone
-          }" readonly />
+          <input type="text" class="input" id="phone" value="${userCurrent.phone}" readonly />
         </div>
         <div class="contentTab">
           <span>Địa chỉ : </span>
-          <div class="contentTab-address">${
-            userCurrent.diachi == null ? "" : userCurrent.diachi
-          }</div>
+          <div class="contentTab-address"></div>
         </div>
         <div id="buttonEdit" onclick="chinhsua();">Chỉnh sửa</div>
       </div>
@@ -1247,6 +1241,7 @@ function giaodienthanhtoan() {
     </div>`;
     populateCities();
     midcontent.innerHTML = s;
+    makeAddressSelect();
   }
 }
 
